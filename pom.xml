@@ -1,0 +1,186 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <!--
+    | POM Relationships
+    -->
+    <groupId>net.codjo.tools.pyp</groupId>
+    <artifactId>codjo-tools-pyp</artifactId>
+    <version>1.6-SNAPSHOT</version>
+    <!-- START SNIPPET: super-pom -->
+    <parent>
+        <groupId>net.codjo.pom</groupId>
+        <artifactId>codjo-pom-external</artifactId>
+        <version>SNAPSHOT</version>
+    </parent>
+    <!-- END SNIPPET: super-pom -->
+    <dependencies>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.wicket</groupId>
+            <artifactId>wicket-extensions</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.confluence</groupId>
+            <artifactId>codjo-confluence</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>net.codjo.agent</groupId>
+                    <artifactId>codjo-agent</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.util</groupId>
+            <artifactId>codjo-util</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xstream</groupId>
+            <artifactId>xstream</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.codjo.test</groupId>
+            <artifactId>codjo-test-common</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <properties>
+        <smtpMockServer>localhost</smtpMockServer>
+        <smtpMockPort>89</smtpMockPort>
+
+        <confluenceTestPage>SendAnnouncementForBrin</confluenceTestPage>
+        <confluenceManualTestPage>SendAnnouncementForBrinManualTest</confluenceManualTestPage>
+        <repositoryTestFilePath>target/pyp/pypRpository.xml</repositoryTestFilePath>
+    </properties>
+
+    <name>codjo-pyp</name>
+    <description>Application de gestion des brins (Post Your Problem)</description>
+
+    <packaging>war</packaging>
+    <build>
+        <finalName>pyp</finalName>
+        <plugins>
+            <plugin>
+                <artifactId>maven-war-plugin</artifactId>
+                <configuration>
+                    <!--
+                        this configuration avoid an annoying console message
+                        - web.xml is already packaged elsewhere -
+                    -->
+                    <packagingExcludes>WEB-INF/web.xml</packagingExcludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>server-developer</id>
+            <activation>
+                <property>
+                    <name>!server</name>
+                </property>
+            </activation>
+            <properties>
+                <application.environmentMode>development</application.environmentMode>
+
+                <smtpServer>${smtpMockServer}</smtpServer>
+                <smtpPort>${smtpMockPort}</smtpPort>
+                <mailDomain>${mailDomainPrd}</mailDomain>
+
+                <confluenceUrl>${confluenceTestUrl}</confluenceUrl>
+                <confluenceUser>${confluenceTestUser}</confluenceUser>
+                <confluencePassword>${confluenceTestPassword}</confluencePassword>
+                <confluenceSpaceKey>${confluenceTestSpaceKey}</confluenceSpaceKey>
+                <confluencePage>${confluenceManualTestPage}</confluencePage>
+
+                <confluenceUnitPage>${confluenceTestPage}</confluenceUnitPage>
+                <repositoryFilePath>${repositoryTestFilePath}</repositoryFilePath>
+            </properties>
+        </profile>
+        <profile>
+            <id>server-integration</id>
+            <activation>
+                <property>
+                    <name>server</name>
+                    <value>integration</value>
+                </property>
+            </activation>
+            <properties>
+                <application.environmentMode>deployment</application.environmentMode>
+
+                <smtpServer>${smtpPrdServer}</smtpServer>
+                <smtpPort>${smtpPrdPort}</smtpPort>
+                <mailDomain>${mailDomainPrd}</mailDomain>
+
+                <confluenceUrl>${confluencePrdUrl}</confluenceUrl>
+                <confluenceUser>${confluencePrdUser}</confluenceUser>
+                <confluencePassword>${confluencePrdPassword}</confluencePassword>
+                <confluenceSpaceKey>${confluencePrdSpaceKey}</confluenceSpaceKey>
+                <confluencePage>${confluencePrdPage}</confluencePage>
+
+                <confluenceUnitPage>${confluenceTestPage}</confluenceUnitPage>
+                <repositoryFilePath>Z:\\equipes\\equipe-transverse\\pyp\\repository\\pypRpository.xml</repositoryFilePath>
+            </properties>
+        </profile>
+        <profile>
+            <id>deploy-on-wp-sic</id>
+            <activation>
+                <property>
+                    <name>process</name>
+                    <value>integration</value>
+                </property>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>tomcat-maven-plugin</artifactId>
+                        <version>1.0-beta-1</version>
+                        <configuration>
+                            <url>http://wp-sic:8080/manager/</url>
+                            <path>/pyp</path>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>deploy-on-server</id>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>redeploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <scm>
+        <connection>scm:git:https://github.com/codjo/codjo-tools-pyp.git</connection>
+        <developerConnection>scm:git:https://github.com/codjo/codjo-tools-pyp.git</developerConnection>
+        <url>scm:git:https://github.com/codjo/codjo-tools-pyp.git</url>
+    </scm>
+</project>
