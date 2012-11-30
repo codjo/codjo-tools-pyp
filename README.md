@@ -30,6 +30,7 @@ for example :
 ```
 
 TODO :
+* add a statistic panel (nb brin/years) + filters ?
 * Manage properly the absence of a confluence server (add alerts on gui or any sendMail simulation)
 * when unblocking radio button is clcked, status passes to unblocked
   --> ideally, if its "quick" date is set to creation date, else to "today"
@@ -37,3 +38,4 @@ TODO :
 * show detail in a popup to avoid double click
 * simple export for confluence, with Name/Url for quick insert in "reunion plateforme" minutes
 * Move tomcat-maven-plugin to super-pom
+* Manage automatic sauvegarde of repository ?
