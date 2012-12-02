@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<idea>
+    <execConfiguration>
+        <name>PypLocalServer</name>
+        <description>Lance un Server PYP en local (port7777)</description>
+        <execClass>net.codjo.tools.pyp.PypServer</execClass>
+        <vmParameter>-Dlog4j.configuration="file:${user.home}/log4j.properties"</vmParameter>
+        <parameter/>
+        <workdir>${basedir}</workdir>
+        <module>codjo-tools-pyp</module>
+    </execConfiguration>
+</idea>

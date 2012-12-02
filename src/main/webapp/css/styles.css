@@ -629,3 +629,17 @@ div.explorerTree div.wicket-tree-table-body {
 .rightMenuTable {
     float: right;
 }
+
+.filter {
+    margin-top: 10px;
+}
+
+.filter label{
+    color: #113388;
+}
+
+.selectFilters {
+    font-size: 11px;
+    padding-top: 1px;
+    text-transform: none;
+}

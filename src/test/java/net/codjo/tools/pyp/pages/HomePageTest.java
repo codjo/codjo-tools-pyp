@@ -1,8 +1,14 @@
 package net.codjo.tools.pyp.pages;
-import net.codjo.tools.pyp.WicketFixture;
+import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import net.codjo.test.common.Directory.NotDeletedException;
 import net.codjo.test.common.fixture.DirectoryFixture;
+import net.codjo.tools.pyp.WicketFixture;
+import net.codjo.util.file.FileUtil;
 import org.apache.wicket.Session;
+import org.apache.wicket.util.tester.FormTester;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,6 +17,7 @@ import org.junit.Test;
  */
 public class HomePageTest extends WicketFixture {
     DirectoryFixture fixture = new DirectoryFixture("target/pyp");
+    private final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S z");
 
 
     @Before
@@ -57,6 +64,72 @@ public class HomePageTest extends WicketFixture {
     }
 
 
+    @Test
+    public void test_BrinFilter() throws Exception {
+        Date today = Calendar.getInstance().getTime();
+        Date twoDaysAgo = shiftDate(today, -2);
+        Date sevenDaysAgo = shiftDate(today, -7);
+        Date aMonthAgo = shiftDate(today, -30);
+        String fileContent = "<brinList>\n"
+                             + "  <repository>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>1</uuid>\n"
+                             + "      <title>Brin de plus d'un mois</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(aMonthAgo) + "</creationDate>\n"
+                             + "      <status>current</status>\n"
+                             + "      <description>sdq</description>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                             + "    </brin>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>2</uuid>\n"
+                             + "      <title>Brin d'il y a deux jours</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(twoDaysAgo) + "</creationDate>\n"
+                             + "      <status>current</status>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
+                             + "    </brin>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>3</uuid>\n"
+                             + "      <title>Brin pile ya une semaine</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(sevenDaysAgo) + "</creationDate>\n"
+                             + "      <status>current</status>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
+                             + "    </brin>\n"
+                             + "  </repository>\n"
+                             + "</brinList>";
+
+        FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRpository.xml"), fileContent);
+        //TODO not very beautifull to load repository, we need to re-init
+        doInit("/pyp.properties");
+
+        getWicketTester().startPage(HomePage.class);
+
+        getWicketTester().assertLabel("brinListContainer:brinList:1:title", "Brin d&#039;il y a deux jours");
+        getWicketTester().assertLabel("brinListContainer:brinList:2:title", "Brin pile ya une semaine");
+        getWicketTester().assertLabel("brinListContainer:brinList:3:title", "Brin de plus d&#039;un mois");
+
+        switchFilter(this);
+
+        //TODO verifier pourquoi c'est indice 8 et 9 !!!!!!!!!!!!
+        getWicketTester().dumpPage();
+        getWicketTester().assertLabel("brinListContainer:brinList:8:title", "Brin pile ya une semaine");
+        getWicketTester().assertLabel("brinListContainer:brinList:7:title", "Brin d&#039;il y a deux jours");
+        assertTextIsNotPresent("Brin de plus d&#039;un mois");
+
+    }
+
+
+    //TODO copierColler de BrinFilterForm pas beau
+    public static Date shiftDate(Date dateToShift, int nbOfDays) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(dateToShift);
+        calendar.add(Calendar.DAY_OF_MONTH, nbOfDays);
+        return calendar.getTime();
+    }
+
+
     private void addNewBrin(String title, int statusIndex) {
         getWicketTester().assertRenderedPage(HomePage.class);
         getWicketTester().clickLink("rightPanel:myContainer:menuList:0:imageLink");
@@ -78,7 +151,7 @@ public class HomePageTest extends WicketFixture {
 
 
     private void updateBrin(String title, int statusIndex) {
-        getWicketTester().clickLink("brinList:1:editBrin");
+        getWicketTester().clickLink("brinListContainer:brinList:1:editBrin");
         getWicketTester().assertRenderedPage(BrinEditPage.class);
 
         getWicketTester().setParameterForNextRequest("brinForm:title", title);
@@ -88,5 +161,13 @@ public class HomePageTest extends WicketFixture {
         getWicketTester().submitForm("brinForm");
 
         getWicketTester().assertNoErrorMessage();
+    }
+
+
+    private void switchFilter(WicketFixture fixture) {
+        FormTester tester = fixture.newFormTester("rightPanel:myContainer:filterForm");
+        tester.select("brinFilters", 0);
+        tester.submit();
+        fixture.executeAjaxEvent("rightPanel:myContainer:filterForm:brinFilters", "onchange");
     }
 }

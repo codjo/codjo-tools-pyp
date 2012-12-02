@@ -1,9 +1,4 @@
 package net.codjo.tools.pyp.services;
-import net.codjo.tools.pyp.PypApplication;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.Status;
-import net.codjo.tools.pyp.xml.XmlCodec;
-import net.codjo.util.file.FileUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +10,12 @@ import java.util.TreeMap;
 import java.util.UUID;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import net.codjo.tools.pyp.PypApplication;
+import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.filter.BrinFilter;
+import net.codjo.tools.pyp.model.Status;
+import net.codjo.tools.pyp.xml.XmlCodec;
+import net.codjo.util.file.FileUtil;
 import org.apache.wicket.Component;
 /**
  * Le DAO
@@ -93,8 +94,25 @@ public class BrinService {
 
 
     public List<Brin> getAllBrins() {
+        return getAllBrins(null);
+    }
+
+
+    public List<Brin> getAllBrins(BrinFilter brinFilter) {
         try {
-            return loadConfig();
+            List<Brin> resultList = new ArrayList<Brin>();
+            List<Brin> brinList = loadConfig();
+            if (brinFilter == null) {
+                return brinList;
+            }
+            else {
+                for (Brin brin : brinList) {
+                    if (brinFilter.doFilter(brin)) {
+                        resultList.add(brin);
+                    }
+                }
+                return resultList;
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -139,7 +157,7 @@ public class BrinService {
         catch (IOException e) {
             e.printStackTrace();
             throw new IllegalStateException(
-                  "Erreur en mettant à jour le brin suivant : " + brin.getTitle() + "\ndans le fichier "
+                  "Erreur en mettant ï¿½ jour le brin suivant : " + brin.getTitle() + "\ndans le fichier "
                   + configFile.getAbsolutePath(), e);
         }
         finally {
