@@ -1,12 +1,15 @@
 package net.codjo.tools.pyp;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.mortbay.jetty.handler.ContextHandler;
 import org.mortbay.jetty.webapp.WebAppContext;
 /**
  *
  */
 public class PypServer {
+
+    private PypServer() {
+    }
+
 
     public static void main(String[] args) {
         JettyFixture fixture = new JettyFixture(8080) {
