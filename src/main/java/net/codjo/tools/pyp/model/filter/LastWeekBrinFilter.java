@@ -4,10 +4,8 @@ import net.codjo.tools.pyp.model.Brin;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import net.codjo.tools.pyp.model.Status;
 
-/**
- *   TODO enhance sort  add unit test
- */
 public class LastWeekBrinFilter extends BrinFilter implements Serializable {
 
     public LastWeekBrinFilter(String brinId, String displayLabel) {
@@ -16,9 +14,15 @@ public class LastWeekBrinFilter extends BrinFilter implements Serializable {
 
     @Override
     public boolean doFilter(Brin brin) {
+        if (Status.current.equals(brin.getStatus())){
+            return true;
+        }
         Date creationDate = brin.getCreationDate();
         Date lastWeekDate = shiftDate(Calendar.getInstance().getTime(), -8);
-        return creationDate.compareTo(lastWeekDate) > 0;
+        boolean creationDateInLastWeek = creationDate.compareTo(lastWeekDate) > 0;
+        Date unBlockingDate = brin.getUnBlockingDate();
+        boolean unblockingDateInLastWeek = unBlockingDate!=null && unBlockingDate.compareTo(lastWeekDate) > 0;
+        return creationDateInLastWeek || unblockingDateInLastWeek;
     }
 
 

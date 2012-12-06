@@ -76,7 +76,7 @@ public class HomePageTest extends WicketFixture {
                              + "      <uuid>1</uuid>\n"
                              + "      <title>Brin de plus d'un mois</title>\n"
                              + "      <creationDate>" + simpleDateFormat.format(aMonthAgo) + "</creationDate>\n"
-                             + "      <status>current</status>\n"
+                             + "      <status>unblocked</status>\n"
                              + "      <description>sdq</description>\n"
                              + "      <affectedTeams/>\n"
                              + "      <unblockingDescription>qsd</unblockingDescription>\n"
@@ -97,6 +97,25 @@ public class HomePageTest extends WicketFixture {
                              + "      <affectedTeams/>\n"
                              + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
                              + "    </brin>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>4</uuid>\n"
+                             + "      <title>Plus d'un mois MAIS status current</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(aMonthAgo) + "</creationDate>\n"
+                             + "      <status>current</status>\n"
+                             + "      <description>sdq</description>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                             + "    </brin>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>5</uuid>\n"
+                             + "      <title>Deboque ya moins d une semaine</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(aMonthAgo) + "</creationDate>\n"
+                             + "      <unblockingDate>" + simpleDateFormat.format(twoDaysAgo) + "</unblockingDate>\n"
+                             + "      <status>unblocked</status>\n"
+                             + "      <description>sdq</description>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                             + "    </brin>\n"
                              + "  </repository>\n"
                              + "</brinList>";
 
@@ -106,18 +125,30 @@ public class HomePageTest extends WicketFixture {
 
         getWicketTester().startPage(HomePage.class);
 
-        getWicketTester().assertLabel("brinListContainer:brinList:1:title", "Brin d&#039;il y a deux jours");
-        getWicketTester().assertLabel("brinListContainer:brinList:2:title", "Brin pile ya une semaine");
-        getWicketTester().assertLabel("brinListContainer:brinList:3:title", "Brin de plus d&#039;un mois");
+        int row = 1;
+        assertLabelAtRow(row++, "Brin d&#039;il y a deux jours");
+        assertLabelAtRow(row++, "Brin pile ya une semaine");
+        assertLabelAtRow(row++, "Plus d&#039;un mois MAIS status current");
+        assertLabelAtRow(row++, "Brin de plus d&#039;un mois");
+        assertLabelAtRow(row, "Deboque ya moins d une semaine");
 
         switchFilter(this);
 
-        //TODO verifier pourquoi c'est indice 8 et 9 !!!!!!!!!!!!
         getWicketTester().dumpPage();
-        getWicketTester().assertLabel("brinListContainer:brinList:8:title", "Brin pile ya une semaine");
-        getWicketTester().assertLabel("brinListContainer:brinList:7:title", "Brin d&#039;il y a deux jours");
-        assertTextIsNotPresent("Brin de plus d&#039;un mois");
 
+        //TODO decalage des indices de la liste a cause de 2 appels a la construction de la liste ?
+        row = 11;
+        assertLabelAtRow(row++, "Brin d&#039;il y a deux jours");
+        assertLabelAtRow(row++, "Brin pile ya une semaine");
+        assertLabelAtRow(row++, "Plus d&#039;un mois MAIS status current");
+        assertLabelAtRow(row, "Deboque ya moins d une semaine");
+        assertTextIsNotPresent("Brin de plus d&#039;un mois");
+    }
+
+
+    private void assertLabelAtRow(int row, String brinYaDeuxJours) {
+        getWicketTester().assertLabel("brinListContainer:brinList:" + row + ":title",
+                                      brinYaDeuxJours);
     }
 
 
