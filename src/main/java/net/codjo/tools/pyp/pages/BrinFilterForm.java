@@ -1,7 +1,6 @@
 package net.codjo.tools.pyp.pages;
 import java.util.ArrayList;
 import java.util.List;
-
 import net.codjo.tools.pyp.model.filter.BrinFilter;
 import net.codjo.tools.pyp.model.filter.LastWeekBrinFilter;
 import net.codjo.tools.pyp.pages.HomePage.CallBack;
@@ -43,6 +42,7 @@ public class BrinFilterForm extends Form {
                 BrinFilter brinFilter = (BrinFilter)getFormComponent().getModelObject();
                 callBack.onClickCallBack(brinFilter);
                 addComponentToTarget("brinListContainer", target);
+                addComponentToTarget("leftPanel:summaryPanel", target);
             }
         });
         add(choice);
@@ -60,6 +60,4 @@ public class BrinFilterForm extends Form {
             }
         }
     }
-
-
 }

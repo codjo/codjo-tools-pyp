@@ -43,17 +43,15 @@ public class HomePageTest extends WicketFixture {
 
         assertTextIsNotPresent("thisIsA new Brin");
 
-        getWicketTester().assertLabel("leftPanel:leftContainer:infoList:0:statusLabel", "current");
-        getWicketTester().assertLabel("leftPanel:leftContainer:infoList:1:statusLabel", "unblocked");
-        getWicketTester().assertLabel("leftPanel:leftContainer:infoList:2:statusLabel", "toEradicate");
-        getWicketTester().assertLabel("leftPanel:leftContainer:infoList:3:statusLabel", "eradicated");
-
-        getWicketTester().assertLabel("leftPanel:leftContainer:infoList:0:nbBrin", "0");
+        assertLabelInLeftPanelAtRow(1,"current","0");
+        assertLabelInLeftPanelAtRow(2,"unblocked","0");
+        assertLabelInLeftPanelAtRow(3,"toEradicate","0");
+        assertLabelInLeftPanelAtRow(4, "eradicated", "0");
 
         addNewBrin("thisIsA new Brin", 2);
 
         getWicketTester().assertRenderedPage(HomePage.class);
-        getWicketTester().assertLabel("leftPanel:leftContainer:infoList:2:nbBrin", "1");
+        getWicketTester().assertLabel("leftPanel:summaryPanel:infoList:3:nbBrin", "1");
         getWicketTester().assertContains("thisIsA new Brin");
         getWicketTester().assertContains("toEradicate");
 
@@ -61,6 +59,11 @@ public class HomePageTest extends WicketFixture {
         getWicketTester().assertRenderedPage(HomePage.class);
         getWicketTester().assertContains("titre Modifié");
         getWicketTester().assertContains("toEradicate");
+
+        assertLabelInLeftPanelAtRow(1,"current","0");
+        assertLabelInLeftPanelAtRow(2,"unblocked","0");
+        assertLabelInLeftPanelAtRow(3,"toEradicate","1");
+        assertLabelInLeftPanelAtRow(4,"eradicated","0");
     }
 
 
@@ -132,7 +135,12 @@ public class HomePageTest extends WicketFixture {
         assertLabelAtRow(row++, "Brin de plus d&#039;un mois");
         assertLabelAtRow(row, "Deboque ya moins d une semaine");
 
-        switchFilter(this);
+        assertLabelInLeftPanelAtRow(1,"current","3");
+        assertLabelInLeftPanelAtRow(2,"unblocked","2");
+        assertLabelInLeftPanelAtRow(3,"toEradicate","0");
+        assertLabelInLeftPanelAtRow(4,"eradicated","0");
+
+        switchFilter(this, 0);
 
         getWicketTester().dumpPage();
 
@@ -143,12 +151,32 @@ public class HomePageTest extends WicketFixture {
         assertLabelAtRow(row++, "Plus d&#039;un mois MAIS status current");
         assertLabelAtRow(row, "Deboque ya moins d une semaine");
         assertTextIsNotPresent("Brin de plus d&#039;un mois");
+
+        assertLabelInLeftPanelAtRow(9,"current","3");
+        assertLabelInLeftPanelAtRow(10,"unblocked","1");
+        assertLabelInLeftPanelAtRow(11,"toEradicate","0");
+        assertLabelInLeftPanelAtRow(12,"eradicated","0");
+
+        switchFilter(this, 1);
+
+        assertLabelInLeftPanelAtRow(17,"current","3");
+        assertLabelInLeftPanelAtRow(18,"unblocked","2");
+        assertLabelInLeftPanelAtRow(19,"toEradicate","0");
+        assertLabelInLeftPanelAtRow(20, "eradicated", "0");
+
     }
 
 
-    private void assertLabelAtRow(int row, String brinYaDeuxJours) {
+    private void assertLabelAtRow(int row, String expectedLabel) {
         getWicketTester().assertLabel("brinListContainer:brinList:" + row + ":title",
-                                      brinYaDeuxJours);
+                                      expectedLabel);
+    }
+
+
+    private void assertLabelInLeftPanelAtRow(int row, String expectedLabelText, String expectedBrinNumber) {
+        getWicketTester().assertLabel("leftPanel:summaryPanel:infoList:" + row + ":statusLabel", expectedLabelText);
+        getWicketTester().assertLabel("leftPanel:summaryPanel:infoList:" + row + ":nbBrin",
+                                      expectedBrinNumber);
     }
 
 
@@ -195,10 +223,10 @@ public class HomePageTest extends WicketFixture {
     }
 
 
-    private void switchFilter(WicketFixture fixture) {
-        FormTester tester = fixture.newFormTester("rightPanel:myContainer:filterForm");
-        tester.select("brinFilters", 0);
+    private void switchFilter(WicketFixture fixture, int index) {
+        FormTester tester = fixture.newFormTester("leftPanel:filterForm");
+        tester.select("brinFilters", index);
         tester.submit();
-        fixture.executeAjaxEvent("rightPanel:myContainer:filterForm:brinFilters", "onchange");
+        fixture.executeAjaxEvent("leftPanel:filterForm:brinFilters", "onchange");
     }
 }

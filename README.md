@@ -31,10 +31,12 @@ for example :
 
 TODO :
 * Filter the last x days Brins OR highlight them with a specific color
-   * filter should take creation date and Unblocking date
-   * add "current" brins regardless of the creation date
-   * summary should also be updated according to filter value
-   * ergonomy : add more filters (current year / current month ) and move filter to the Left above "Summary" block.
+   * filter should take creation date and Unblocking date DONE
+   * add "current" brins regardless of the creation date  DONE
+   * summary should also be updated according to filter value DONE
+   * ergonomy :
+          ** add more filters (current year / current month )
+          ** move filter to the Left above "Summary" block. DONE
    * when coming from edit page, filter is always "All brin"
 * Edit page correction : bug link "Ajout" +  move save button to the upper right
 * add a statistic panel (nb brin/years) + filters ?

@@ -30,6 +30,7 @@ public class HomePage extends RootPage {
     private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
     private BrinFilter brinFilter;
 
+
     public HomePage() {
         BrinListView dataView = new BrinListView("brinList");
         WebMarkupContainer brinListContainer = new WebMarkupContainer("brinListContainer");
@@ -78,7 +79,12 @@ public class HomePage extends RootPage {
                 return "images/export.png";
             }
         };
+        add(new RightPanel(id, buttonCallBack, exportCallBack));
+    }
 
+
+    @Override
+    protected void initLeftPanel(String id) {
         CallBack brinFilterCallBack = new CallBack<BrinFilter>() {
             public void onClickCallBack(BrinFilter brinFilter) {
                 setBrinFilter(brinFilter);
@@ -94,15 +100,7 @@ public class HomePage extends RootPage {
                 return null;
             }
         };
-
-        add(new RightPanel(id, brinFilterCallBack, buttonCallBack, exportCallBack));
-    }
-
-
-    @Override
-    protected void initLeftPanel(String id) {
-        BrinService service = BrinService.getBrinService(this);
-        add(new LeftPanel(id, service.calculateBrinNumber(service.getAllBrins(getBrinFilter()))));
+        add(new LeftPanel(id,brinFilterCallBack));
     }
 
 
@@ -144,11 +142,12 @@ public class HomePage extends RootPage {
         String getImagePath();
     }
 
-    private class BrinListView extends RefreshingView<Brin>{
+    private class BrinListView extends RefreshingView<Brin> {
 
         public BrinListView(String id) {
             super(id);
         }
+
 
         @Override
         protected Iterator<IModel<Brin>> getItemModels() {
@@ -158,7 +157,9 @@ public class HomePage extends RootPage {
                 protected Model<Brin> model(Brin object) {
                     return new Model<Brin>(object);
                 }
-            };        }
+            };
+        }
+
 
         @Override
         protected void populateItem(Item<Brin> listItem) {
@@ -181,6 +182,6 @@ public class HomePage extends RootPage {
                     responseWithEdit(brin, false);
                 }
             });
-                }
+        }
     }
 }
