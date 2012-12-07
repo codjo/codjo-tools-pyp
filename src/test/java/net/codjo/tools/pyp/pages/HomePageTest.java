@@ -16,6 +16,11 @@ import org.junit.Test;
  *
  */
 public class HomePageTest extends WicketFixture {
+    static final int LAST_WEEK_FILTER = 0;
+    private static final int CURRENT_MONTH_FILTER = 1;
+    private static final int CURRENT_YEAR_FILTER = 2;
+    static final int ALL_BRIN_FILTER = 3;
+
     DirectoryFixture fixture = new DirectoryFixture("target/pyp");
     private final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S z");
 
@@ -23,7 +28,6 @@ public class HomePageTest extends WicketFixture {
     @Before
     public void setUp() throws NotDeletedException {
         fixture.doSetUp();
-        doInit("/pyp.properties");
     }
 
 
@@ -35,6 +39,7 @@ public class HomePageTest extends WicketFixture {
 
     @Test
     public void test_homePage() throws Exception {
+        doInit("/pyp.properties");
         getWicketTester().startPage(HomePage.class);
         getWicketTester().assertContains("Title");
         getWicketTester().assertContains("Creation");
@@ -43,9 +48,9 @@ public class HomePageTest extends WicketFixture {
 
         assertTextIsNotPresent("thisIsA new Brin");
 
-        assertLabelInLeftPanelAtRow(1,"current","0");
-        assertLabelInLeftPanelAtRow(2,"unblocked","0");
-        assertLabelInLeftPanelAtRow(3,"toEradicate","0");
+        assertLabelInLeftPanelAtRow(1, "current", "0");
+        assertLabelInLeftPanelAtRow(2, "unblocked", "0");
+        assertLabelInLeftPanelAtRow(3, "toEradicate", "0");
         assertLabelInLeftPanelAtRow(4, "eradicated", "0");
 
         addNewBrin("thisIsA new Brin", 2);
@@ -60,10 +65,10 @@ public class HomePageTest extends WicketFixture {
         getWicketTester().assertContains("titre Modifié");
         getWicketTester().assertContains("toEradicate");
 
-        assertLabelInLeftPanelAtRow(1,"current","0");
-        assertLabelInLeftPanelAtRow(2,"unblocked","0");
-        assertLabelInLeftPanelAtRow(3,"toEradicate","1");
-        assertLabelInLeftPanelAtRow(4,"eradicated","0");
+        assertLabelInLeftPanelAtRow(1, "current", "0");
+        assertLabelInLeftPanelAtRow(2, "unblocked", "0");
+        assertLabelInLeftPanelAtRow(3, "toEradicate", "1");
+        assertLabelInLeftPanelAtRow(4, "eradicated", "0");
     }
 
 
@@ -73,6 +78,9 @@ public class HomePageTest extends WicketFixture {
         Date twoDaysAgo = shiftDate(today, -2);
         Date sevenDaysAgo = shiftDate(today, -7);
         Date aMonthAgo = shiftDate(today, -30);
+        Date moreThanThreeMonthAgo = shiftDate(today, -90);
+        Date moreThanAYearAgo = shiftDate(today, -370);
+        
         String fileContent = "<brinList>\n"
                              + "  <repository>\n"
                              + "    <brin>\n"
@@ -119,11 +127,32 @@ public class HomePageTest extends WicketFixture {
                              + "      <affectedTeams/>\n"
                              + "      <unblockingDescription>qsd</unblockingDescription>\n"
                              + "    </brin>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>6</uuid>\n"
+                             + "      <title>A eradiquer ya plus de 3 mois (90jours)</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(aMonthAgo) + "</creationDate>\n"
+                             + "      <unblockingDate>" + simpleDateFormat.format(moreThanThreeMonthAgo) + "</unblockingDate>\n"
+                             + "      <status>toEradicate</status>\n"
+                             + "      <description>sdq</description>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                             + "    </brin>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>7</uuid>\n"
+                             + "      <title>Eradique ya plus d'un an (370 jours)</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(moreThanAYearAgo) + "</creationDate>\n"
+                             + "      <unblockingDate>" + simpleDateFormat.format(moreThanAYearAgo)
+                             + "      </unblockingDate>\n"
+                             + "      <status>eradicated</status>\n"
+                             + "      <description>sdq</description>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                             + "    </brin>\n"
                              + "  </repository>\n"
                              + "</brinList>";
 
         FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRpository.xml"), fileContent);
-        //TODO not very beautifull to load repository, we need to re-init
+
         doInit("/pyp.properties");
 
         getWicketTester().startPage(HomePage.class);
@@ -132,38 +161,51 @@ public class HomePageTest extends WicketFixture {
         assertLabelAtRow(row++, "Brin d&#039;il y a deux jours");
         assertLabelAtRow(row++, "Brin pile ya une semaine");
         assertLabelAtRow(row++, "Plus d&#039;un mois MAIS status current");
+        assertLabelAtRow(row++, "A eradiquer ya plus de 3 mois (90jours)");
         assertLabelAtRow(row++, "Brin de plus d&#039;un mois");
-        assertLabelAtRow(row, "Deboque ya moins d une semaine");
+        assertLabelAtRow(row++, "Deboque ya moins d une semaine");
+        assertLabelAtRow(row, "Eradique ya plus d&#039;un an (370 jours)");
 
-        assertLabelInLeftPanelAtRow(1,"current","3");
-        assertLabelInLeftPanelAtRow(2,"unblocked","2");
-        assertLabelInLeftPanelAtRow(3,"toEradicate","0");
-        assertLabelInLeftPanelAtRow(4,"eradicated","0");
+        assertLabelInLeftPanelAtRow(1, "current", "3");
+        assertLabelInLeftPanelAtRow(2, "unblocked", "2");
+        assertLabelInLeftPanelAtRow(3, "toEradicate", "1");
+        assertLabelInLeftPanelAtRow(4, "eradicated", "1");
 
-        switchFilter(this, 0);
-
-        getWicketTester().dumpPage();
+        switchFilter(this, LAST_WEEK_FILTER);
 
         //TODO decalage des indices de la liste a cause de 2 appels a la construction de la liste ?
-        row = 11;
+        row = 15;
         assertLabelAtRow(row++, "Brin d&#039;il y a deux jours");
         assertLabelAtRow(row++, "Brin pile ya une semaine");
         assertLabelAtRow(row++, "Plus d&#039;un mois MAIS status current");
         assertLabelAtRow(row, "Deboque ya moins d une semaine");
         assertTextIsNotPresent("Brin de plus d&#039;un mois");
+        assertTextIsNotPresent("A eradiquer ya plus de 3 mois (90jours)");
+        assertTextIsNotPresent("Eradique ya plus d&#039;un an (370 jours)");
 
-        assertLabelInLeftPanelAtRow(9,"current","3");
-        assertLabelInLeftPanelAtRow(10,"unblocked","1");
-        assertLabelInLeftPanelAtRow(11,"toEradicate","0");
-        assertLabelInLeftPanelAtRow(12,"eradicated","0");
+        assertLabelInLeftPanelAtRow(9, "current", "3");
+        assertLabelInLeftPanelAtRow(10, "unblocked", "1");
+        assertLabelInLeftPanelAtRow(11, "toEradicate", "0");
+        assertLabelInLeftPanelAtRow(12, "eradicated", "0");
 
-        switchFilter(this, 1);
+        switchFilter(this, CURRENT_MONTH_FILTER);
 
-        assertLabelInLeftPanelAtRow(17,"current","3");
-        assertLabelInLeftPanelAtRow(18,"unblocked","2");
-        assertLabelInLeftPanelAtRow(19,"toEradicate","0");
+        assertLabelInLeftPanelAtRow(17, "current", "3");
+        assertLabelInLeftPanelAtRow(18, "unblocked", "1");
+        assertLabelInLeftPanelAtRow(19, "toEradicate", "0");
         assertLabelInLeftPanelAtRow(20, "eradicated", "0");
 
+        switchFilter(this, CURRENT_YEAR_FILTER);
+        assertLabelInLeftPanelAtRow(25, "current", "3");
+        assertLabelInLeftPanelAtRow(26, "unblocked", "2");
+        assertLabelInLeftPanelAtRow(27, "toEradicate", "1");
+        assertLabelInLeftPanelAtRow(28, "eradicated", "0");
+
+        switchFilter(this, ALL_BRIN_FILTER);
+        assertLabelInLeftPanelAtRow(33, "current", "3");
+        assertLabelInLeftPanelAtRow(34, "unblocked", "2");
+        assertLabelInLeftPanelAtRow(35, "toEradicate", "1");
+        assertLabelInLeftPanelAtRow(36, "eradicated", "1");
     }
 
 

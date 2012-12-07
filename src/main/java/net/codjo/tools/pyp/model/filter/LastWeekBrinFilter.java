@@ -1,10 +1,10 @@
 package net.codjo.tools.pyp.model.filter;
-import net.codjo.tools.pyp.model.Brin;
-
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.Status;
+import org.joda.time.DateTime;
 
 public class LastWeekBrinFilter extends BrinFilter implements Serializable {
 
@@ -12,16 +12,25 @@ public class LastWeekBrinFilter extends BrinFilter implements Serializable {
         super(brinId, displayLabel);
     }
 
+
     @Override
     public boolean doFilter(Brin brin) {
-        if (Status.current.equals(brin.getStatus())){
+        if (Status.current.equals(brin.getStatus())) {
             return true;
         }
-        Date creationDate = brin.getCreationDate();
-        Date lastWeekDate = shiftDate(Calendar.getInstance().getTime(), -8);
-        boolean creationDateInLastWeek = creationDate.compareTo(lastWeekDate) > 0;
-        Date unBlockingDate = brin.getUnBlockingDate();
-        boolean unblockingDateInLastWeek = unBlockingDate!=null && unBlockingDate.compareTo(lastWeekDate) > 0;
+        DateTime creationDateTime = new DateTime(brin.getCreationDate());
+        DateTime lastWeekDate = new DateTime().minusDays(7).withHourOfDay(0);
+        boolean creationDateInLastWeek = creationDateTime.isAfter(lastWeekDate.toInstant());
+
+        DateTime unBlockingDate;
+        if (brin.getUnBlockingDate() == null) {
+            unBlockingDate = null;
+        }
+        else {
+            unBlockingDate = new DateTime(brin.getUnBlockingDate());
+        }
+        boolean unblockingDateInLastWeek = unBlockingDate != null && unBlockingDate.isAfter(lastWeekDate.toInstant());
+
         return creationDateInLastWeek || unblockingDateInLastWeek;
     }
 

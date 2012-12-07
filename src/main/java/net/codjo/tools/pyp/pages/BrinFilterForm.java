@@ -2,6 +2,8 @@ package net.codjo.tools.pyp.pages;
 import java.util.ArrayList;
 import java.util.List;
 import net.codjo.tools.pyp.model.filter.BrinFilter;
+import net.codjo.tools.pyp.model.filter.CurrentMonthBrinFilter;
+import net.codjo.tools.pyp.model.filter.CurrentYearBrinFilter;
 import net.codjo.tools.pyp.model.filter.LastWeekBrinFilter;
 import net.codjo.tools.pyp.pages.HomePage.CallBack;
 import org.apache.log4j.Logger;
@@ -29,6 +31,8 @@ public class BrinFilterForm extends Form {
         };
         List<BrinFilter> brinFilters = new ArrayList<BrinFilter>();
         brinFilters.add(new LastWeekBrinFilter("LastWeekFilter", "D-7 brins"));
+        brinFilters.add(new CurrentMonthBrinFilter("CurrentMonthFilter", "Current Month"));
+        brinFilters.add(new CurrentYearBrinFilter("CurrentYearFilter", "Current Year"));
         brinFilters.add(new BrinFilter("AllBrinsFilter", "All brins"));
 
         DropDownChoice choice = new DropDownChoice<BrinFilter>("brinFilters",
