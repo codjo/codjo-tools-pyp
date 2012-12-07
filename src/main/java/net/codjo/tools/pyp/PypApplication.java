@@ -59,6 +59,7 @@ public class PypApplication extends WebApplication {
         super.init();
 
         mountBookmarkablePage("/edit.html", BrinEditPage.class);
+//        mount(new QueryStringUrlCodingStrategy("/edit.html", BrinEditPage.class));
         mount(new HybridUrlCodingStrategy("/home.html", HomePage.class));
     }
 

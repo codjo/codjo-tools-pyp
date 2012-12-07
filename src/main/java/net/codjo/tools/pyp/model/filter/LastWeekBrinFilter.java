@@ -1,12 +1,11 @@
 package net.codjo.tools.pyp.model.filter;
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.Status;
 import org.joda.time.DateTime;
 
-public class LastWeekBrinFilter extends BrinFilter implements Serializable {
+public class LastWeekBrinFilter extends DefaultBrinFilter {
 
     public LastWeekBrinFilter(String brinId, String displayLabel) {
         super(brinId, displayLabel);

@@ -3,8 +3,9 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import net.codjo.test.common.Directory.NotDeletedException;
+import net.codjo.test.common.fixture.CompositeFixture;
 import net.codjo.test.common.fixture.DirectoryFixture;
+import net.codjo.test.common.fixture.MailFixture;
 import net.codjo.tools.pyp.WicketFixture;
 import net.codjo.util.file.FileUtil;
 import org.apache.wicket.Session;
@@ -21,19 +22,22 @@ public class HomePageTest extends WicketFixture {
     private static final int CURRENT_YEAR_FILTER = 2;
     static final int ALL_BRIN_FILTER = 3;
 
-    DirectoryFixture fixture = new DirectoryFixture("target/pyp");
+    private DirectoryFixture fixture = new DirectoryFixture("target/pyp");
+    private MailFixture mailFixture = new MailFixture(89);
+    private CompositeFixture compositeFixture = new CompositeFixture(fixture, mailFixture);
+
     private final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S z");
 
 
     @Before
-    public void setUp() throws NotDeletedException {
-        fixture.doSetUp();
+    public void setUp() throws Exception {
+        compositeFixture.doSetUp();
     }
 
 
     @After
-    public void tearDown() throws NotDeletedException {
-        fixture.doTearDown();
+    public void tearDown() throws Exception {
+        compositeFixture.doTearDown();
     }
 
 
@@ -53,7 +57,7 @@ public class HomePageTest extends WicketFixture {
         assertLabelInLeftPanelAtRow(3, "toEradicate", "0");
         assertLabelInLeftPanelAtRow(4, "eradicated", "0");
 
-        addNewBrin("thisIsA new Brin", 2);
+        addNewBrin("thisIsA new Brin", 2, "2001-01-12");
 
         getWicketTester().assertRenderedPage(HomePage.class);
         getWicketTester().assertLabel("leftPanel:summaryPanel:infoList:3:nbBrin", "1");
@@ -80,7 +84,7 @@ public class HomePageTest extends WicketFixture {
         Date aMonthAgo = shiftDate(today, -30);
         Date moreThanThreeMonthAgo = shiftDate(today, -90);
         Date moreThanAYearAgo = shiftDate(today, -370);
-        
+
         String fileContent = "<brinList>\n"
                              + "  <repository>\n"
                              + "    <brin>\n"
@@ -131,7 +135,8 @@ public class HomePageTest extends WicketFixture {
                              + "      <uuid>6</uuid>\n"
                              + "      <title>A eradiquer ya plus de 3 mois (90jours)</title>\n"
                              + "      <creationDate>" + simpleDateFormat.format(aMonthAgo) + "</creationDate>\n"
-                             + "      <unblockingDate>" + simpleDateFormat.format(moreThanThreeMonthAgo) + "</unblockingDate>\n"
+                             + "      <unblockingDate>" + simpleDateFormat.format(moreThanThreeMonthAgo)
+                             + "</unblockingDate>\n"
                              + "      <status>toEradicate</status>\n"
                              + "      <description>sdq</description>\n"
                              + "      <affectedTeams/>\n"
@@ -209,6 +214,66 @@ public class HomePageTest extends WicketFixture {
     }
 
 
+    @Test
+    public void test_BrinFilterPersistentWithSession() throws Exception {
+        Date today = Calendar.getInstance().getTime();
+        Date twoDaysAgo = shiftDate(today, -2);
+        Date aMonthAgo = shiftDate(today, -30);
+
+        String fileContent = "<brinList>\n"
+                             + "  <repository>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>1</uuid>\n"
+                             + "      <title>Brin de plus d'un mois</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(aMonthAgo) + "</creationDate>\n"
+                             + "      <status>unblocked</status>\n"
+                             + "      <description>sdq</description>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                             + "    </brin>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>2</uuid>\n"
+                             + "      <title>Brin d'il y a deux jours</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(twoDaysAgo) + "</creationDate>\n"
+                             + "      <status>current</status>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
+                             + "    </brin>\n"
+                             + "  </repository>\n"
+                             + "</brinList>";
+
+        FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRpository.xml"), fileContent);
+
+        doInit("/pyp.properties");
+
+        getWicketTester().startPage(HomePage.class);
+
+        int row = 1;
+        assertLabelAtRow(row++, "Brin d&#039;il y a deux jours");
+        assertLabelAtRow(row, "Brin de plus d&#039;un mois");
+
+        switchFilter(this, LAST_WEEK_FILTER);
+
+        row = 5;
+        assertLabelAtRow(row, "Brin d&#039;il y a deux jours");
+        assertTextIsNotPresent("Brin de plus d&#039;un mois");
+
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
+        updateBrinWithParams(row, "Brin d'il y a deux jours (modifié)", 1, format.format(today));
+
+        getWicketTester().assertRenderedPage(HomePage.class);
+        assertLabelAtRow(1, "Brin d&#039;il y a deux jours (modifié)");
+        assertTextIsNotPresent("Brin de plus d&#039;un mois");
+
+        addNewBrin("thisIsA new Brin", 1, format.format(today));
+        getWicketTester().assertRenderedPage(HomePage.class);
+        assertLabelAtRow(1, "Brin d&#039;il y a deux jours (modifié)");
+        assertLabelAtRow(2, "thisIsA new Brin");
+        assertTextIsNotPresent("Brin de plus d&#039;un mois");
+    }
+
+
     private void assertLabelAtRow(int row, String expectedLabel) {
         getWicketTester().assertLabel("brinListContainer:brinList:" + row + ":title",
                                       expectedLabel);
@@ -231,7 +296,7 @@ public class HomePageTest extends WicketFixture {
     }
 
 
-    private void addNewBrin(String title, int statusIndex) {
+    private void addNewBrin(String title, int statusIndex, String newCreationDate) {
         getWicketTester().assertRenderedPage(HomePage.class);
         getWicketTester().clickLink("rightPanel:myContainer:menuList:0:imageLink");
         getWicketTester().assertRenderedPage(BrinEditPage.class);
@@ -244,24 +309,29 @@ public class HomePageTest extends WicketFixture {
         Session.get().cleanupFeedbackMessages();
         getWicketTester().setParameterForNextRequest("brinForm:title", title);
         getWicketTester().setParameterForNextRequest("brinForm:status", statusIndex);
-        getWicketTester().setParameterForNextRequest("brinForm:creationDate", "2001-01-12");
+        getWicketTester().setParameterForNextRequest("brinForm:creationDate", newCreationDate);
         getWicketTester().submitForm("brinForm");
 
         getWicketTester().assertNoErrorMessage();
     }
 
 
-    private void updateBrin(String title, int statusIndex) {
-        getWicketTester().clickLink("brinListContainer:brinList:1:editBrin");
+    private void updateBrinWithParams(int rowIndex, String newTitle, int newStatusIndex, String newCreationDate) {
+        getWicketTester().clickLink("brinListContainer:brinList:" + rowIndex + ":editBrin");
         getWicketTester().assertRenderedPage(BrinEditPage.class);
 
-        getWicketTester().setParameterForNextRequest("brinForm:title", title);
-        getWicketTester().setParameterForNextRequest("brinForm:status", statusIndex);
-        getWicketTester().setParameterForNextRequest("brinForm:creationDate", "2001-01-12");
+        getWicketTester().setParameterForNextRequest("brinForm:title", newTitle);
+        getWicketTester().setParameterForNextRequest("brinForm:status", newStatusIndex);
+        getWicketTester().setParameterForNextRequest("brinForm:creationDate", newCreationDate);
 
         getWicketTester().submitForm("brinForm");
 
         getWicketTester().assertNoErrorMessage();
+    }
+
+
+    private void updateBrin(String newTitle, int newStatusIndex) {
+        updateBrinWithParams(1, newTitle, newStatusIndex, "2001-01-12");
     }
 
 

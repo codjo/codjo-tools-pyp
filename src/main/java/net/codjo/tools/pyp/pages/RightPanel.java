@@ -1,7 +1,6 @@
 package net.codjo.tools.pyp.pages;
 import java.util.Arrays;
 import net.codjo.tools.pyp.ExternalImage;
-import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.pages.HomePage.CallBack;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
@@ -43,7 +42,7 @@ public class RightPanel extends Panel {
 
             @Override
             public void onClick() {
-                buttonCallBack.onClickCallBack(new Brin());
+                buttonCallBack.onClickCallBack(null);
             }
         };
         link.add(new ExternalImage("imageLogo", buttonCallBack.getImagePath()));

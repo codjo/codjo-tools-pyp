@@ -8,6 +8,8 @@ import java.util.List;
 import net.codjo.tools.pyp.ExternalImage;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.filter.BrinFilter;
+import net.codjo.tools.pyp.model.filter.BrinFilterEnum;
+import net.codjo.tools.pyp.model.filter.DefaultBrinFilter;
 import net.codjo.tools.pyp.services.BrinService;
 import net.codjo.tools.pyp.services.CsvService;
 import org.apache.wicket.PageParameters;
@@ -31,7 +33,24 @@ public class HomePage extends RootPage {
     private BrinFilter brinFilter;
 
 
-    public HomePage() {
+    public HomePage(final PageParameters pageParameters) {
+        if (pageParameters.containsKey("brinFilter")) {
+            brinFilter = BrinFilterEnum.get(pageParameters.getString("brinFilter"));
+        }
+        else {
+            brinFilter = BrinFilterForm.DEFAULT_BRIN_FILTER;
+        }
+        buildPage();
+    }
+
+
+    public HomePage(BrinFilter brinFilter) {
+        this.brinFilter = brinFilter;
+        buildPage();
+    }
+
+
+    private void buildPage() {
         BrinListView dataView = new BrinListView("brinList");
         WebMarkupContainer brinListContainer = new WebMarkupContainer("brinListContainer");
         brinListContainer.setOutputMarkupId(true);
@@ -44,7 +63,7 @@ public class HomePage extends RootPage {
     protected void initRightPanel(String id) {
         CallBack buttonCallBack = new CallBack<Brin>() {
             public void onClickCallBack(Brin brin) {
-                responseWithEdit(brin, true);
+                responseWithEdit(brin);
             }
 
 
@@ -85,8 +104,8 @@ public class HomePage extends RootPage {
 
     @Override
     protected void initLeftPanel(String id) {
-        CallBack brinFilterCallBack = new CallBack<BrinFilter>() {
-            public void onClickCallBack(BrinFilter brinFilter) {
+        CallBack brinFilterCallBack = new CallBack<DefaultBrinFilter>() {
+            public void onClickCallBack(DefaultBrinFilter brinFilter) {
                 setBrinFilter(brinFilter);
             }
 
@@ -100,17 +119,20 @@ public class HomePage extends RootPage {
                 return null;
             }
         };
-        add(new LeftPanel(id,brinFilterCallBack));
+        add(new LeftPanel(id,brinFilter, brinFilterCallBack));
     }
 
 
-    private void responseWithEdit(Brin brin, boolean creationMode) {
-        if (creationMode) {
-            setResponsePage(new BrinEditPage(brin, creationMode));
+    private void responseWithEdit(Brin brin) {
+/*        PageParameters pageParameters = new PageParameters();
+        pageParameters.put("creationMode", Boolean.toString(brin == null));
+        pageParameters.put("brinFilter", getBrinFilter().getBrinId());
+        if (brin != null) {
+            pageParameters.put("id", brin.getUuid());
         }
-        else {
-            setResponsePage(BrinEditPage.class, new PageParameters("id=" + brin.getUuid()));
-        }
+        setResponsePage(BrinEditPage.class, pageParameters);*/
+
+        setResponsePage(new BrinEditPage(brin, brinFilter));
     }
 
 
@@ -127,7 +149,7 @@ public class HomePage extends RootPage {
     }
 
 
-    public void setBrinFilter(BrinFilter brinFilter) {
+    public void setBrinFilter(DefaultBrinFilter brinFilter) {
         this.brinFilter = brinFilter;
     }
 
@@ -171,7 +193,7 @@ public class HomePage extends RootPage {
             Link editionLink = new Link("editBrin") {
                 @Override
                 public void onClick() {
-                    responseWithEdit(brin, false);
+                    responseWithEdit(brin);
                 }
             };
             editionLink.add(new ExternalImage("editBrinLogo", "images/brin_form_edit.png"));
@@ -179,7 +201,7 @@ public class HomePage extends RootPage {
             listItem.add(new AjaxEventBehavior("ondblclick") {
                 @Override
                 protected void onEvent(AjaxRequestTarget target) {
-                    responseWithEdit(brin, false);
+                    responseWithEdit(brin);
                 }
             });
         }
