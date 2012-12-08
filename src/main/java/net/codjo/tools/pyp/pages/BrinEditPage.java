@@ -2,43 +2,25 @@ package net.codjo.tools.pyp.pages;
 import java.io.IOException;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.filter.BrinFilter;
-import net.codjo.tools.pyp.model.filter.BrinFilterEnum;
 import net.codjo.tools.pyp.pages.HomePage.CallBack;
 import net.codjo.tools.pyp.services.BrinService;
-import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 public class BrinEditPage extends RootPage {
-
-
-    public BrinEditPage(final PageParameters parameters) throws IOException {
-        BrinService service = BrinService.getBrinService(this);
-        Boolean creationMode = parameters.getAsBoolean("creationMode");
-        brinFilter = BrinFilterEnum.get(parameters.getString("brinFilter"));
-
-        if (!creationMode) {
-            String idString = parameters.getString("id");
-            Brin brin = service.getBrin(idString);
-            if (brin == null) {
-                setResponsePage(new HomePage(brinFilter));
-            }
-            else {
-                buildPage(brin, false);
-            }
-        }
-        else {
-            buildPage(new Brin(), creationMode);
-        }
+    /**
+     * Keep this constructor to access brin directly from url (cf mail content)
+     *  ex : http://localhost:8080/pyp/edit.html?id=1245b4d5-9c64-41ed-b3df-d5f327234979
+     *
+     * @throws IOException
+     */
+    public BrinEditPage() throws IOException {
+        String brinId = getRequest().getParameter("id");
+        Brin brin = BrinService.getBrinService(this).getBrin(brinId);
+        buildPage(brin);
     }
-
 
     public BrinEditPage(Brin brin, BrinFilter brinFilter) {
         this.brinFilter = brinFilter;
-        if (brin != null) {
-            buildPage(brin, false);
-        }
-        else {
-            buildPage(new Brin(), true);
-        }
+        buildPage(brin);
     }
 
 
@@ -64,8 +46,11 @@ public class BrinEditPage extends RootPage {
     }
 
 
-    private void buildPage(Brin brin, boolean creationMode) {
+    private void buildPage(Brin brin) {
         add(new FeedbackPanel("feedback").setOutputMarkupId(true));
-        add(new BrinForm("brinForm", brin, creationMode, brinFilter));
+        if(brin==null){
+            brin= new Brin();
+        }
+        add(new BrinForm("brinForm", brin, brinFilter));
     }
 }

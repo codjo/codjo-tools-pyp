@@ -34,14 +34,12 @@ public class BrinForm extends Form<Brin> {
     private Brin brin;
     private MailService mailService;
     private Status initialStatus;
-    private boolean creationMode;
     private BrinFilter brinFilter;
 
 
-    public BrinForm(String formId, final Brin brin, boolean creationMode, BrinFilter brinFilter) {
+    public BrinForm(String formId, final Brin brin, BrinFilter brinFilter) {
         super(formId, new CompoundPropertyModel<Brin>(brin));
         this.brin = brin;
-        this.creationMode = creationMode;
         this.brinFilter = brinFilter;
         initialStatus = brin.getStatus();
         mailService = new MailService(getContextUrl(((WebRequest)getRequest()).getHttpServletRequest()).toString());
@@ -110,7 +108,7 @@ public class BrinForm extends Form<Brin> {
 
     @Override
     public void onSubmit() {
-        if (creationMode) {
+        if (brin.getUuid()==null) {
             BrinService.getBrinService(this).addBrin(brin);
             sendMail(brin);
         }

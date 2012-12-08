@@ -35,9 +35,9 @@ TODO :
    * add "current" brins regardless of the creation date  DONE
    * summary should also be updated according to filter value DONE
    * ergonomy :
-          ** add more filters (current year / current month )
+          ** add more filters (current year / current month ) DONE
           ** move filter to the Left above "Summary" block. DONE
-   * when coming from edit page, filter is always "All brin"
+   * when coming from edit page, filter is always "All brin" DONE
 * Edit page correction : bug link "Ajout" +  move save button to the upper right
 * add a statistic panel (nb brin/years) + filters ?
 * Manage properly the absence of a confluence server (add alerts on gui or any sendMail simulation)

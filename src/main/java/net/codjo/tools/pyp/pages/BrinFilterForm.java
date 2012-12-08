@@ -34,7 +34,6 @@ public class BrinFilterForm extends Form {
         brinFilters.add(BrinFilterEnum.CURRENT_YEAR.get());
         brinFilters.add(DEFAULT_BRIN_FILTER);
 
-        System.out.println("filter = " + filter);
         BrinFilter defaultBrinFilter = DEFAULT_BRIN_FILTER;
         if (filter!=null){
             defaultBrinFilter = filter;
