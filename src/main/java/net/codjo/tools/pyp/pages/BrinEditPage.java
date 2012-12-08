@@ -8,7 +8,6 @@ import net.codjo.tools.pyp.services.BrinService;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 public class BrinEditPage extends RootPage {
-    private BrinFilter brinFilter;
 
 
     public BrinEditPage(final PageParameters parameters) throws IOException {

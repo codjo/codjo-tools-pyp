@@ -36,8 +36,8 @@ public class BrinFilterForm extends Form {
 
         System.out.println("filter = " + filter);
         BrinFilter defaultBrinFilter = DEFAULT_BRIN_FILTER;
-        if (filter==null){
-            defaultBrinFilter = DEFAULT_BRIN_FILTER;    
+        if (filter!=null){
+            defaultBrinFilter = filter;
         }
         DropDownChoice choice = new DropDownChoice<BrinFilter>("brinFilters",
                                                                new Model<BrinFilter>(defaultBrinFilter),

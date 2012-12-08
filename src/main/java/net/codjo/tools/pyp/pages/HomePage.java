@@ -30,7 +30,6 @@ import org.apache.wicket.util.resource.StringResourceStream;
  */
 public class HomePage extends RootPage {
     private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    private BrinFilter brinFilter;
 
 
     public HomePage(final PageParameters pageParameters) {
@@ -45,7 +44,7 @@ public class HomePage extends RootPage {
 
 
     public HomePage(BrinFilter brinFilter) {
-        this.brinFilter = brinFilter;
+        super(brinFilter);
         buildPage();
     }
 
@@ -124,14 +123,6 @@ public class HomePage extends RootPage {
 
 
     private void responseWithEdit(Brin brin) {
-/*        PageParameters pageParameters = new PageParameters();
-        pageParameters.put("creationMode", Boolean.toString(brin == null));
-        pageParameters.put("brinFilter", getBrinFilter().getBrinId());
-        if (brin != null) {
-            pageParameters.put("id", brin.getUuid());
-        }
-        setResponsePage(BrinEditPage.class, pageParameters);*/
-
         setResponsePage(new BrinEditPage(brin, brinFilter));
     }
 
