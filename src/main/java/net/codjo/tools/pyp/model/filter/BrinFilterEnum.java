@@ -22,7 +22,7 @@ public enum BrinFilterEnum {
 
 
     public static BrinFilter get(String brinId) {
-        final DefaultBrinFilter allBrinFilter = new DefaultBrinFilter(ALL_BRIN.getBrinId(), "All brins");
+        final AllBrinFilter allBrinFilter = new AllBrinFilter(ALL_BRIN.getBrinId(), "All brins");
         if ("AllBrinsFilter".equals(brinId)) {
             return allBrinFilter;
         }

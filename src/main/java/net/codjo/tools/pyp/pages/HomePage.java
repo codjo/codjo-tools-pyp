@@ -7,9 +7,9 @@ import java.util.Iterator;
 import java.util.List;
 import net.codjo.tools.pyp.ExternalImage;
 import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.filter.AllBrinFilter;
 import net.codjo.tools.pyp.model.filter.BrinFilter;
 import net.codjo.tools.pyp.model.filter.BrinFilterEnum;
-import net.codjo.tools.pyp.model.filter.DefaultBrinFilter;
 import net.codjo.tools.pyp.services.BrinService;
 import net.codjo.tools.pyp.services.CsvService;
 import org.apache.wicket.PageParameters;
@@ -103,8 +103,8 @@ public class HomePage extends RootPage {
 
     @Override
     protected void initLeftPanel(String id) {
-        CallBack brinFilterCallBack = new CallBack<DefaultBrinFilter>() {
-            public void onClickCallBack(DefaultBrinFilter brinFilter) {
+        CallBack brinFilterCallBack = new CallBack<AllBrinFilter>() {
+            public void onClickCallBack(AllBrinFilter brinFilter) {
                 setBrinFilter(brinFilter);
             }
 
@@ -140,7 +140,7 @@ public class HomePage extends RootPage {
     }
 
 
-    public void setBrinFilter(DefaultBrinFilter brinFilter) {
+    public void setBrinFilter(AllBrinFilter brinFilter) {
         this.brinFilter = brinFilter;
     }
 

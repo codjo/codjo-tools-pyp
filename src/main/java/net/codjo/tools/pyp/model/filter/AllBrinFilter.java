@@ -3,12 +3,12 @@ import net.codjo.tools.pyp.model.Brin;
 /**
  *
  */
-public class DefaultBrinFilter implements BrinFilter {
+public class AllBrinFilter implements BrinFilter {
     private String brinId;
     private String displayLabel;
 
 
-    public DefaultBrinFilter(String brinId, String displayLabel) {
+    public AllBrinFilter(String brinId, String displayLabel) {
         this.brinId = brinId;
         this.displayLabel = displayLabel;
     }

@@ -1,7 +1,8 @@
 package net.codjo.tools.pyp.pages;
 import java.util.ArrayList;
 import java.util.List;
-import net.codjo.tools.pyp.model.filter.DefaultBrinFilter;
+
+import net.codjo.tools.pyp.model.filter.AllBrinFilter;
 import net.codjo.tools.pyp.model.filter.BrinFilterEnum;
 import net.codjo.tools.pyp.model.filter.BrinFilter;
 import net.codjo.tools.pyp.pages.HomePage.CallBack;
@@ -18,13 +19,13 @@ import org.apache.wicket.model.Model;
  */
 public class BrinFilterForm extends Form {
     private static final Logger LOG = Logger.getLogger(BrinFilterForm.class);
-    static final BrinFilter DEFAULT_BRIN_FILTER = BrinFilterEnum.ALL_BRIN.get();
+    static final BrinFilter DEFAULT_BRIN_FILTER = BrinFilterEnum.LAST_WEEK.get();
 
 
     public BrinFilterForm(String id, BrinFilter filter, final CallBack<BrinFilter> callBack) {
         super(id);
         ChoiceRenderer<BrinFilter> choiceRenderer = new ChoiceRenderer<BrinFilter>("displayLabel", "brinId") {
-            public Object getDisplayValue(DefaultBrinFilter object) {
+            public Object getDisplayValue(AllBrinFilter object) {
                 return object.getDisplayLabel();
             }
         };

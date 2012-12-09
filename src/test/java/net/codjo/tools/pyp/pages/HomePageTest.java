@@ -23,8 +23,8 @@ public class HomePageTest extends WicketFixture {
     static final int ALL_BRIN_FILTER = 3;
 
     private DirectoryFixture fixture = new DirectoryFixture("target/pyp");
-    private MailFixture mailFixture = new MailFixture(89);
-    private CompositeFixture compositeFixture = new CompositeFixture(fixture, mailFixture);
+    private MailFixture mailFixture = new MailFixture(53);
+    private CompositeFixture compositeFixture = new CompositeFixture(fixture,mailFixture);
 
     private final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S z");
 
