@@ -1,7 +1,6 @@
 package net.codjo.tools.pyp.pages;
 
 import java.util.Arrays;
-
 import net.codjo.tools.pyp.ExternalImage;
 import net.codjo.tools.pyp.pages.HomePage.CallBack;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -35,9 +34,10 @@ public class RightPanel extends Panel {
         myContainer.add(listView);
     }
 
-         //TODO very awfull generify copy/paste of "else" part
+
+    //TODO very awfull to be refactored
     private void addLink(ListItem<CallBack> callBackListItem, final CallBack buttonCallBack) {
-        if (buttonCallBack instanceof HomePage.AjaxCallBack) {
+        if ("Export wiki".equals(buttonCallBack.getLabel())) {
             AjaxLink link = new AjaxLink("imageLink") {
                 @Override
                 protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {
@@ -45,16 +45,16 @@ public class RightPanel extends Panel {
                     super.onComponentTagBody(markupStream, openTag);
                 }
 
+
                 @Override
                 public void onClick(AjaxRequestTarget ajaxRequestTarget) {
-                    ((HomePage.AjaxCallBack)buttonCallBack).onClickCallBack(ajaxRequestTarget);
+                    buttonCallBack.onClickCallBack(ajaxRequestTarget);
                 }
-
             };
             link.add(new ExternalImage("imageLogo", buttonCallBack.getImagePath()));
             callBackListItem.add(link);
-        } else {
-
+        }
+        else {
             Link link = new Link("imageLink") {
                 @Override
                 protected void onComponentTagBody(MarkupStream markupStream, ComponentTag openTag) {

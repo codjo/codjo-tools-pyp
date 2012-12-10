@@ -3,12 +3,14 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import junit.framework.Assert;
 import net.codjo.test.common.fixture.CompositeFixture;
 import net.codjo.test.common.fixture.DirectoryFixture;
 import net.codjo.test.common.fixture.MailFixture;
 import net.codjo.tools.pyp.WicketFixture;
 import net.codjo.util.file.FileUtil;
 import org.apache.wicket.Session;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.util.tester.FormTester;
 import org.junit.After;
 import org.junit.Before;
@@ -23,8 +25,8 @@ public class HomePageTest extends WicketFixture {
     static final int ALL_BRIN_FILTER = 3;
 
     private DirectoryFixture fixture = new DirectoryFixture("target/pyp");
-    private MailFixture mailFixture = new MailFixture(53);
-    private CompositeFixture compositeFixture = new CompositeFixture(fixture,mailFixture);
+    private MailFixture mailFixture = new MailFixture(89);
+    private CompositeFixture compositeFixture = new CompositeFixture(fixture, mailFixture);
 
     private final static SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.S z");
 
@@ -156,7 +158,7 @@ public class HomePageTest extends WicketFixture {
                              + "  </repository>\n"
                              + "</brinList>";
 
-        FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRpository.xml"), fileContent);
+        FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRepository.xml"), fileContent);
 
         doInit("/pyp.properties");
 
@@ -242,7 +244,7 @@ public class HomePageTest extends WicketFixture {
                              + "  </repository>\n"
                              + "</brinList>";
 
-        FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRpository.xml"), fileContent);
+        FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRepository.xml"), fileContent);
 
         doInit("/pyp.properties");
 
@@ -271,6 +273,70 @@ public class HomePageTest extends WicketFixture {
         assertLabelAtRow(1, "Brin d&#039;il y a deux jours (modifié)");
         assertLabelAtRow(2, "thisIsA new Brin");
         assertTextIsNotPresent("Brin de plus d&#039;un mois");
+    }
+
+
+    @Test
+    public void test_wikiExport() throws Exception {
+        Date today = Calendar.getInstance().getTime();
+        Date twoDaysAgo = shiftDate(today, -2);
+        Date aMonthAgo = shiftDate(today, -30);
+
+        String fileContent = "<brinList>\n"
+                             + "  <repository>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>1</uuid>\n"
+                             + "      <title>Brin de plus d'un mois</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(aMonthAgo) + "</creationDate>\n"
+                             + "      <status>unblocked</status>\n"
+                             + "      <description>sdq</description>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                             + "    </brin>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>3</uuid>\n"
+                             + "      <title>Autre Brin de plus d'un mois</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(aMonthAgo) + "</creationDate>\n"
+                             + "      <status>unblocked</status>\n"
+                             + "      <description>sdq</description>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                             + "    </brin>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>2</uuid>\n"
+                             + "      <title>Brin d'il y a deux jours</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(twoDaysAgo) + "</creationDate>\n"
+                             + "      <status>current</status>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
+                             + "    </brin>\n"
+                             + "  </repository>\n"
+                             + "</brinList>";
+
+        FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRepository.xml"), fileContent);
+
+        doInit("/pyp.properties");
+
+        getWicketTester().startPage(HomePage.class);
+
+        int row = 1;
+        assertLabelAtRow(row++, "Brin d&#039;il y a deux jours");
+        assertLabelAtRow(row++, "Brin de plus d&#039;un mois");
+        assertLabelAtRow(row, "Autre Brin de plus d&#039;un mois");
+
+        getWicketTester().clickLink("rightPanel:myContainer:menuList:2:imageLink", true);
+
+        ModalWindow modalWindow = (ModalWindow)getWicketTester().getComponentFromLastRenderedPage("wikiExportPanel");
+        Assert.assertTrue(modalWindow.isShown());
+
+        String expectedWikiContent = ""
+                                     + "* current\n"
+                                     + "** [Brin d'il y a deux jours | http://localhost/edit.html?id=2]\n"
+                                     + "* unblocked\n"
+                                     + "** [Brin de plus d'un mois | http://localhost/edit.html?id=1]\n"
+                                     + "** [Autre Brin de plus d'un mois | http://localhost/edit.html?id=3]\n"
+              ;
+        getWicketTester().assertModelValue("wikiExportPanel:content:wikiContent", expectedWikiContent);
     }
 
 

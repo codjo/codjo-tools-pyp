@@ -94,11 +94,11 @@ public class BrinService {
 
 
     public List<Brin> getAllBrins() {
-        return getAllBrins(null);
+        return getBrins(null);
     }
 
 
-    public List<Brin> getAllBrins(BrinFilter brinFilter) {
+    public List<Brin> getBrins(BrinFilter brinFilter) {
         try {
             List<Brin> resultList = new ArrayList<Brin>();
             List<Brin> brinList = loadConfig();

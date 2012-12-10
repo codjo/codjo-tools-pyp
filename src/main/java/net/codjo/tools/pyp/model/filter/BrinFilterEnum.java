@@ -1,6 +1,6 @@
 package net.codjo.tools.pyp.model.filter;
 /**
- *
+ * TODO Do we really need an enum to make a factory ? ;-)
  */
 public enum BrinFilterEnum {
     ALL_BRIN("AllBrinsFilter"),

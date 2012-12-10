@@ -7,7 +7,6 @@ import java.util.Iterator;
 import java.util.List;
 import net.codjo.tools.pyp.ExternalImage;
 import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.filter.AllBrinFilter;
 import net.codjo.tools.pyp.model.filter.BrinFilter;
 import net.codjo.tools.pyp.model.filter.BrinFilterEnum;
 import net.codjo.tools.pyp.services.BrinService;
@@ -56,14 +55,16 @@ public class HomePage extends RootPage {
         brinListContainer.setOutputMarkupId(true);
         brinListContainer.add(dataView);
         add(brinListContainer);
-//        add(new CloseOnEscBehavior(addApplicationPanel, closeButtonCallback, "document", "keyup"));
     }
 
 
     @Override
     protected void initRightPanel(String id) {
-        final ModalWindow addApplicationPanel = createWikiExportPanel();
-        add(addApplicationPanel);
+        final ModalWindow wikiExportWindow = createWikiExportWindow();
+        final WikiExportPanel wikiExportPanel = new WikiExportPanel(wikiExportWindow.getContentId());
+
+        wikiExportWindow.setContent(wikiExportPanel);
+        add(wikiExportWindow);
 
         CallBack buttonCallBack = new CallBack<Brin>() {
             public void onClickCallBack(Brin brin) {
@@ -84,7 +85,7 @@ public class HomePage extends RootPage {
         CallBack exportCallBack = new CallBack<Brin>() {
             public void onClickCallBack(Brin brin) {
                 //TODO On pourrait creer un DownloadLink pour encapsuler ce comportement
-                StringBuilder content = CsvService.export(BrinService.getBrinService(HomePage.this).getAllBrins(
+                StringBuilder content = CsvService.export(BrinService.getBrinService(HomePage.this).getBrins(
                       getBrinFilter()));
                 StringResourceStream stream = new StringResourceStream(content.toString(), "text/csv");
                 ResourceStreamRequestTarget requestTarget = new ResourceStreamRequestTarget(stream);
@@ -94,7 +95,7 @@ public class HomePage extends RootPage {
 
 
             public String getLabel() {
-                return "Export BRINs (csv)";
+                return "Export all BRINs (csv)";
             }
 
 
@@ -102,13 +103,10 @@ public class HomePage extends RootPage {
                 return "images/export.png";
             }
         };
-        CallBack wikiExportCallBack = new AjaxCallBack() {
-            public void onClickCallBack(Object brin) {
-                addApplicationPanel.show((AjaxRequestTarget) brin);
-            }
-
-            public void onClickCallBack(Object brin, AjaxRequestTarget target) {
-                addApplicationPanel.show(target);
+        CallBack<AjaxRequestTarget> wikiExportCallBack = new CallBack<AjaxRequestTarget>() {
+            public void onClickCallBack(AjaxRequestTarget target) {
+                wikiExportPanel.fillContent(BrinService.getBrinService(HomePage.this).getBrins(brinFilter));
+                wikiExportWindow.show(target);
             }
 
             public String getLabel() {
@@ -125,8 +123,8 @@ public class HomePage extends RootPage {
 
     @Override
     protected void initLeftPanel(String id) {
-        CallBack brinFilterCallBack = new CallBack<AllBrinFilter>() {
-            public void onClickCallBack(AllBrinFilter brinFilter) {
+        CallBack brinFilterCallBack = new CallBack<BrinFilter>() {
+            public void onClickCallBack(BrinFilter brinFilter) {
                 setBrinFilter(brinFilter);
             }
 
@@ -145,7 +143,7 @@ public class HomePage extends RootPage {
 
 
     //TODO copier coller from Magic
-    private ModalWindow createWikiExportPanel() {
+    private ModalWindow createWikiExportWindow() {
         final ModalWindow wikiExportWindow = new ModalWindow("wikiExportPanel");
 
         wikiExportWindow.setTitle("Wiki export");
@@ -154,20 +152,13 @@ public class HomePage extends RootPage {
         wikiExportWindow.setInitialHeight(435);
         wikiExportWindow.setOutputMarkupId(true);
 
-        final WikiExportPanel wikiExportPanel
-                = new WikiExportPanel(wikiExportWindow.getContentId(),
-                null, brinFilter);
-
-        wikiExportWindow.setContent(wikiExportPanel);
-        wikiExportPanel.setOutputMarkupId(true);
-
         ModalWindow.CloseButtonCallback closeButtonCallback = new ModalWindow.CloseButtonCallback() {
             public boolean onCloseButtonClicked(AjaxRequestTarget target) {
-                // do onClose stuff
                 return true;
             }
         };
         wikiExportWindow.setCloseButtonCallback(closeButtonCallback);
+ //       add(new CloseOnEscBehavior(wikiExportWindow, closeButtonCallback, "document", "keyup"));
         return wikiExportWindow;
     }
 
@@ -191,23 +182,13 @@ public class HomePage extends RootPage {
     }
 
 
-    public void setBrinFilter(AllBrinFilter brinFilter) {
+    public void setBrinFilter(BrinFilter brinFilter) {
         this.brinFilter = brinFilter;
     }
 
 
     public interface CallBack<T> extends Serializable {
         void onClickCallBack(T brin);
-
-
-        String getLabel();
-
-
-        String getImagePath();
-    }
-
-    public interface AjaxCallBack<T> extends CallBack<T> {
-        void onClickCallBack(T brin, AjaxRequestTarget target);
 
 
         String getLabel();
@@ -225,7 +206,7 @@ public class HomePage extends RootPage {
 
         @Override
         protected Iterator<IModel<Brin>> getItemModels() {
-            List<Brin> filteredList = BrinService.getBrinService(this).getAllBrins(getBrinFilter());
+            List<Brin> filteredList = BrinService.getBrinService(this).getBrins(getBrinFilter());
             return new ModelIteratorAdapter<Brin>(filteredList.iterator()) {
                 @Override
                 protected Model<Brin> model(Brin object) {
