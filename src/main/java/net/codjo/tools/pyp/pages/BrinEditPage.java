@@ -1,8 +1,8 @@
 package net.codjo.tools.pyp.pages;
+import java.io.IOException;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.pages.HomePage.CallBack;
 import net.codjo.tools.pyp.services.BrinService;
-import java.io.IOException;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 public class BrinEditPage extends RootPage {
 
@@ -26,7 +26,7 @@ public class BrinEditPage extends RootPage {
 
     @Override
     protected void initRightPanel(String id) {
-        CallBack buttonCallBack = new CallBack() {
+        CallBack buttonCallBack = new CallBack<Brin>() {
             public void onClickCallBack(Brin brin) {
                 setResponsePage(new HomePage());
             }
@@ -48,7 +48,6 @@ public class BrinEditPage extends RootPage {
 
     private void buildPage(Brin brin, boolean creationMode) {
         add(new FeedbackPanel("feedback").setOutputMarkupId(true));
-
         add(new BrinForm("brinForm", brin, creationMode));
     }
 }

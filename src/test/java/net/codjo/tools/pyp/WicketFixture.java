@@ -3,9 +3,10 @@ import java.util.Collection;
 import javax.servlet.http.Cookie;
 import junit.framework.Assert;
 import junit.framework.AssertionFailedError;
+import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
 /**
- *
+ * //TODO replace with the brand new fixture in Magic
  */
 public class WicketFixture {
     private WicketTester wicketTester;
@@ -49,4 +50,15 @@ public class WicketFixture {
                                 applicationConfigFile);
         }
     }
+
+
+    public FormTester newFormTester(String path) {
+        return wicketTester.newFormTester(path);
+    }
+
+
+    public void executeAjaxEvent(String componentPath, String event) {
+        wicketTester.executeAjaxEvent(componentPath, event);
+    }
+
 }

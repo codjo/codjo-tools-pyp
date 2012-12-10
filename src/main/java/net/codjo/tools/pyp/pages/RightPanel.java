@@ -1,9 +1,8 @@
 package net.codjo.tools.pyp.pages;
+import java.util.Arrays;
 import net.codjo.tools.pyp.ExternalImage;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.pages.HomePage.CallBack;
-import java.util.Arrays;
-import java.util.List;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.MarkupStream;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -23,13 +22,13 @@ public class RightPanel extends Panel {
         myContainer = new WebMarkupContainer("myContainer");
         add(myContainer);
 
-        List<CallBack> callBackList = Arrays.asList(buttonCallBack);
-        myContainer.add(new ListView<CallBack>("menuList", callBackList) {
+        ListView<CallBack> listView = new ListView<CallBack>("menuList", Arrays.asList(buttonCallBack)) {
             @Override
             protected void populateItem(ListItem<CallBack> callBackListItem) {
                 addLink(callBackListItem, callBackListItem.getModelObject());
             }
-        });
+        };
+        myContainer.add(listView);
     }
 
 

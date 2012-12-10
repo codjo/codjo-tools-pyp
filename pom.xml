@@ -17,6 +17,11 @@
     <!-- END SNIPPET: super-pom -->
     <dependencies>
         <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>1.5.2</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.wicket</groupId>
             <artifactId>wicket</artifactId>
         </dependency>

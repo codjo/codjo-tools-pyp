@@ -1,12 +1,14 @@
 package net.codjo.tools.pyp;
 import java.io.BufferedReader;
 import java.io.IOException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import net.codjo.test.common.fixture.Fixture;
 import org.mortbay.jetty.Connector;
 import org.mortbay.jetty.Server;
 import org.mortbay.jetty.bio.SocketConnector;
+import org.mortbay.jetty.handler.AbstractHandler;
 import org.mortbay.jetty.security.Constraint;
 import org.mortbay.jetty.security.ConstraintMapping;
 import org.mortbay.jetty.security.HashUserRealm;
@@ -95,7 +97,6 @@ public abstract class JettyFixture implements Fixture {
             addSecurityContext(newServer, roles,
                                getClass().getResource(getRealmPropertyFile()).getPath());
         }
-/*
         newServer.addHandler(new AbstractHandler() {
             public void handle(String target,
                                HttpServletRequest httpServletRequest,
@@ -105,7 +106,6 @@ public abstract class JettyFixture implements Fixture {
                 handleHttpRequest(target, httpServletRequest, httpServletResponse);
             }
         });
-*/
         return newServer;
     }
 

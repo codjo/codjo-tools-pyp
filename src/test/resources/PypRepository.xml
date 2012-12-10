@@ -1,4 +1,5 @@
-<brinList>
+<brinList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="file:///C:/dev/user/pypRpository.xsd">
     <repository>
         <brin>
             <uuid>uuidUn</uuid>
