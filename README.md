@@ -31,7 +31,7 @@ for example :
 
 TODO :
 * close WikiExport window with ESC button
-* Edit page correction : bug link "Ajout" +  move save button to the upper right
+* Edit page correction : move save button to the upper right
 * add a statistic panel (nb brin/years) + filters ?
 * Manage properly the absence of a confluence server (add alerts on gui or any sendMail simulation)
 * when unblocking radio button is clcked, status passes to unblocked
@@ -44,10 +44,11 @@ TODO :
 DONE :
 * simple export for confluence, with Name/Url for quick insert in "reunion plateforme" minutes
 * Filter the last x days Brins OR highlight them with a specific color
-   * filter should take creation date and Unblocking date DONE
-   * add "current" brins regardless of the creation date  DONE
-   * summary should also be updated according to filter value DONE
+   * filter should take creation date and Unblocking date
+   * add "current" brins regardless of the creation date
+   * summary should also be updated according to filter value
    * ergonomy :
-          ** add more filters (current year / current month ) DONE
-          ** move filter to the Left above "Summary" block. DONE
-   * when coming from edit page, filter is always "All brin" DONE
+          ** add more filters (current year / current month )
+          ** move filter to the Left above "Summary" block.
+   * when coming from edit page, filter is always "All brin"
+* Edit page correction : bug link "Ajout"

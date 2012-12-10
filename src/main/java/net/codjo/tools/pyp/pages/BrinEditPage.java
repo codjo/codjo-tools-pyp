@@ -38,7 +38,7 @@ public class BrinEditPage extends RootPage {
 
 
             public String getImagePath() {
-                return "../../images/backToList.png";
+                return "images/backToList.png";
             }
         };
 

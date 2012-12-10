@@ -9,7 +9,6 @@ import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.target.coding.HybridUrlCodingStrategy;
 /**
  *
  */
@@ -57,7 +56,6 @@ public class PypApplication extends WebApplication {
     @Override
     protected void init() {
         super.init();
-
         mountBookmarkablePage("/edit.html", BrinEditPage.class);
         mountBookmarkablePage("/home.html", HomePage.class);
     }
