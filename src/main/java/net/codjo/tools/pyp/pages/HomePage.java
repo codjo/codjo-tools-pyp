@@ -15,6 +15,7 @@ import net.codjo.tools.pyp.services.CsvService;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -55,11 +56,15 @@ public class HomePage extends RootPage {
         brinListContainer.setOutputMarkupId(true);
         brinListContainer.add(dataView);
         add(brinListContainer);
+//        add(new CloseOnEscBehavior(addApplicationPanel, closeButtonCallback, "document", "keyup"));
     }
 
 
     @Override
     protected void initRightPanel(String id) {
+        final ModalWindow addApplicationPanel = createWikiExportPanel();
+        add(addApplicationPanel);
+
         CallBack buttonCallBack = new CallBack<Brin>() {
             public void onClickCallBack(Brin brin) {
                 responseWithEdit(brin);
@@ -97,7 +102,24 @@ public class HomePage extends RootPage {
                 return "images/export.png";
             }
         };
-        add(new RightPanel(id, buttonCallBack, exportCallBack));
+        CallBack wikiExportCallBack = new AjaxCallBack() {
+            public void onClickCallBack(Object brin) {
+                addApplicationPanel.show((AjaxRequestTarget) brin);
+            }
+
+            public void onClickCallBack(Object brin, AjaxRequestTarget target) {
+                addApplicationPanel.show(target);
+            }
+
+            public String getLabel() {
+                return "Export wiki";
+            }
+
+            public String getImagePath() {
+                return "images/export.png";
+            }
+        };
+        add(new RightPanel(id, buttonCallBack, exportCallBack,wikiExportCallBack));
     }
 
 
@@ -120,6 +142,35 @@ public class HomePage extends RootPage {
         };
         add(new LeftPanel(id,brinFilter, brinFilterCallBack));
     }
+
+
+    //TODO copier coller from Magic
+    private ModalWindow createWikiExportPanel() {
+        final ModalWindow wikiExportWindow = new ModalWindow("wikiExportPanel");
+
+        wikiExportWindow.setTitle("Wiki export");
+        wikiExportWindow.setInitialWidth(700);
+        wikiExportWindow.setMinimalWidth(700);
+        wikiExportWindow.setInitialHeight(435);
+        wikiExportWindow.setOutputMarkupId(true);
+
+        final WikiExportPanel wikiExportPanel
+                = new WikiExportPanel(wikiExportWindow.getContentId(),
+                null, brinFilter);
+
+        wikiExportWindow.setContent(wikiExportPanel);
+        wikiExportPanel.setOutputMarkupId(true);
+
+        ModalWindow.CloseButtonCallback closeButtonCallback = new ModalWindow.CloseButtonCallback() {
+            public boolean onCloseButtonClicked(AjaxRequestTarget target) {
+                // do onClose stuff
+                return true;
+            }
+        };
+        wikiExportWindow.setCloseButtonCallback(closeButtonCallback);
+        return wikiExportWindow;
+    }
+
 
 
     private void responseWithEdit(Brin brin) {
@@ -147,6 +198,16 @@ public class HomePage extends RootPage {
 
     public interface CallBack<T> extends Serializable {
         void onClickCallBack(T brin);
+
+
+        String getLabel();
+
+
+        String getImagePath();
+    }
+
+    public interface AjaxCallBack<T> extends CallBack<T> {
+        void onClickCallBack(T brin, AjaxRequestTarget target);
 
 
         String getLabel();
