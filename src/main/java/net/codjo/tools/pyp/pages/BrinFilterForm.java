@@ -2,9 +2,7 @@ package net.codjo.tools.pyp.pages;
 import java.util.ArrayList;
 import java.util.List;
 import net.codjo.tools.pyp.model.filter.BrinFilter;
-import net.codjo.tools.pyp.model.filter.CurrentMonthBrinFilter;
-import net.codjo.tools.pyp.model.filter.CurrentYearBrinFilter;
-import net.codjo.tools.pyp.model.filter.LastWeekBrinFilter;
+import net.codjo.tools.pyp.model.filter.BrinFilterEnum;
 import net.codjo.tools.pyp.pages.HomePage.CallBack;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
@@ -15,29 +13,32 @@ import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
 /**
- * TODO : put generified class in codjo-wicket (copied from LanguagePanel in magic)
+ * TODO[codjo-web] - see LanguagePanel in Magic
  */
 public class BrinFilterForm extends Form {
     private static final Logger LOG = Logger.getLogger(BrinFilterForm.class);
+    static final BrinFilter DEFAULT_BRIN_FILTER = BrinFilterEnum.ALL_BRIN.get();
 
 
-    public BrinFilterForm(String id, final CallBack<BrinFilter> callBack) {
+    public BrinFilterForm(String id, BrinFilter filter, final CallBack<BrinFilter> callBack) {
         super(id);
         ChoiceRenderer<BrinFilter> choiceRenderer = new ChoiceRenderer<BrinFilter>("displayLabel", "brinId") {
-            @Override
             public Object getDisplayValue(BrinFilter object) {
                 return object.getDisplayLabel();
             }
         };
         List<BrinFilter> brinFilters = new ArrayList<BrinFilter>();
-        brinFilters.add(new LastWeekBrinFilter("LastWeekFilter", "D-7 brins"));
-        brinFilters.add(new CurrentMonthBrinFilter("CurrentMonthFilter", "Current Month"));
-        brinFilters.add(new CurrentYearBrinFilter("CurrentYearFilter", "Current Year"));
-        brinFilters.add(new BrinFilter("AllBrinsFilter", "All brins"));
+        brinFilters.add(BrinFilterEnum.LAST_WEEK.get());
+        brinFilters.add(BrinFilterEnum.CURRENT_MONTH.get());
+        brinFilters.add(BrinFilterEnum.CURRENT_YEAR.get());
+        brinFilters.add(DEFAULT_BRIN_FILTER);
 
+        BrinFilter defaultBrinFilter = DEFAULT_BRIN_FILTER;
+        if (filter != null) {
+            defaultBrinFilter = filter;
+        }
         DropDownChoice choice = new DropDownChoice<BrinFilter>("brinFilters",
-                                                               new Model<BrinFilter>(new BrinFilter("AllBrinsFilter",
-                                                                                                    "NotUsed")),
+                                                               new Model<BrinFilter>(defaultBrinFilter),
                                                                brinFilters,
                                                                choiceRenderer);
         choice.add(new AjaxFormComponentUpdatingBehavior("onchange") {

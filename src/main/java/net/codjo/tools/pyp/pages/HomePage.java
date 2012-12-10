@@ -8,11 +8,13 @@ import java.util.List;
 import net.codjo.tools.pyp.ExternalImage;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.filter.BrinFilter;
+import net.codjo.tools.pyp.model.filter.BrinFilterEnum;
 import net.codjo.tools.pyp.services.BrinService;
 import net.codjo.tools.pyp.services.CsvService;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -28,10 +30,26 @@ import org.apache.wicket.util.resource.StringResourceStream;
  */
 public class HomePage extends RootPage {
     private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-    private BrinFilter brinFilter;
 
 
-    public HomePage() {
+    public HomePage(final PageParameters pageParameters) {
+        if (pageParameters.containsKey("brinFilter")) {
+            brinFilter = BrinFilterEnum.get(pageParameters.getString("brinFilter"));
+        }
+        else {
+            brinFilter = BrinFilterForm.DEFAULT_BRIN_FILTER;
+        }
+        buildPage();
+    }
+
+
+    public HomePage(BrinFilter brinFilter) {
+        super(brinFilter);
+        buildPage();
+    }
+
+
+    private void buildPage() {
         BrinListView dataView = new BrinListView("brinList");
         WebMarkupContainer brinListContainer = new WebMarkupContainer("brinListContainer");
         brinListContainer.setOutputMarkupId(true);
@@ -42,9 +60,15 @@ public class HomePage extends RootPage {
 
     @Override
     protected void initRightPanel(String id) {
+        final ModalWindow wikiExportWindow = createWikiExportWindow();
+        final WikiExportPanel wikiExportPanel = new WikiExportPanel(wikiExportWindow.getContentId());
+
+        wikiExportWindow.setContent(wikiExportPanel);
+        add(wikiExportWindow);
+
         CallBack buttonCallBack = new CallBack<Brin>() {
             public void onClickCallBack(Brin brin) {
-                responseWithEdit(brin, true);
+                responseWithEdit(brin);
             }
 
 
@@ -61,7 +85,7 @@ public class HomePage extends RootPage {
         CallBack exportCallBack = new CallBack<Brin>() {
             public void onClickCallBack(Brin brin) {
                 //TODO On pourrait creer un DownloadLink pour encapsuler ce comportement
-                StringBuilder content = CsvService.export(BrinService.getBrinService(HomePage.this).getAllBrins(
+                StringBuilder content = CsvService.export(BrinService.getBrinService(HomePage.this).getBrins(
                       getBrinFilter()));
                 StringResourceStream stream = new StringResourceStream(content.toString(), "text/csv");
                 ResourceStreamRequestTarget requestTarget = new ResourceStreamRequestTarget(stream);
@@ -71,7 +95,7 @@ public class HomePage extends RootPage {
 
 
             public String getLabel() {
-                return "Export BRINs (csv)";
+                return "Export all BRINs (csv)";
             }
 
 
@@ -79,7 +103,21 @@ public class HomePage extends RootPage {
                 return "images/export.png";
             }
         };
-        add(new RightPanel(id, buttonCallBack, exportCallBack));
+        CallBack<AjaxRequestTarget> wikiExportCallBack = new CallBack<AjaxRequestTarget>() {
+            public void onClickCallBack(AjaxRequestTarget target) {
+                wikiExportPanel.fillContent(BrinService.getBrinService(HomePage.this).getBrins(brinFilter));
+                wikiExportWindow.show(target);
+            }
+
+            public String getLabel() {
+                return "Export wiki";
+            }
+
+            public String getImagePath() {
+                return "images/export.png";
+            }
+        };
+        add(new RightPanel(id, buttonCallBack, exportCallBack,wikiExportCallBack));
     }
 
 
@@ -100,17 +138,34 @@ public class HomePage extends RootPage {
                 return null;
             }
         };
-        add(new LeftPanel(id,brinFilterCallBack));
+        add(new LeftPanel(id,brinFilter, brinFilterCallBack));
     }
 
 
-    private void responseWithEdit(Brin brin, boolean creationMode) {
-        if (creationMode) {
-            setResponsePage(new BrinEditPage(brin, creationMode));
-        }
-        else {
-            setResponsePage(BrinEditPage.class, new PageParameters("id=" + brin.getUuid()));
-        }
+    //TODO copier coller from Magic
+    private ModalWindow createWikiExportWindow() {
+        final ModalWindow wikiExportWindow = new ModalWindow("wikiExportPanel");
+
+        wikiExportWindow.setTitle("Wiki export");
+        wikiExportWindow.setInitialWidth(700);
+        wikiExportWindow.setMinimalWidth(700);
+        wikiExportWindow.setInitialHeight(435);
+        wikiExportWindow.setOutputMarkupId(true);
+
+        ModalWindow.CloseButtonCallback closeButtonCallback = new ModalWindow.CloseButtonCallback() {
+            public boolean onCloseButtonClicked(AjaxRequestTarget target) {
+                return true;
+            }
+        };
+        wikiExportWindow.setCloseButtonCallback(closeButtonCallback);
+ //       add(new CloseOnEscBehavior(wikiExportWindow, closeButtonCallback, "document", "keyup"));
+        return wikiExportWindow;
+    }
+
+
+
+    private void responseWithEdit(Brin brin) {
+        setResponsePage(new BrinEditPage(brin, brinFilter));
     }
 
 
@@ -151,7 +206,7 @@ public class HomePage extends RootPage {
 
         @Override
         protected Iterator<IModel<Brin>> getItemModels() {
-            List<Brin> filteredList = BrinService.getBrinService(this).getAllBrins(getBrinFilter());
+            List<Brin> filteredList = BrinService.getBrinService(this).getBrins(getBrinFilter());
             return new ModelIteratorAdapter<Brin>(filteredList.iterator()) {
                 @Override
                 protected Model<Brin> model(Brin object) {
@@ -171,7 +226,7 @@ public class HomePage extends RootPage {
             Link editionLink = new Link("editBrin") {
                 @Override
                 public void onClick() {
-                    responseWithEdit(brin, false);
+                    responseWithEdit(brin);
                 }
             };
             editionLink.add(new ExternalImage("editBrinLogo", "images/brin_form_edit.png"));
@@ -179,7 +234,7 @@ public class HomePage extends RootPage {
             listItem.add(new AjaxEventBehavior("ondblclick") {
                 @Override
                 protected void onEvent(AjaxRequestTarget target) {
-                    responseWithEdit(brin, false);
+                    responseWithEdit(brin);
                 }
             });
         }

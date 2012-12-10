@@ -83,7 +83,7 @@
 
         <confluenceTestPage>SendAnnouncementForBrin</confluenceTestPage>
         <confluenceManualTestPage>SendAnnouncementForBrinManualTest</confluenceManualTestPage>
-        <repositoryTestFilePath>target/pyp/pypRpository.xml</repositoryTestFilePath>
+        <repositoryTestFilePath>target/pyp/pypRepository.xml</repositoryTestFilePath>
     </properties>
 
     <name>codjo-pyp</name>
@@ -154,7 +154,7 @@
                 <confluencePage>${confluencePrdPage}</confluencePage>
 
                 <confluenceUnitPage>${confluenceTestPage}</confluenceUnitPage>
-                <repositoryFilePath>Z:\\equipes\\equipe-transverse\\pyp\\repository\\pypRpository.xml</repositoryFilePath>
+                <repositoryFilePath>Z:\\equipes\\equipe-transverse\\pyp\\repository\\pypRepository.xml</repositoryFilePath>
                 <deploymentServerUrl>http://wp-sic:8080/manager/</deploymentServerUrl>
             </properties>
         </profile>

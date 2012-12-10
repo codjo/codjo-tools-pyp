@@ -1,12 +1,11 @@
 package net.codjo.tools.pyp.model.filter;
-import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.Status;
 import org.joda.time.DateTime;
 
-public class LastWeekBrinFilter extends BrinFilter implements Serializable {
+public class LastWeekBrinFilter extends AllBrinFilter {
 
     public LastWeekBrinFilter(String brinId, String displayLabel) {
         super(brinId, displayLabel);
@@ -19,7 +18,7 @@ public class LastWeekBrinFilter extends BrinFilter implements Serializable {
             return true;
         }
         DateTime creationDateTime = new DateTime(brin.getCreationDate());
-        DateTime lastWeekDate = new DateTime().minusDays(7).withHourOfDay(0);
+        DateTime lastWeekDate = new DateTime().minusDays(7).withHourOfDay(0).withMinuteOfHour(0);
         boolean creationDateInLastWeek = creationDateTime.isAfter(lastWeekDate.toInstant());
 
         DateTime unBlockingDate;

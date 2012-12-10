@@ -12,8 +12,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import net.codjo.tools.pyp.PypApplication;
 import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.filter.BrinFilter;
 import net.codjo.tools.pyp.model.Status;
+import net.codjo.tools.pyp.model.filter.BrinFilter;
 import net.codjo.tools.pyp.xml.XmlCodec;
 import net.codjo.util.file.FileUtil;
 import org.apache.wicket.Component;
@@ -94,11 +94,11 @@ public class BrinService {
 
 
     public List<Brin> getAllBrins() {
-        return getAllBrins(null);
+        return getBrins(null);
     }
 
 
-    public List<Brin> getAllBrins(BrinFilter brinFilter) {
+    public List<Brin> getBrins(BrinFilter brinFilter) {
         try {
             List<Brin> resultList = new ArrayList<Brin>();
             List<Brin> brinList = loadConfig();

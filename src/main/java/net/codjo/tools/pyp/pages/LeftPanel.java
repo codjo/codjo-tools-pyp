@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.Status;
+import net.codjo.tools.pyp.model.filter.BrinFilter;
 import net.codjo.tools.pyp.pages.HomePage.CallBack;
 import net.codjo.tools.pyp.services.BrinService;
 import org.apache.wicket.Component;
@@ -20,9 +21,9 @@ import org.apache.wicket.model.Model;
  *
  */
 public class LeftPanel extends Panel {
-    public LeftPanel(String id, final CallBack... buttonCallBack) {
+    public LeftPanel(String id, BrinFilter brinFilter, CallBack<BrinFilter> buttonCallBack) {
         super(id);
-        add(brinFilterForm(buttonCallBack[0]));
+        add(brinFilterForm(brinFilter, buttonCallBack));
 
         WebMarkupContainer myContainer = new WebMarkupContainer("summaryPanel");
         myContainer.add(new StatusView("infoList"));
@@ -30,8 +31,8 @@ public class LeftPanel extends Panel {
         add(myContainer);
     }
 
-    private Component brinFilterForm(CallBack brinFilter) {
-        return new BrinFilterForm("filterForm", brinFilter).setVisible(brinFilter != null);
+    private Component brinFilterForm(BrinFilter filter, CallBack<BrinFilter> brinFilter) {
+        return new BrinFilterForm("filterForm",filter, brinFilter).setVisible(brinFilter != null);
     }
 
     private class StatusView extends RefreshingView<Status> {
@@ -47,7 +48,7 @@ public class LeftPanel extends Panel {
         protected Iterator<IModel<Status>> getItemModels() {
             BrinService brinService = BrinService.getBrinService(this);
             //TODO pas beau le ((HomePage)getPage()).getBrinFilter() !!!
-            List<Brin> allBrins = brinService.getAllBrins(((HomePage)getPage()).getBrinFilter());
+            List<Brin> allBrins = brinService.getBrins(((HomePage)getPage()).getBrinFilter());
             statusIntegerMap = brinService.calculateBrinNumber(allBrins);
 
             List<Status> filteredList = Arrays.asList(Status.values());
