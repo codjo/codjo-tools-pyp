@@ -30,7 +30,6 @@ for example :
 ```
 
 TODO :
-* close WikiExport window with ESC button
 * Edit page correction : move save button to the upper right
 * add a statistic panel (nb brin/years) + filters ?
 * Manage properly the absence of a confluence server (add alerts on gui or any sendMail simulation)
@@ -39,11 +38,13 @@ TODO :
 * Filter the last x days Brins OR highlight them with a specific color
 * show detail in a popup to avoid double click
 * Move tomcat-maven-plugin to super-pom
-* Manage automatic sauvegarde of repository ?
+* Manage automatic backup of repository ?
 * Manage PypRepository.xsd
 
 DONE :
 * simple export for confluence, with Name/Url for quick insert in "reunion plateforme" minutes
+* close WikiExport window with ESC button
+* add an icon for wiki export
 * Filter the last x days Brins OR highlight them with a specific color
    * filter should take creation date and Unblocking date
    * add "current" brins regardless of the creation date

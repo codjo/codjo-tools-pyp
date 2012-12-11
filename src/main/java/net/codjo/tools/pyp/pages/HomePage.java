@@ -65,8 +65,15 @@ public class HomePage extends RootPage {
 
         wikiExportWindow.setContent(wikiExportPanel);
         add(wikiExportWindow);
+        ModalWindow.CloseButtonCallback closeButtonCallback = new ModalWindow.CloseButtonCallback() {
+            public boolean onCloseButtonClicked(AjaxRequestTarget target) {
+                return true;
+            }
+        };
+        wikiExportWindow.setCloseButtonCallback(closeButtonCallback);
+        add(new CloseOnEscBehavior(wikiExportWindow, closeButtonCallback, "document", "keyup"));
 
-        CallBack buttonCallBack = new CallBack<Brin>() {
+        CallBack<Brin> addNewBrinCallBack = new CallBack<Brin>() {
             public void onClickCallBack(Brin brin) {
                 responseWithEdit(brin);
             }
@@ -82,7 +89,7 @@ public class HomePage extends RootPage {
             }
         };
 
-        CallBack exportCallBack = new CallBack<Brin>() {
+        CallBack<Brin> exportCsvCallBack = new CallBack<Brin>() {
             public void onClickCallBack(Brin brin) {
                 //TODO On pourrait creer un DownloadLink pour encapsuler ce comportement
                 StringBuilder content = CsvService.export(BrinService.getBrinService(HomePage.this).getBrins(
@@ -103,7 +110,8 @@ public class HomePage extends RootPage {
                 return "images/export.png";
             }
         };
-        CallBack<AjaxRequestTarget> wikiExportCallBack = new CallBack<AjaxRequestTarget>() {
+
+        CallBack<AjaxRequestTarget> exportWikiCallBack = new CallBack<AjaxRequestTarget>() {
             public void onClickCallBack(AjaxRequestTarget target) {
                 wikiExportPanel.fillContent(BrinService.getBrinService(HomePage.this).getBrins(brinFilter));
                 wikiExportWindow.show(target);
@@ -114,10 +122,11 @@ public class HomePage extends RootPage {
             }
 
             public String getImagePath() {
-                return "images/export.png";
+                return "images/wiki-icon.gif";
             }
         };
-        add(new RightPanel(id, buttonCallBack, exportCallBack,wikiExportCallBack));
+
+        add(new RightPanel(id, addNewBrinCallBack, exportCsvCallBack,exportWikiCallBack));
     }
 
 
@@ -152,13 +161,6 @@ public class HomePage extends RootPage {
         wikiExportWindow.setInitialHeight(435);
         wikiExportWindow.setOutputMarkupId(true);
 
-        ModalWindow.CloseButtonCallback closeButtonCallback = new ModalWindow.CloseButtonCallback() {
-            public boolean onCloseButtonClicked(AjaxRequestTarget target) {
-                return true;
-            }
-        };
-        wikiExportWindow.setCloseButtonCallback(closeButtonCallback);
- //       add(new CloseOnEscBehavior(wikiExportWindow, closeButtonCallback, "document", "keyup"));
         return wikiExportWindow;
     }
 

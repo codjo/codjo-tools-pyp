@@ -616,7 +616,7 @@ div.explorerTree div.wicket-tree-table-body {
 .fieldSetSummary legend {
     position: absolute;
     top: -2px;
-    left: 40px;
+    left: 30px;
     padding-bottom: 5px;
     color: #339;
     font-weight: bold;
