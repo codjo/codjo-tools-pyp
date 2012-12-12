@@ -1,5 +1,4 @@
 package net.codjo.tools.pyp.pages;
-import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -73,24 +72,16 @@ public class HomePage extends RootPage {
         wikiExportWindow.setCloseButtonCallback(closeButtonCallback);
         add(new CloseOnEscBehavior(wikiExportWindow, closeButtonCallback, "document", "keyup"));
 
-        CallBack<Brin> addNewBrinCallBack = new CallBack<Brin>() {
-            public void onClickCallBack(Brin brin) {
-                responseWithEdit(brin);
-            }
-
-
-            public String getLabel() {
-                return "Add new BRIN";
-            }
-
-
-            public String getImagePath() {
-                return "images/brin_form_add.png";
+        CallBack<AjaxRequestTarget> addNewBrinCallBack
+              = new AbstractCallBack<AjaxRequestTarget>("Add new BRIN", "images/brin_form_add.png") {
+            public void onClickCallBack(AjaxRequestTarget brin) {
+                responseWithEdit(null);
             }
         };
 
-        CallBack<Brin> exportCsvCallBack = new CallBack<Brin>() {
-            public void onClickCallBack(Brin brin) {
+        CallBack<AjaxRequestTarget> exportCsvCallBack
+              = new AbstractCallBack<AjaxRequestTarget>("Export all BRINs (csv)", "images/export.png") {
+            public void onClickCallBack(AjaxRequestTarget brin) {
                 //TODO On pourrait creer un DownloadLink pour encapsuler ce comportement
                 StringBuilder content = CsvService.export(BrinService.getBrinService(HomePage.this).getBrins(
                       getBrinFilter()));
@@ -99,55 +90,28 @@ public class HomePage extends RootPage {
                 requestTarget.setFileName("ExportBrin.csv");
                 getRequestCycle().setRequestTarget(requestTarget);
             }
-
-
-            public String getLabel() {
-                return "Export all BRINs (csv)";
-            }
-
-
-            public String getImagePath() {
-                return "images/export.png";
-            }
         };
 
-        CallBack<AjaxRequestTarget> exportWikiCallBack = new CallBack<AjaxRequestTarget>() {
+        CallBack<AjaxRequestTarget> exportWikiCallBack = new AbstractCallBack<AjaxRequestTarget>("Export wiki",
+                                                                                                 "images/WikiPediaFavicon.ico") {
             public void onClickCallBack(AjaxRequestTarget target) {
                 wikiExportPanel.fillContent(BrinService.getBrinService(HomePage.this).getBrins(brinFilter));
                 wikiExportWindow.show(target);
             }
-
-            public String getLabel() {
-                return "Export wiki";
-            }
-
-            public String getImagePath() {
-                return "images/wiki-icon.gif";
-            }
         };
 
-        add(new RightPanel(id, addNewBrinCallBack, exportCsvCallBack,exportWikiCallBack));
+        add(new RightPanel(id, addNewBrinCallBack, exportCsvCallBack, exportWikiCallBack));
     }
 
 
     @Override
     protected void initLeftPanel(String id) {
-        CallBack brinFilterCallBack = new CallBack<BrinFilter>() {
+        CallBack brinFilterCallBack = new AbstractCallBack<BrinFilter>("brinFilterCallBack", null) {
             public void onClickCallBack(BrinFilter brinFilter) {
                 setBrinFilter(brinFilter);
             }
-
-
-            public String getLabel() {
-                return "brinFilterCallBack";
-            }
-
-
-            public String getImagePath() {
-                return null;
-            }
         };
-        add(new LeftPanel(id,brinFilter, brinFilterCallBack));
+        add(new LeftPanel(id, brinFilter, brinFilterCallBack));
     }
 
 
@@ -163,7 +127,6 @@ public class HomePage extends RootPage {
 
         return wikiExportWindow;
     }
-
 
 
     private void responseWithEdit(Brin brin) {
@@ -188,16 +151,6 @@ public class HomePage extends RootPage {
         this.brinFilter = brinFilter;
     }
 
-
-    public interface CallBack<T> extends Serializable {
-        void onClickCallBack(T brin);
-
-
-        String getLabel();
-
-
-        String getImagePath();
-    }
 
     private class BrinListView extends RefreshingView<Brin> {
 

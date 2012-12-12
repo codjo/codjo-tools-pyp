@@ -6,7 +6,6 @@ import java.util.Map;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.Status;
 import net.codjo.tools.pyp.model.filter.BrinFilter;
-import net.codjo.tools.pyp.pages.HomePage.CallBack;
 import net.codjo.tools.pyp.services.BrinService;
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;

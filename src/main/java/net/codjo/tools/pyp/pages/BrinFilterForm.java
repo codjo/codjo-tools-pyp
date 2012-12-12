@@ -3,7 +3,6 @@ import java.util.ArrayList;
 import java.util.List;
 import net.codjo.tools.pyp.model.filter.BrinFilter;
 import net.codjo.tools.pyp.model.filter.BrinFilterEnum;
-import net.codjo.tools.pyp.pages.HomePage.CallBack;
 import org.apache.log4j.Logger;
 import org.apache.wicket.Component;
 import org.apache.wicket.ajax.AjaxRequestTarget;
