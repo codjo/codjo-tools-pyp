@@ -110,28 +110,29 @@ a:visited {
     min-height: 1px;
 }
 
-#leftPanel {
-    margin-top: 70px;
+.leftPanel {
+    position: relative;
+   margin-top: 70px;
 }
 
-#leftPanel li a {
+.leftPanel li a {
     padding: 4px 7px;
 }
 
-#leftPanel li.internal a {
+.leftPanel li.internal a {
     background-color: #426BB3;
 }
 
-#leftPanel li.internal a:hover {
+.leftPanel li.internal a:hover {
     background-color: #819CCC;
 }
 
-#leftPanel li.external a {
+.leftPanel li.external a {
     border-bottom: 1px solid #DEDFE0;
     color: #4A494A;
 }
 
-#leftPanel li.external a:hover {
+.leftPanel li.external a:hover {
     background-color: #DEDFE0;
 }
 
@@ -430,6 +431,7 @@ div.explorerTree div.wicket-tree-table-body {
 
 .brinTable {
     padding-top: 50px;
+    cursor: pointer;
 }
 
 .brinForm {
@@ -615,7 +617,7 @@ div.explorerTree div.wicket-tree-table-body {
 .fieldSetSummary legend {
     position: absolute;
     top: -2px;
-    left: 40px;
+    left: 30px;
     padding-bottom: 5px;
     color: #339;
     font-weight: bold;
@@ -629,3 +631,31 @@ div.explorerTree div.wicket-tree-table-body {
 .rightMenuTable {
     float: right;
 }
+
+.filter {
+    margin-top: 10px;
+}
+
+.filter label {
+    color: #113388;
+}
+
+.selectFilters {
+    font-size: 11px;
+    padding-top: 1px;
+    text-transform: none;
+}
+
+#filterPanel {
+    position: absolute;
+    height: 20px;
+    width: 141px;
+    top: 0px;
+}
+
+.summaryPanel {
+    position: absolute;
+    height: 100px;
+    top: 55px;
+}
+

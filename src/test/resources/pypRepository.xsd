@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
+      <!--
+      exemple de declaration dans le fichier xml
+            <brinList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xsi:noNamespaceSchemaLocation="file:///C:/dev/user/pypRepository.xsd">
+      -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
+
+    <xs:element name="brinList">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="repository" type="type-brin-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="type-brin-list">
+        <xs:sequence>
+            <xs:element name="brin" type="type-brin" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="type-brin">
+        <xs:sequence>
+            <xs:element name="uuid" type="xs:string"/>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="creationDate" type="xs:date"/>
+            <xs:element name="unblockingDate" type="xs:date"/>
+            <xs:element name="status" type="xs:string"/>
+            <xs:element name="description" type="xs:string"/>
+            <xs:element name="affectedTeams" type="xs:string"/>
+            <xs:element name="unblockingDescription" type="xs:string"/>
+            <xs:element name="rootCause" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

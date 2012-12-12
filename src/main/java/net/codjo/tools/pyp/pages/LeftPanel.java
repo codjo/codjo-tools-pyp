@@ -1,31 +1,70 @@
 package net.codjo.tools.pyp.pages;
-import net.codjo.tools.pyp.model.Status;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.Status;
+import net.codjo.tools.pyp.model.filter.BrinFilter;
+import net.codjo.tools.pyp.services.BrinService;
+import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.list.ListItem;
-import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.markup.repeater.Item;
+import org.apache.wicket.markup.repeater.RefreshingView;
+import org.apache.wicket.markup.repeater.util.ModelIteratorAdapter;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 /**
  *
  */
 public class LeftPanel extends Panel {
-    public LeftPanel(String id, final Map<Status, Integer> statusIntegerMap) {
+    public LeftPanel(String id, BrinFilter brinFilter, CallBack<BrinFilter> buttonCallBack) {
         super(id);
-        WebMarkupContainer myContainer = new WebMarkupContainer("leftContainer");
+        add(brinFilterForm(brinFilter, buttonCallBack));
+
+        WebMarkupContainer myContainer = new WebMarkupContainer("summaryPanel");
+        myContainer.add(new StatusView("infoList"));
+        myContainer.setOutputMarkupId(true);
         add(myContainer);
+    }
 
-        List<Status> callBackList = Arrays.asList(Status.values());
+    private Component brinFilterForm(BrinFilter filter, CallBack<BrinFilter> brinFilter) {
+        return new BrinFilterForm("filterForm",filter, brinFilter).setVisible(brinFilter != null);
+    }
 
-        myContainer.add(new ListView<Status>("infoList", callBackList) {
-            @Override
-            protected void populateItem(ListItem<Status> statusListItem) {
-                Status status = statusListItem.getModelObject();
-                statusListItem.add(new Label("statusLabel", status.toString()));
-                statusListItem.add(new Label("nbBrin", statusIntegerMap.get(status).toString()));
-            }
-        });
+    private class StatusView extends RefreshingView<Status> {
+        private Map<Status, Integer> statusIntegerMap;
+
+
+        public StatusView(String id) {
+            super(id);
+        }
+
+
+        @Override
+        protected Iterator<IModel<Status>> getItemModels() {
+            BrinService brinService = BrinService.getBrinService(this);
+            //TODO pas beau le ((HomePage)getPage()).getBrinFilter() !!!
+            List<Brin> allBrins = brinService.getBrins(((HomePage)getPage()).getBrinFilter());
+            statusIntegerMap = brinService.calculateBrinNumber(allBrins);
+
+            List<Status> filteredList = Arrays.asList(Status.values());
+            return new ModelIteratorAdapter<Status>(filteredList.iterator()) {
+                @Override
+                protected Model<Status> model(Status object) {
+                    return new Model<Status>(object);
+                }
+            };
+        }
+
+
+        @Override
+        protected void populateItem(Item<Status> statusListItem) {
+            Status status = statusListItem.getModelObject();
+            statusListItem.add(new Label("statusLabel", status.toString()));
+            statusListItem.add(new Label("nbBrin", statusIntegerMap.get(status).toString()));
+        }
     }
 }

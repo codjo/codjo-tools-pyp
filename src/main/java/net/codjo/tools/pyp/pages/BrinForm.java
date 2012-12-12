@@ -1,15 +1,16 @@
 package net.codjo.tools.pyp.pages;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.Status;
-import net.codjo.tools.pyp.model.Team;
-import net.codjo.tools.pyp.model.UnblockingType;
-import net.codjo.tools.pyp.services.BrinService;
-import net.codjo.tools.pyp.services.MailService;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.Status;
+import net.codjo.tools.pyp.model.Team;
+import net.codjo.tools.pyp.model.UnblockingType;
+import net.codjo.tools.pyp.model.filter.BrinFilter;
+import net.codjo.tools.pyp.services.BrinService;
+import net.codjo.tools.pyp.services.MailService;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
 import org.apache.wicket.markup.html.form.Check;
 import org.apache.wicket.markup.html.form.CheckGroup;
@@ -33,13 +34,13 @@ public class BrinForm extends Form<Brin> {
     private Brin brin;
     private MailService mailService;
     private Status initialStatus;
-    private boolean creationMode;
+    private BrinFilter brinFilter;
 
 
-    public BrinForm(String formId, final Brin brin, boolean creationMode) {
+    public BrinForm(String formId, final Brin brin, BrinFilter brinFilter) {
         super(formId, new CompoundPropertyModel<Brin>(brin));
         this.brin = brin;
-        this.creationMode = creationMode;
+        this.brinFilter = brinFilter;
         initialStatus = brin.getStatus();
         mailService = new MailService(getContextUrl(((WebRequest)getRequest()).getHttpServletRequest()).toString());
 
@@ -86,9 +87,6 @@ public class BrinForm extends Form<Brin> {
                 item.add(check);
                 item.add(new SimpleFormComponentLabel("team", check));
             }
-
-
-            ;
         }.setReuseItems(true);
 
         checks.add(checksList);
@@ -110,7 +108,7 @@ public class BrinForm extends Form<Brin> {
 
     @Override
     public void onSubmit() {
-        if (creationMode) {
+        if (brin.getUuid()==null) {
             BrinService.getBrinService(this).addBrin(brin);
             sendMail(brin);
         }
@@ -122,7 +120,7 @@ public class BrinForm extends Form<Brin> {
             }
         }
 
-        setResponsePage(new HomePage());
+        setResponsePage(new HomePage(brinFilter));
     }
 
 

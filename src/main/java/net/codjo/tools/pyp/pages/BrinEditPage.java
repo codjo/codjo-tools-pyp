@@ -1,44 +1,40 @@
 package net.codjo.tools.pyp.pages;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.pages.HomePage.CallBack;
-import net.codjo.tools.pyp.services.BrinService;
 import java.io.IOException;
+import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.filter.BrinFilter;
+import net.codjo.tools.pyp.services.BrinService;
+import org.apache.wicket.PageParameters;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 public class BrinEditPage extends RootPage {
+    private CallBack buttonCallBack;
 
-    public BrinEditPage() throws IOException {
-        BrinService service = BrinService.getBrinService(this);
-        String idString = getRequest().getParameterMap().get("id")[0];
-        Brin brin = service.getBrin(idString);
-        if (brin == null) {
-            setResponsePage(new HomePage());
+
+    /**
+     * Keep this constructor to access brin directly from url (cf mail content) ex :
+     * http://localhost:8080/pyp/edit.html/id/1245b4d5-9c64-41ed-b3df-d5f327234979
+     */
+    public BrinEditPage(PageParameters pageParameters) throws IOException {
+        String brinId = getRequest().getParameter("id");
+        if (brinId==null){
+            brinId=pageParameters.getString("id");
         }
-        else {
-            buildPage(brin, false);
-        }
+        Brin brin = BrinService.getBrinService(this).getBrin(brinId);
+        buildPage(brin);
     }
 
-
-    public BrinEditPage(Brin brin, boolean creationMode) {
-        buildPage(brin, creationMode);
+    public BrinEditPage(Brin brin, BrinFilter brinFilter) {
+        this.brinFilter = brinFilter;
+        buildPage(brin);
     }
 
 
     @Override
     protected void initRightPanel(String id) {
-        CallBack buttonCallBack = new CallBack() {
-            public void onClickCallBack(Brin brin) {
-                setResponsePage(new HomePage());
-            }
-
-
-            public String getLabel() {
-                return "Back to the List";
-            }
-
-
-            public String getImagePath() {
-                return "../../images/backToList.png";
+        CallBack<AjaxRequestTarget> buttonCallBack = new AbstractCallBack<AjaxRequestTarget>("Back to the List",
+                                                                                             "images/backToList.png") {
+            public void onClickCallBack(AjaxRequestTarget brin) {
+                setResponsePage(new HomePage(brinFilter));
             }
         };
 
@@ -46,9 +42,11 @@ public class BrinEditPage extends RootPage {
     }
 
 
-    private void buildPage(Brin brin, boolean creationMode) {
+    private void buildPage(Brin brin) {
         add(new FeedbackPanel("feedback").setOutputMarkupId(true));
-
-        add(new BrinForm("brinForm", brin, creationMode));
+        if (brin == null) {
+            brin = new Brin();
+        }
+        add(new BrinForm("brinForm", brin, brinFilter));
     }
 }
