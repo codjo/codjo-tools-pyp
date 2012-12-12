@@ -92,13 +92,13 @@ public class HomePage extends RootPage {
             }
         };
 
-        CallBack<AjaxRequestTarget> exportWikiCallBack = new AbstractCallBack<AjaxRequestTarget>("Export wiki",
-                                                                                                 "images/WikiPediaFavicon.ico") {
-            public void onClickCallBack(AjaxRequestTarget target) {
-                wikiExportPanel.fillContent(BrinService.getBrinService(HomePage.this).getBrins(brinFilter));
-                wikiExportWindow.show(target);
-            }
-        };
+        CallBack<AjaxRequestTarget> exportWikiCallBack =
+              new AbstractCallBack<AjaxRequestTarget>("Export wiki", "images/wiki-icon.gif") {
+                  public void onClickCallBack(AjaxRequestTarget target) {
+                      wikiExportPanel.fillContent(BrinService.getBrinService(HomePage.this).getBrins(brinFilter));
+                      wikiExportWindow.show(target);
+                  }
+              };
 
         add(new RightPanel(id, addNewBrinCallBack, exportCsvCallBack, exportWikiCallBack));
     }
