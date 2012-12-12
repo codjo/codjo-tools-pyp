@@ -67,6 +67,19 @@ public class HomePageTest extends WicketFixture {
         getWicketTester().assertContains("toEradicate");
 
         updateBrin("titre Modifié", 2);
+        mailFixture.getReceivedMessage(0).assertThat()
+              .from(System.getProperty("user.name") + "@allianz.fr")
+              .to("USER1@allianz.fr", "USER2@allianz.fr")
+              .subject("[BRIN][TO_ERADICATE] - thisIsA new Brin")
+              .bodyContains("Bonjour,<br><br>Le BRIN suivant a été créé.<br>")
+              .bodyContains("<br><b>Description:</b><br><br><br><br>")
+              .bodyContains("Pour plus de détails, ")
+              .bodyContains("merci de consulter le BRIN dans l'application ")
+              .bodyContains("<a href=\"http://localhost:8080/pyp/edit.html/(.*)/1\">PostYourProblem</a>")
+              .bodyContains("Cordialement.")
+        ;
+        mailFixture.assertReceivedMessagesCount(1);
+
         getWicketTester().assertRenderedPage(HomePage.class);
         getWicketTester().assertContains("titre Modifié");
         getWicketTester().assertContains("toEradicate");
@@ -337,6 +350,49 @@ public class HomePageTest extends WicketFixture {
                                      + "** [Autre Brin de plus d'un mois | http://localhost/edit.html?id=3]\n"
               ;
         getWicketTester().assertModelValue("wikiExportPanel:content:wikiContent", expectedWikiContent);
+    }
+
+    @Test
+    public void test_sendMail() throws Exception {
+        Date today = Calendar.getInstance().getTime();
+        Date twoDaysAgo = shiftDate(today, -2);
+        Date aMonthAgo = shiftDate(today, -30);
+
+        String fileContent = "<brinList>\n"
+                             + "  <repository>\n"
+                             + "    <brin>\n"
+                             + "      <uuid>1</uuid>\n"
+                             + "      <title>Brin de plus d'un mois</title>\n"
+                             + "      <creationDate>" + simpleDateFormat.format(aMonthAgo) + "</creationDate>\n"
+                             + "      <status>unblocked</status>\n"
+                             + "      <description>sdq</description>\n"
+                             + "      <affectedTeams/>\n"
+                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                             + "    </brin>\n"
+                             + "  </repository>\n"
+                             + "</brinList>";
+
+        FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRepository.xml"), fileContent);
+
+        doInit("/pyp.properties");
+
+        getWicketTester().startPage(HomePage.class);
+
+        updateBrin("new title",2);
+        mailFixture.getReceivedMessage(0).assertThat()
+              .from(System.getProperty("user.name") + "@allianz.fr")
+              .to("USER1@allianz.fr", "USER2@allianz.fr")
+              .subject("[BRIN][TO_ERADICATE] - new title")
+              .bodyContains("Bonjour,<br><br>Le BRIN suivant doit être éradiqué.<br>")
+              .bodyContains("<br><b>Description:</b><br><br><br><br>")
+              .bodyContains("Pour plus de détails, ")
+              .bodyContains("merci de consulter le BRIN dans l'application ")
+              .bodyContains("<a href=\"http://localhost//edit.html/id/1\">PostYourProblem</a>")
+              .bodyContains("Cordialement.")
+        ;
+        mailFixture.assertReceivedMessagesCount(1);
+
+
     }
 
 
