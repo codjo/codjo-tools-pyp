@@ -67,18 +67,6 @@ public class HomePageTest extends WicketFixture {
         getWicketTester().assertContains("toEradicate");
 
         updateBrin("titre Modifié", 2);
-        mailFixture.getReceivedMessage(0).assertThat()
-              .from(System.getProperty("user.name") + "@allianz.fr")
-              .to("USER1@allianz.fr", "USER2@allianz.fr")
-              .subject("[BRIN][TO_ERADICATE] - thisIsA new Brin")
-              .bodyContains("Bonjour,<br><br>Le BRIN suivant a été créé.<br>")
-              .bodyContains("<br><b>Description:</b><br><br><br><br>")
-              .bodyContains("Pour plus de détails, ")
-              .bodyContains("merci de consulter le BRIN dans l'application ")
-              .bodyContains("<a href=\"http://localhost:8080/pyp/edit.html/(.*)/1\">PostYourProblem</a>")
-              .bodyContains("Cordialement.")
-        ;
-        mailFixture.assertReceivedMessagesCount(1);
 
         getWicketTester().assertRenderedPage(HomePage.class);
         getWicketTester().assertContains("titre Modifié");
