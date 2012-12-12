@@ -431,6 +431,7 @@ div.explorerTree div.wicket-tree-table-body {
 
 .brinTable {
     padding-top: 50px;
+    cursor: pointer;
 }
 
 .brinForm {
