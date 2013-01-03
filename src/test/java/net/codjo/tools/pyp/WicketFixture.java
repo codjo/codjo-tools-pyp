@@ -60,5 +60,4 @@ public class WicketFixture {
     public void executeAjaxEvent(String componentPath, String event) {
         wicketTester.executeAjaxEvent(componentPath, event);
     }
-
 }

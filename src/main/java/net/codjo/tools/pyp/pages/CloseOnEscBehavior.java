@@ -38,11 +38,11 @@ public class CloseOnEscBehavior extends AbstractDefaultAjaxBehavior {
     @Override
     public void renderHead(IHeaderResponse response) {
         String javascript =
-                "$(" + elementToObserve + ").observe('" + eventName + "', function(e){\n"
-                        + "  if (e.keyCode == Event.KEY_ESC){"
-                        + getCallbackScript()
-                        + "}"
-                        + "});";
+              "$(" + elementToObserve + ").observe('" + eventName + "', function(e){\n"
+              + "  if (e.keyCode == Event.KEY_ESC){"
+              + getCallbackScript()
+              + "}"
+              + "});";
         response.renderOnDomReadyJavascript(javascript);
         super.renderHead(response);
     }

@@ -1,11 +1,11 @@
 package net.codjo.tools.pyp.services;
+import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.TreeSet;
 import net.codjo.confluence.ConfluenceException;
 import net.codjo.confluence.ConfluenceServer;
 import net.codjo.confluence.ConfluenceSession;
 import net.codjo.confluence.Page;
-import java.util.Set;
-import java.util.StringTokenizer;
-import java.util.TreeSet;
 /**
  * TODO beaucoup de copier/coller de net.codjo.maven.mojo.agf.SendAnnouncementToTeamsMojo
  */
@@ -40,7 +40,7 @@ public class ConfluenceService {
     protected Set<String> extractDeveloperList(String confluenceContent) {
         Set<String> userList = new TreeSet<String>();
         for (StringTokenizer tokenizer = new StringTokenizer(confluenceContent, "\n");
-             tokenizer.hasMoreTokens();) {
+             tokenizer.hasMoreTokens(); ) {
             String row = tokenizer.nextToken();
             if (row.startsWith("* ") && row.contains("(*g)")) {
                 userList.add(extractUser(row));

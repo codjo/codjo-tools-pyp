@@ -1,14 +1,14 @@
 package net.codjo.tools.pyp.services;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.Status;
-import net.codjo.tools.pyp.model.Team;
-import net.codjo.tools.pyp.model.UnblockingType;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import junit.framework.TestCase;
+import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.Status;
+import net.codjo.tools.pyp.model.Team;
+import net.codjo.tools.pyp.model.UnblockingType;
 import org.junit.Assert;
 import org.junit.Test;
 /**

@@ -1,10 +1,10 @@
 package net.codjo.tools.pyp.xml;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.Team;
-import net.codjo.test.common.XmlUtil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import net.codjo.test.common.XmlUtil;
+import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.Team;
 import org.junit.Test;
 /**
  *

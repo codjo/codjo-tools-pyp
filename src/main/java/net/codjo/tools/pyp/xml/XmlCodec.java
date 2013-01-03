@@ -1,9 +1,9 @@
 package net.codjo.tools.pyp.xml;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.Team;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.util.List;
+import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.Team;
 /**
  *
  */

@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletResponse;
 import net.codjo.test.common.fixture.MailFixture;
 import org.mortbay.jetty.webapp.WebAppContext;
 /**
- * TODO add a clean "stop" method 
+ * TODO add a clean "stop" method
  */
 public class PypServer {
 

@@ -108,7 +108,7 @@ public class BrinForm extends Form<Brin> {
 
     @Override
     public void onSubmit() {
-        if (brin.getUuid()==null) {
+        if (brin.getUuid() == null) {
             BrinService.getBrinService(this).addBrin(brin);
             sendMail(brin);
         }

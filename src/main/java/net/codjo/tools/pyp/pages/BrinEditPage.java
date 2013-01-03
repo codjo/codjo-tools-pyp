@@ -16,12 +16,13 @@ public class BrinEditPage extends RootPage {
      */
     public BrinEditPage(PageParameters pageParameters) throws IOException {
         String brinId = getRequest().getParameter("id");
-        if (brinId==null){
-            brinId=pageParameters.getString("id");
+        if (brinId == null) {
+            brinId = pageParameters.getString("id");
         }
         Brin brin = BrinService.getBrinService(this).getBrin(brinId);
         buildPage(brin);
     }
+
 
     public BrinEditPage(Brin brin, BrinFilter brinFilter) {
         this.brinFilter = brinFilter;

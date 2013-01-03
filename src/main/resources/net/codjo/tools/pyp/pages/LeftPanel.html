@@ -5,40 +5,40 @@
       xmlns:wicket="http://wicket.apache.org/dtds.data/wicket-xhtml1.4-strict.dtd">
 <body>
 <wicket:panel class="sidePanel">
-        <div id="filterPanel">
-            <fieldset class="fieldSetSummary">
-                <legend>
-                    <span>Filters</span>
-                </legend>
-                <table class="infoTable">
-                    <tbody>
-                    <tr>
-                        <td>
-                            <form wicket:id="filterForm">
-                                <select name="filters" wicket:id="brinFilters" class="selectFilters"></select>
-                            </form>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </fieldset>
-        </div>
+    <div id="filterPanel">
+        <fieldset class="fieldSetSummary">
+            <legend>
+                <span>Filters</span>
+            </legend>
+            <table class="infoTable">
+                <tbody>
+                <tr>
+                    <td>
+                        <form wicket:id="filterForm">
+                            <select name="filters" wicket:id="brinFilters" class="selectFilters"></select>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
 
-        <div wicket:id="summaryPanel" class="summaryPanel">
-            <fieldset class="fieldSetSummary">
-                <legend>
-                    <span>Summary</span>
-                </legend>
-                <table class="infoTable">
-                    <tbody>
-                    <tr wicket:id="infoList">
-                        <td><span wicket:id="statusLabel">[statusLabel]</span></td>
-                        <td><span wicket:id="nbBrin">[nbBrin]</span></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </fieldset>
-        </div>
+    <div wicket:id="summaryPanel" class="summaryPanel">
+        <fieldset class="fieldSetSummary">
+            <legend>
+                <span>Summary</span>
+            </legend>
+            <table class="infoTable">
+                <tbody>
+                <tr wicket:id="infoList">
+                    <td><span wicket:id="statusLabel">[statusLabel]</span></td>
+                    <td><span wicket:id="nbBrin">[nbBrin]</span></td>
+                </tr>
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
 </wicket:panel>
 </body>
 </html>

@@ -1,9 +1,9 @@
 package net.codjo.tools.pyp.services;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.Status;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.Status;
 import org.junit.Before;
 import org.junit.Test;
 

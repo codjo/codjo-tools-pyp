@@ -1,7 +1,7 @@
 package net.codjo.tools.pyp.services;
+import net.codjo.test.common.fixture.MailFixture;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.Status;
-import net.codjo.test.common.fixture.MailFixture;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
