@@ -8,7 +8,12 @@ import org.joda.time.DateTime;
 public class LastWeekBrinFilter extends AllBrinFilter {
 
     public LastWeekBrinFilter(String brinId, String displayLabel) {
-        super(brinId, displayLabel);
+        this(brinId, displayLabel, new DateTime());
+    }
+
+
+    public LastWeekBrinFilter(String brinId, String displayLabel, DateTime from) {
+        super(brinId, displayLabel, from);
     }
 
 
@@ -18,7 +23,7 @@ public class LastWeekBrinFilter extends AllBrinFilter {
             return true;
         }
         DateTime creationDateTime = new DateTime(brin.getCreationDate());
-        DateTime lastWeekDate = new DateTime().minusDays(7).withHourOfDay(0).withMinuteOfHour(0);
+        DateTime lastWeekDate = getFrom().minusDays(7).withHourOfDay(0).withMinuteOfHour(0);
         boolean creationDateInLastWeek = creationDateTime.isAfter(lastWeekDate.toInstant());
 
         DateTime unBlockingDate;
