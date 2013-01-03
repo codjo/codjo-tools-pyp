@@ -23,7 +23,7 @@ public class LastWeekBrinFilter extends AllBrinFilter {
             return true;
         }
         DateTime creationDateTime = new DateTime(brin.getCreationDate());
-        DateTime lastWeekDate = getFrom().minusDays(7).withHourOfDay(0).withMinuteOfHour(0);
+        DateTime lastWeekDate = getFrom().minusDays(7).withMillisOfDay(0).minus(1);
         boolean creationDateInLastWeek = creationDateTime.isAfter(lastWeekDate.toInstant());
 
         DateTime unBlockingDate;
