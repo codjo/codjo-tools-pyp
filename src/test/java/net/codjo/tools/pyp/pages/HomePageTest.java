@@ -84,9 +84,6 @@ public class HomePageTest extends WicketFixture {
 
         String today = dateTime.toString(DATETIME_FORMAT);
         String twoDaysAgo = dateTime.minusDays(2).toString(DATETIME_FORMAT);
-        String aWeekAgo = dateTime.minusWeeks(1).toString(DATETIME_FORMAT);
-        String aMonthAgo = dateTime.minusMonths(1).toString(DATETIME_FORMAT);
-        String threeMonthAgo = dateTime.minusMonths(3).toString(DATETIME_FORMAT);
         String aYearAgo = dateTime.minusYears(1).toString(DATETIME_FORMAT);
 
         String fileContent = "<brinList>\n"
@@ -94,7 +91,7 @@ public class HomePageTest extends WicketFixture {
                              + "    <brin>\n"
                              + "      <uuid>1</uuid>\n"
                              + "      <title>Brin de plus d'un mois</title>\n"
-                             + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
+                             + "      <creationDate>" + aYearAgo + "</creationDate>\n"
                              + "      <status>unblocked</status>\n"
                              + "      <description>sdq</description>\n"
                              + "      <affectedTeams/>\n"
@@ -110,25 +107,8 @@ public class HomePageTest extends WicketFixture {
                              + "    </brin>\n"
                              + "    <brin>\n"
                              + "      <uuid>3</uuid>\n"
-                             + "      <title>Brin pile ya une semaine</title>\n"
-                             + "      <creationDate>" + aWeekAgo + "</creationDate>\n"
-                             + "      <status>current</status>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>4</uuid>\n"
-                             + "      <title>Plus d'un mois MAIS status current</title>\n"
-                             + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
-                             + "      <status>current</status>\n"
-                             + "      <description>sdq</description>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>5</uuid>\n"
                              + "      <title>Deboque ya moins d une semaine</title>\n"
-                             + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
+                             + "      <creationDate>" + aYearAgo + "</creationDate>\n"
                              + "      <unblockingDate>" + today + "</unblockingDate>\n"
                              + "      <status>unblocked</status>\n"
                              + "      <description>sdq</description>\n"
@@ -136,17 +116,17 @@ public class HomePageTest extends WicketFixture {
                              + "      <unblockingDescription>qsd</unblockingDescription>\n"
                              + "    </brin>\n"
                              + "    <brin>\n"
-                             + "      <uuid>6</uuid>\n"
+                             + "      <uuid>4</uuid>\n"
                              + "      <title>A eradiquer ya plus de 3 mois (90jours)</title>\n"
-                             + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
-                             + "      <unblockingDate>" + threeMonthAgo + "</unblockingDate>\n"
+                             + "      <creationDate>" + aYearAgo + "</creationDate>\n"
+                             + "      <unblockingDate>" + aYearAgo + "</unblockingDate>\n"
                              + "      <status>toEradicate</status>\n"
                              + "      <description>sdq</description>\n"
                              + "      <affectedTeams/>\n"
                              + "      <unblockingDescription>qsd</unblockingDescription>\n"
                              + "    </brin>\n"
                              + "    <brin>\n"
-                             + "      <uuid>7</uuid>\n"
+                             + "      <uuid>5</uuid>\n"
                              + "      <title>Eradique ya plus d'un an (370 jours)</title>\n"
                              + "      <creationDate>" + aYearAgo + "</creationDate>\n"
                              + "      <unblockingDate>" + aYearAgo + "</unblockingDate>\n"
@@ -166,14 +146,12 @@ public class HomePageTest extends WicketFixture {
 
         int row = 1;
         assertLabelAtRow(row++, "Brin d&#039;il y a deux jours");
-        assertLabelAtRow(row++, "Brin pile ya une semaine");
-        assertLabelAtRow(row++, "Plus d&#039;un mois MAIS status current");
         assertLabelAtRow(row++, "A eradiquer ya plus de 3 mois (90jours)");
         assertLabelAtRow(row++, "Brin de plus d&#039;un mois");
         assertLabelAtRow(row++, "Deboque ya moins d une semaine");
         assertLabelAtRow(row, "Eradique ya plus d&#039;un an (370 jours)");
 
-        assertLabelInLeftPanelAtRow(1, "current", "3");
+        assertLabelInLeftPanelAtRow(1, "current", "1");
         assertLabelInLeftPanelAtRow(2, "unblocked", "2");
         assertLabelInLeftPanelAtRow(3, "toEradicate", "1");
         assertLabelInLeftPanelAtRow(4, "eradicated", "1");
@@ -181,39 +159,21 @@ public class HomePageTest extends WicketFixture {
         switchFilter(LAST_WEEK_FILTER);
 
         //TODO decalage des indices de la liste a cause de 2 appels a la construction de la liste ?
-        row = 15;
+        row = 11;
         assertLabelAtRow(row++, "Brin d&#039;il y a deux jours");
-        assertLabelAtRow(row++, "Brin pile ya une semaine");
-        assertLabelAtRow(row++, "Plus d&#039;un mois MAIS status current");
         assertLabelAtRow(row, "Deboque ya moins d une semaine");
         assertTextIsNotPresent("Brin de plus d&#039;un mois");
         assertTextIsNotPresent("A eradiquer ya plus de 3 mois (90jours)");
         assertTextIsNotPresent("Eradique ya plus d&#039;un an (370 jours)");
 
-        assertLabelInLeftPanelAtRow(9, "current", "3");
+        assertLabelInLeftPanelAtRow(9, "current", "1");
         assertLabelInLeftPanelAtRow(10, "unblocked", "1");
         assertLabelInLeftPanelAtRow(11, "toEradicate", "0");
         assertLabelInLeftPanelAtRow(12, "eradicated", "0");
 
+        //Just to verify their existence.
         switchFilter(CURRENT_MONTH_FILTER);
-
-        assertLabelInLeftPanelAtRow(17, "current", "3");
-        assertLabelInLeftPanelAtRow(18, "unblocked", "1");
-        assertLabelInLeftPanelAtRow(19, "toEradicate", "0");
-        assertLabelInLeftPanelAtRow(20, "eradicated", "0");
-
         switchFilter(CURRENT_YEAR_FILTER);
-        assertLabelInLeftPanelAtRow(25, "current", "3");
-//        TODO desactived because it is the beginning of the year
-//        assertLabelInLeftPanelAtRow(26, "unblocked", "2");
-//        assertLabelInLeftPanelAtRow(27, "toEradicate", "1");
-        assertLabelInLeftPanelAtRow(28, "eradicated", "0");
-
-        switchFilter(ALL_BRIN_FILTER);
-        assertLabelInLeftPanelAtRow(33, "current", "3");
-        assertLabelInLeftPanelAtRow(34, "unblocked", "2");
-        assertLabelInLeftPanelAtRow(35, "toEradicate", "1");
-        assertLabelInLeftPanelAtRow(36, "eradicated", "1");
     }
 
 
