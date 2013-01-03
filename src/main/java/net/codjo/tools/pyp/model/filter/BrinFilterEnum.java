@@ -22,6 +22,11 @@ public enum BrinFilterEnum {
     }
 
 
+    public static BrinFilter get(String brinFilterId) {
+        return get(brinFilterId, new DateTime());
+    }
+
+
     public static BrinFilter get(String brinFilterId, DateTime from) {
         if ("LastWeekFilter".equals(brinFilterId)) {
             return new LastWeekBrinFilter(LAST_WEEK.brinFilterId, "D-7 brins", from);

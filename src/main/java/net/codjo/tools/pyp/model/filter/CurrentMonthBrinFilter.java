@@ -21,7 +21,7 @@ public class CurrentMonthBrinFilter extends AllBrinFilter {
             return true;
         }
         DateTime creationDateTime = new DateTime(brin.getCreationDate());
-        DateTime firstDayOfMonth = getFrom().withDayOfMonth(1).withHourOfDay(0).withMinuteOfHour(0);
+        DateTime firstDayOfMonth = getFrom().withDayOfMonth(1).withMillisOfDay(0).minus(1);
 
         DateTime unBlockingDate;
         if (brin.getUnBlockingDate() == null) {

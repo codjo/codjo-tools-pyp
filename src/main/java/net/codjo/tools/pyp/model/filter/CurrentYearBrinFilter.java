@@ -21,7 +21,7 @@ public class CurrentYearBrinFilter extends AllBrinFilter {
             return true;
         }
         DateTime creationDateTime = new DateTime(brin.getCreationDate());
-        DateTime firstDayOfMonth = getFrom().withDayOfYear(1).withHourOfDay(0).withMinuteOfHour(0);
+        DateTime firstDayOfMonth = getFrom().withDayOfYear(1).withMillisOfDay(0).minus(1);
 
         DateTime unBlockingDate;
         if (brin.getUnBlockingDate() == null) {
@@ -30,7 +30,7 @@ public class CurrentYearBrinFilter extends AllBrinFilter {
         else {
             unBlockingDate = new DateTime(brin.getUnBlockingDate());
         }
-        return creationDateTime.isAfter(firstDayOfMonth) || (unBlockingDate != null && unBlockingDate.isAfter(
-              firstDayOfMonth));
+        return creationDateTime.isAfter(firstDayOfMonth)
+               || (unBlockingDate != null && unBlockingDate.isAfter(firstDayOfMonth));
     }
 }

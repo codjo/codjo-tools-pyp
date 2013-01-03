@@ -47,6 +47,9 @@ public class CurrentMonthBrinFilterTest {
         brinUn.setUnBlockingDate(today.withDayOfMonth(2).toDate());
         Assert.assertTrue(filter.doFilter(brinUn));
 
+        brinUn.setUnBlockingDate(today.withDayOfMonth(1).withMillisOfDay(0).toDate());
+        Assert.assertTrue(filter.doFilter(brinUn));
+
         brinUn.setUnBlockingDate(today.withDayOfMonth(1).minusDays(1).toDate());
         Assert.assertFalse(filter.doFilter(brinUn));
     }

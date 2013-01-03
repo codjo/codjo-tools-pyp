@@ -34,6 +34,9 @@ public class CurrentYearBrinFilterTest {
         brinUn.setCreationDate(today.withDayOfYear(1).toDate());
         Assert.assertTrue(filter.doFilter(brinUn));
 
+        brinUn.setCreationDate(today.withDayOfYear(1).withMillisOfDay(0).toDate());
+        Assert.assertTrue(filter.doFilter(brinUn));
+
         brinUn.setCreationDate(today.withDayOfYear(1).minusDays(1).toDate());
         Assert.assertFalse(filter.doFilter(brinUn));
     }
