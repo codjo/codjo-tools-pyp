@@ -46,6 +46,9 @@ public class CurrentMonthBrinFilterTest {
 
         brinUn.setUnBlockingDate(today.withDayOfMonth(2).toDate());
         Assert.assertTrue(filter.doFilter(brinUn));
+
+        brinUn.setUnBlockingDate(today.withDayOfMonth(1).minusDays(1).toDate());
+        Assert.assertFalse(filter.doFilter(brinUn));
     }
 
 
@@ -54,13 +57,13 @@ public class CurrentMonthBrinFilterTest {
         brinUn.setCreationDate(today.minusMonths(2).toDate());
         Assert.assertFalse(filter.doFilter(brinUn));
 
-        brinUn.setStatus(Status.current);
-        Assert.assertTrue(filter.doFilter(brinUn));
-
         brinUn.setStatus(Status.toEradicate);
         Assert.assertFalse(filter.doFilter(brinUn));
 
         brinUn.setStatus(Status.eradicated);
         Assert.assertFalse(filter.doFilter(brinUn));
+
+        brinUn.setStatus(Status.current);
+        Assert.assertTrue(filter.doFilter(brinUn));
     }
 }
