@@ -12,10 +12,12 @@ public class CurrentYearBrinFilterTest {
 
     private CurrentYearBrinFilter filter;
     private Brin brinUn;
+    DateTime today;
 
 
     @Before
     public void setup() throws Exception {
+        today = new DateTime();
         filter = new CurrentYearBrinFilter("mybrin", "toto");
         brinUn = new Brin("brinUn");
         brinUn.setStatus(Status.unblocked);
@@ -26,28 +28,40 @@ public class CurrentYearBrinFilterTest {
     public void test_filterOnCreationDate() throws Exception {
         Assert.assertTrue(filter.doFilter(brinUn));
 
-        brinUn.setCreationDate(new DateTime().minusYears(1).toDate());
+        brinUn.setCreationDate(today.minusYears(1).toDate());
         Assert.assertFalse(filter.doFilter(brinUn));
 
-        brinUn.setCreationDate(new DateTime().withDayOfYear(1).toDate());
+        brinUn.setCreationDate(today.withDayOfYear(1).toDate());
         Assert.assertTrue(filter.doFilter(brinUn));
+
+        brinUn.setCreationDate(today.withDayOfYear(1).minusDays(1).toDate());
+        Assert.assertFalse(filter.doFilter(brinUn));
     }
 
 
     @Test
     public void test_filterOnUnblockingDate() throws Exception {
-        brinUn.setCreationDate(new DateTime().minusYears(1).toDate());
+        brinUn.setCreationDate(today.minusYears(1).toDate());
         Assert.assertFalse(filter.doFilter(brinUn));
 
-        brinUn.setUnBlockingDate(new DateTime().withDayOfYear(2).toDate());
+        brinUn.setUnBlockingDate(today.withDayOfYear(1).toDate());
         Assert.assertTrue(filter.doFilter(brinUn));
+
+        brinUn.setUnBlockingDate(today.withDayOfYear(1).minusDays(1).toDate());
+        Assert.assertFalse(filter.doFilter(brinUn));
     }
 
 
     @Test
-    public void test_filterCurrentStatusAlwaysFiltered() throws Exception {
+    public void test_filterCurrentStatusAlwaysFilteredOthersNo() throws Exception {
         Assert.assertTrue(filter.doFilter(brinUn));
-        brinUn.setCreationDate(new DateTime().minusYears(1).toDate());
+        brinUn.setCreationDate(today.minusYears(1).toDate());
+        Assert.assertFalse(filter.doFilter(brinUn));
+
+        brinUn.setStatus(Status.toEradicate);
+        Assert.assertFalse(filter.doFilter(brinUn));
+
+        brinUn.setStatus(Status.eradicated);
         Assert.assertFalse(filter.doFilter(brinUn));
 
         brinUn.setStatus(Status.current);

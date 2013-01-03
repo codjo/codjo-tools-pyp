@@ -6,7 +6,12 @@ import org.joda.time.DateTime;
 public class CurrentMonthBrinFilter extends AllBrinFilter {
 
     public CurrentMonthBrinFilter(String brinId, String displayLabel) {
-        super(brinId, displayLabel);
+        this(brinId, displayLabel, new DateTime());
+    }
+
+
+    public CurrentMonthBrinFilter(String brinId, String displayLabel, DateTime from) {
+        super(brinId, displayLabel, from);
     }
 
 
@@ -16,7 +21,7 @@ public class CurrentMonthBrinFilter extends AllBrinFilter {
             return true;
         }
         DateTime creationDateTime = new DateTime(brin.getCreationDate());
-        DateTime firstDayOfMonth = new DateTime().withDayOfMonth(1).withHourOfDay(0).withMinuteOfHour(0);
+        DateTime firstDayOfMonth = getFrom().withDayOfMonth(1).withHourOfDay(0).withMinuteOfHour(0);
 
         DateTime unBlockingDate;
         if (brin.getUnBlockingDate() == null) {
