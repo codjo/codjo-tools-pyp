@@ -32,12 +32,8 @@ public class HomePage extends RootPage {
 
 
     public HomePage(final PageParameters pageParameters) {
-        if (pageParameters.containsKey("brinFilter")) {
-            brinFilter = BrinFilterEnum.get(pageParameters.getString("brinFilter"));
-        }
-        else {
-            brinFilter = BrinFilterForm.DEFAULT_BRIN_FILTER;
-        }
+        brinFilter = BrinFilterEnum.get(pageParameters.getString("brinFilter"));
+
         buildPage();
     }
 

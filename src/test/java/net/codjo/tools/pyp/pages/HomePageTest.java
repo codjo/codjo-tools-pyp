@@ -1,5 +1,4 @@
 package net.codjo.tools.pyp.pages;
-import com.sun.xml.internal.bind.v2.TODO;
 import java.io.File;
 import junit.framework.Assert;
 import net.codjo.test.common.fixture.CompositeFixture;

@@ -30,9 +30,11 @@ public class LeftPanel extends Panel {
         add(myContainer);
     }
 
+
     private Component brinFilterForm(BrinFilter filter, CallBack<BrinFilter> brinFilter) {
-        return new BrinFilterForm("filterForm",filter, brinFilter).setVisible(brinFilter != null);
+        return new BrinFilterForm("filterForm", filter, brinFilter).setVisible(brinFilter != null);
     }
+
 
     private class StatusView extends RefreshingView<Status> {
         private Map<Status, Integer> statusIntegerMap;

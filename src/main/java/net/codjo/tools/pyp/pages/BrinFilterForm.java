@@ -11,33 +11,32 @@ import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.Model;
+import org.joda.time.DateTime;
 /**
  * TODO[codjo-web] - see LanguagePanel in Magic
  */
 public class BrinFilterForm extends Form {
     private static final Logger LOG = Logger.getLogger(BrinFilterForm.class);
-    static final BrinFilter DEFAULT_BRIN_FILTER = BrinFilterEnum.ALL_BRIN.get();
 
 
     public BrinFilterForm(String id, BrinFilter filter, final CallBack<BrinFilter> callBack) {
         super(id);
         ChoiceRenderer<BrinFilter> choiceRenderer = new ChoiceRenderer<BrinFilter>("displayLabel", "brinId") {
+            @Override
             public Object getDisplayValue(BrinFilter object) {
                 return object.getDisplayLabel();
             }
         };
-        List<BrinFilter> brinFilters = new ArrayList<BrinFilter>();
-        brinFilters.add(BrinFilterEnum.LAST_WEEK.get());
-        brinFilters.add(BrinFilterEnum.CURRENT_MONTH.get());
-        brinFilters.add(BrinFilterEnum.CURRENT_YEAR.get());
-        brinFilters.add(DEFAULT_BRIN_FILTER);
 
-        BrinFilter defaultBrinFilter = DEFAULT_BRIN_FILTER;
-        if (filter != null) {
-            defaultBrinFilter = filter;
-        }
+        DateTime now = new DateTime();
+        List<BrinFilter> brinFilters = new ArrayList<BrinFilter>();
+        brinFilters.add(BrinFilterEnum.LAST_WEEK.get(now));
+        brinFilters.add(BrinFilterEnum.CURRENT_MONTH.get(now));
+        brinFilters.add(BrinFilterEnum.CURRENT_YEAR.get(now));
+        brinFilters.add(BrinFilterEnum.ALL_BRIN.get(now));
+
         DropDownChoice choice = new DropDownChoice<BrinFilter>("brinFilters",
-                                                               new Model<BrinFilter>(defaultBrinFilter),
+                                                               new Model<BrinFilter>(filter),
                                                                brinFilters,
                                                                choiceRenderer);
         choice.add(new AjaxFormComponentUpdatingBehavior("onchange") {
