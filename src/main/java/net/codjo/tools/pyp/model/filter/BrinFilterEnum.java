@@ -7,7 +7,8 @@ public enum BrinFilterEnum {
     ALL_BRIN("AllBrinsFilter"),
     LAST_WEEK("LastWeekFilter"),
     CURRENT_MONTH("CurrentMonthFilter"),
-    CURRENT_YEAR("CurrentYearFilter");
+    CURRENT_YEAR("CurrentYearFilter"),
+    SLIDING_MONTH("SlidingMonthFilter");
 
     private String brinFilterId;
 
@@ -36,6 +37,9 @@ public enum BrinFilterEnum {
         }
         if ("CurrentYearFilter".equals(brinFilterId)) {
             return new CurrentYearBrinFilter(CURRENT_YEAR.brinFilterId, "Current Year", from);
+        }
+        if ("SlidingMonthFilter".equals(brinFilterId)) {
+            return new LastThirtyDaysBrinFilter(SLIDING_MONTH.brinFilterId, "Last 30 days", from);
         }
 
         return new AllBrinFilter(ALL_BRIN.brinFilterId, "All brins", from);

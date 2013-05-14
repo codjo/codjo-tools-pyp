@@ -32,6 +32,7 @@ public class BrinFilterForm extends Form {
         List<BrinFilter> brinFilters = new ArrayList<BrinFilter>();
         brinFilters.add(BrinFilterEnum.LAST_WEEK.get(now));
         brinFilters.add(BrinFilterEnum.CURRENT_MONTH.get(now));
+        brinFilters.add(BrinFilterEnum.SLIDING_MONTH.get(now));
         brinFilters.add(BrinFilterEnum.CURRENT_YEAR.get(now));
         brinFilters.add(BrinFilterEnum.ALL_BRIN.get(now));
 
