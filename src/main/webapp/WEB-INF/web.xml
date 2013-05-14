@@ -21,9 +21,9 @@
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
 
-    <session-repository>
+    <session-config>
         <session-timeout>-1</session-timeout>
-    </session-repository>
+    </session-config>
 
     <error-page>
         <error-code>404</error-code>
