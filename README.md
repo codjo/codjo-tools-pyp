@@ -29,6 +29,12 @@ for example :
         </profile>
 ```
 
+Deployment :
+* mvn --batch-mode codjo:switch-to-parent-release
+* mvn release:prepare
+* mvn release:perform -Darguments="-Dprocess=integration -Dserver=integration" -Dprocess=integration -Dserver=integration
+* mvn --batch-mode codjo:switch-to-parent-snapshot
+
 TODO :
 * Edit page correction : move save button to the upper right
 * add a statistic panel (nb brin/years) + filters ?
@@ -37,10 +43,10 @@ TODO :
 * show detail in a popup to avoid double click
 * Move tomcat-maven-plugin to super-pom
 * Manage automatic backup of repository ?
-* Manage PypRepository.xsd
 * Manage properly the absence of a confluence server (add alerts on gui or any sendMail simulation)
 
 DONE :
+* Manage PypRepository.xsd
 * simple export for confluence, with Name/Url for quick insert in "reunion plateforme" minutes
 * close WikiExport window with ESC button
 * add an icon for wiki export
