@@ -32,7 +32,7 @@ for example :
 Deployment :
 * mvn --batch-mode codjo:switch-to-parent-release
 * mvn release:prepare
-* mvn release:perform -Darguments="-Dprocess=integration -Dserver=integration" -Dprocess=integration -Dserver=integration
+*  mvn release:perform -DconnectionUrl=scm:git:file:///C:/dev/projects/codjo/tools/codjo-tools-pyp/.git -Darguments="-Dremote=codjo -Dprocess=integration -Dserver=integration" -Dprocess=integration -Dserver=integration
 * mvn --batch-mode codjo:switch-to-parent-snapshot
 
 TODO :
