@@ -4,6 +4,7 @@ import junit.framework.Assert;
 import net.codjo.test.common.fixture.CompositeFixture;
 import net.codjo.test.common.fixture.DirectoryFixture;
 import net.codjo.test.common.fixture.MailFixture;
+import net.codjo.test.common.matcher.JUnitMatchers;
 import net.codjo.tools.pyp.WicketFixture;
 import net.codjo.util.file.FileUtil;
 import org.apache.wicket.Session;
@@ -13,6 +14,8 @@ import org.joda.time.DateTime;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
+import static net.codjo.test.common.matcher.JUnitMatchers.*;
 /**
  *
  */
@@ -143,6 +146,8 @@ public class HomePageTest extends WicketFixture {
         doInit("/pyp.properties");
 
         getWicketTester().startPage(HomePage.class);
+        assertThat(getWicketTester().getComponentFromLastRenderedPage("leftPanel:filterForm:brinFilters")
+                         .getDefaultModelObject(), JUnitMatchers.<Object>notNullValue());
 
         int row = 1;
         assertLabelAtRow(row++, "Brin d&#039;il y a deux jours");

@@ -27,7 +27,6 @@ public class BrinFilterForm extends Form {
                 return object.getDisplayLabel();
             }
         };
-
         DateTime now = new DateTime();
         List<BrinFilter> brinFilters = new ArrayList<BrinFilter>();
         brinFilters.add(BrinFilterEnum.LAST_WEEK.get(now));
@@ -35,6 +34,10 @@ public class BrinFilterForm extends Form {
         brinFilters.add(BrinFilterEnum.SLIDING_MONTH.get(now));
         brinFilters.add(BrinFilterEnum.CURRENT_YEAR.get(now));
         brinFilters.add(BrinFilterEnum.ALL_BRIN.get(now));
+
+        if (filter == null) {
+            filter = BrinFilterEnum.ALL_BRIN.get(now);
+        }
 
         DropDownChoice choice = new DropDownChoice<BrinFilter>("brinFilters",
                                                                new Model<BrinFilter>(filter),
