@@ -34,7 +34,8 @@ public class XmlCodecTest {
 
         String actual = xmlCodec.toXml(brins);
 
-        XmlUtil.assertEquivalent("<brinList>"
+        XmlUtil.assertEquivalent("<brinList xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+                                 + "          xsi:noNamespaceSchemaLocation=\"/pyp/pypRepository.xsd\">"
                                  + "  <repository>\n"
                                  + "    <brin>\n"
                                  + "      <uuid>MonUUID</uuid>\n"
@@ -61,7 +62,8 @@ public class XmlCodecTest {
 
     @Test
     public void test_fromXml() throws Exception {
-        String expected = "<brinList>"
+        String expected = "<brinList xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
+                          + "          xsi:noNamespaceSchemaLocation=\"/pyp/pypRepository.xsd\">"
                           + "  <repository>\n"
                           + "    <brin>\n"
                           + "      <uuid>uniqueUuid</uuid>\n"
