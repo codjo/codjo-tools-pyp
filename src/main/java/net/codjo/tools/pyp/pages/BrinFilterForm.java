@@ -19,7 +19,7 @@ public class BrinFilterForm extends Form {
     private static final Logger LOG = Logger.getLogger(BrinFilterForm.class);
 
 
-    public BrinFilterForm(String id, BrinFilter filter, final CallBack<BrinFilter> callBack) {
+    public BrinFilterForm(String id, BrinFilter filter, final CallBack<BrinFilter> filterCallBack) {
         super(id);
         ChoiceRenderer<BrinFilter> choiceRenderer = new ChoiceRenderer<BrinFilter>("displayLabel", "brinId") {
             @Override
@@ -47,7 +47,7 @@ public class BrinFilterForm extends Form {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 BrinFilter brinFilter = (BrinFilter)getFormComponent().getModelObject();
-                callBack.onClickCallBack(brinFilter);
+                filterCallBack.onClickCallBack(brinFilter);
                 addComponentToTarget("brinListContainer", target);
                 addComponentToTarget("leftPanel:summaryPanel", target);
             }

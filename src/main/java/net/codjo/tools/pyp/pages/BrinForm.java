@@ -8,7 +8,6 @@ import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.Status;
 import net.codjo.tools.pyp.model.Team;
 import net.codjo.tools.pyp.model.UnblockingType;
-import net.codjo.tools.pyp.model.filter.BrinFilter;
 import net.codjo.tools.pyp.services.BrinService;
 import net.codjo.tools.pyp.services.MailService;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
@@ -34,13 +33,11 @@ public class BrinForm extends Form<Brin> {
     private Brin brin;
     private MailService mailService;
     private Status initialStatus;
-    private BrinFilter brinFilter;
 
 
-    public BrinForm(String formId, final Brin brin, BrinFilter brinFilter) {
+    public BrinForm(String formId, final Brin brin) {
         super(formId, new CompoundPropertyModel<Brin>(brin));
         this.brin = brin;
-        this.brinFilter = brinFilter;
         initialStatus = brin.getStatus();
         mailService = new MailService(getContextUrl(((WebRequest)getRequest()).getHttpServletRequest()).toString());
 
@@ -120,7 +117,7 @@ public class BrinForm extends Form<Brin> {
             }
         }
 
-        setResponsePage(new HomePage(brinFilter));
+        setResponsePage(HomePage.class);
     }
 
 

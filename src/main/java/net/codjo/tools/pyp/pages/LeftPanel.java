@@ -31,8 +31,8 @@ public class LeftPanel extends Panel {
     }
 
 
-    private Component brinFilterForm(BrinFilter filter, CallBack<BrinFilter> brinFilter) {
-        return new BrinFilterForm("filterForm", filter, brinFilter).setVisible(brinFilter != null);
+    private Component brinFilterForm(BrinFilter filter, CallBack<BrinFilter> filterCallBack) {
+        return new BrinFilterForm("filterForm", filter, filterCallBack).setVisible(filterCallBack != null);
     }
 
 
@@ -48,8 +48,8 @@ public class LeftPanel extends Panel {
         @Override
         protected Iterator<IModel<Status>> getItemModels() {
             BrinService brinService = BrinService.getBrinService(this);
-            //TODO pas beau le ((HomePage)getPage()).getBrinFilter() !!!
-            List<Brin> allBrins = brinService.getBrins(((HomePage)getPage()).getBrinFilter());
+            //TODO pas encore tres beau la recuperation du brinFilter
+            List<Brin> allBrins = brinService.getBrins(((RootPage)getPage()).getBrinFilter());
             statusIntegerMap = brinService.calculateBrinNumber(allBrins);
 
             List<Status> filteredList = Arrays.asList(Status.values());

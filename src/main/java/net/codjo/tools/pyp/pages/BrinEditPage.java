@@ -1,31 +1,29 @@
 package net.codjo.tools.pyp.pages;
 import java.io.IOException;
 import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.filter.BrinFilter;
 import net.codjo.tools.pyp.services.BrinService;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 public class BrinEditPage extends RootPage {
-    private CallBack buttonCallBack;
+    static final String BRIN_ID_KEY = "id";
 
 
     /**
      * Keep this constructor to access brin directly from url (cf mail content) ex :
      * http://localhost:8080/pyp/edit.html/id/1245b4d5-9c64-41ed-b3df-d5f327234979
+     *
+     * @param pageParameters: unique id of the brin
+     *
+     * @throws java.io.IOException: @see net.codjo.tools.pyp.services.BrinService
      */
+    @SuppressWarnings({"UnusedDeclaration"})
     public BrinEditPage(PageParameters pageParameters) throws IOException {
-        String brinId = getRequest().getParameter("id");
+        String brinId = getRequest().getParameter(BRIN_ID_KEY);
         if (brinId == null) {
-            brinId = pageParameters.getString("id");
+            brinId = pageParameters.getString(BRIN_ID_KEY);
         }
         Brin brin = BrinService.getBrinService(this).getBrin(brinId);
-        buildPage(brin);
-    }
-
-
-    public BrinEditPage(Brin brin, BrinFilter brinFilter) {
-        this.brinFilter = brinFilter;
         buildPage(brin);
     }
 
@@ -35,10 +33,9 @@ public class BrinEditPage extends RootPage {
         CallBack<AjaxRequestTarget> buttonCallBack = new AbstractCallBack<AjaxRequestTarget>("Back to the List",
                                                                                              "images/backToList.png") {
             public void onClickCallBack(AjaxRequestTarget brin) {
-                setResponsePage(new HomePage(brinFilter));
+                setResponsePage(HomePage.class);
             }
         };
-
         add(new RightPanel(id, buttonCallBack));
     }
 
@@ -48,6 +45,6 @@ public class BrinEditPage extends RootPage {
         if (brin == null) {
             brin = new Brin();
         }
-        add(new BrinForm("brinForm", brin, brinFilter));
+        add(new BrinForm("brinForm", brin));
     }
 }

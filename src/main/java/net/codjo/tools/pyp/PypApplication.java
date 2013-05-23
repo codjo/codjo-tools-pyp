@@ -18,20 +18,25 @@ import org.apache.wicket.util.resource.IResourceStream;
  *
  */
 public class PypApplication extends WebApplication {
-    protected static final String XML_REPOSITORY_PATH = "/xmlRepository";
+    protected static final String XML_REPOSITORY_PATH = "/brinList";
     private PropertyLoader loader;
     private final BrinService brinService;
 
 
-    @Override
-    public Session newSession(Request request, Response response) {
-        return super.newSession(request, response);
+    public PypApplication() {
+        this("/pyp.properties");
     }
 
 
     public PypApplication(String propertyFilePath) {
         loader = new PropertyLoader(propertyFilePath);
         brinService = new BrinService(loader.getRepositoryFilePath());
+    }
+
+
+    @Override
+    public Session newSession(Request request, Response response) {
+        return new PypSession(request);
     }
 
 
@@ -45,11 +50,6 @@ public class PypApplication extends WebApplication {
             return Application.DEPLOYMENT;
         }
         return Application.DEVELOPMENT;
-    }
-
-
-    public PypApplication() {
-        this("/pyp.properties");
     }
 
 
