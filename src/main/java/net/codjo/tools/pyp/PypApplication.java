@@ -1,5 +1,6 @@
 package net.codjo.tools.pyp;
 import java.io.File;
+import java.nio.charset.Charset;
 import net.codjo.tools.pyp.pages.BrinEditPage;
 import net.codjo.tools.pyp.pages.HomePage;
 import net.codjo.tools.pyp.services.BrinService;
@@ -73,10 +74,12 @@ public class PypApplication extends WebApplication {
         getSharedResources().add(resourceId, new WebResource() {
             @Override
             public IResourceStream getResourceStream() {
-                return new FileResourceStream(file);
+                final FileResourceStream fileResourceStream = new FileResourceStream(file);
+                fileResourceStream.setCharset(Charset.forName("UTF-8"));
+                return fileResourceStream;
             }
         });
-        mountSharedResource( XML_REPOSITORY_PATH, Application.class.getName() + "/" + resourceId);
+        mountSharedResource(XML_REPOSITORY_PATH, Application.class.getName() + "/" + resourceId);
     }
 
 

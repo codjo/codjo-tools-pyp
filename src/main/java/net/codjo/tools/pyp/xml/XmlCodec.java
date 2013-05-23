@@ -6,14 +6,17 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.Team;
-/**
- *
- */
+
 public class XmlCodec {
+    public static final String ENCODING = "UTF-8";
     private final XStream xStream;
 
 
@@ -27,8 +30,21 @@ public class XmlCodec {
     }
 
 
-    public String toXml(List<Brin> brinList) {
-        return xStream.toXML(new BrinRepository(brinList));
+    public String toXml(List<Brin> brinList) throws IOException {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        Writer writer = null;
+        try {
+            writer = new OutputStreamWriter(outputStream, ENCODING);
+            writer.write("<?xml version=\"1.0\" encoding=\"" + ENCODING + "\" ?>");
+            xStream.toXML(new BrinRepository(brinList), writer);
+            return outputStream.toString(ENCODING);
+        }
+        finally {
+            if (writer != null) {
+                writer.close();
+            }
+            outputStream.close();
+        }
     }
 
 
@@ -56,7 +72,6 @@ public class XmlCodec {
         }
     }
 
-
     private static class BinListConverter implements Converter {
         private String xsdPath;
 
@@ -83,7 +98,7 @@ public class XmlCodec {
 
         public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
             BrinRepository repository = new BrinRepository(new ArrayList<Brin>());
-            List<Brin> brinlist= new ArrayList<Brin>();
+            List<Brin> brinlist = new ArrayList<Brin>();
             reader.moveDown();
             while (reader.hasMoreChildren()) {
                 reader.moveDown();
@@ -97,7 +112,7 @@ public class XmlCodec {
 
 
         public boolean canConvert(Class type) {
-            return type.equals(BrinRepository.class); 
+            return type.equals(BrinRepository.class);
         }
     }
 }

@@ -17,15 +17,11 @@ import net.codjo.tools.pyp.model.filter.BrinFilter;
 import net.codjo.tools.pyp.xml.XmlCodec;
 import net.codjo.util.file.FileUtil;
 import org.apache.wicket.Component;
-/**
- * Le DAO
- */
+
 public class BrinService {
     private final ReentrantReadWriteLock rwl = new ReentrantReadWriteLock();
     private final Lock readLock = rwl.readLock();
     private final Lock writeLock = rwl.writeLock();
-
-    public static final String ENCODING = "ISO-8859-1";
     private final File configFile;
 
 
@@ -44,6 +40,7 @@ public class BrinService {
     }
 
 
+    @SuppressWarnings({"ResultOfMethodCallIgnored"})
     List<Brin> loadConfig() throws IOException {
         if (!configFile.exists()) {
             try {
@@ -57,7 +54,7 @@ public class BrinService {
         }
         try {
             readLock.lock();
-            String xmlConfig = FileUtil.loadContent(configFile.toURL(), ENCODING);
+            String xmlConfig = FileUtil.loadContent(configFile.toURI().toURL(), XmlCodec.ENCODING);
             List<Brin> brinList = new XmlCodec().fromXml(xmlConfig);
             Collections.sort(brinList, compareByCreationDate());
             return brinList;
@@ -72,7 +69,7 @@ public class BrinService {
         try {
             writeLock.lock();
             String xmlContent = new XmlCodec().toXml(brinList);
-            FileUtil.saveContent(configFile, xmlContent);
+            FileUtil.saveContent(configFile, xmlContent, XmlCodec.ENCODING);
         }
         finally {
             writeLock.unlock();
@@ -115,7 +112,6 @@ public class BrinService {
             }
         }
         catch (Exception e) {
-            e.printStackTrace();
             return new ArrayList<Brin>();
         }
     }
@@ -140,7 +136,6 @@ public class BrinService {
             saveConfig(brins);
         }
         catch (IOException e) {
-            e.printStackTrace();
             throw new IllegalStateException("Erreur en sauvegardant le brin : " + brin.getTitle() + "\ndans le fichier "
                                             + configFile.getAbsolutePath(), e);
         }
@@ -155,9 +150,8 @@ public class BrinService {
             saveConfig(newList);
         }
         catch (IOException e) {
-            e.printStackTrace();
             throw new IllegalStateException(
-                  "Erreur en mettant � jour le brin suivant : " + brin.getTitle() + "\ndans le fichier "
+                  "Erreur en mettant à jour le brin suivant : " + brin.getTitle() + "\ndans le fichier "
                   + configFile.getAbsolutePath(), e);
         }
         finally {
