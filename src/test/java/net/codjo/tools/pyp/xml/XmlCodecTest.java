@@ -28,7 +28,7 @@ public class XmlCodecTest {
         titre2.setDescription("description2");
         List<Team> affectedTeams = new ArrayList<Team>();
         affectedTeams.add(Team.gacpa);
-        affectedTeams.add(Team.rdm_codaf);
+        affectedTeams.add(Team.wam);
         titre2.setAffectedTeams(affectedTeams);
         brins.add(titre2);
 
@@ -51,7 +51,7 @@ public class XmlCodecTest {
                                  + "      <creationDate>2011-06-01 00:00:00.0 CEST</creationDate>\n"
                                  + "      <affectedTeams>\n"
                                  + "           <team>gacpa</team>\n"
-                                 + "           <team>rdm_codaf</team>\n"
+                                 + "           <team>wam</team>\n"
                                  + "      </affectedTeams>\n"
                                  + "      <status>current</status>\n"
                                  + "    </brin>"
@@ -81,7 +81,7 @@ public class XmlCodecTest {
                           + "      <description>description2</description>\n"
                           + "      <creationDate>2011-06-01 00:00:00.0 CEST</creationDate>\n"
                           + "      <affectedTeams>\n"
-                          + "      <team>rdm_codaf</team>\n"
+                          + "      <team>wam</team>\n"
                           + "      <team>transverse</team>\n"
                           + "      </affectedTeams>\n"
                           + "      <rootCause>Pas d'électricité</rootCause>\n"

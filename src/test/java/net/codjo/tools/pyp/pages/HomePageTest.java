@@ -23,7 +23,6 @@ public class HomePageTest extends WicketFixture {
     static final int LAST_WEEK_FILTER = 0;
     private static final int CURRENT_MONTH_FILTER = 1;
     private static final int CURRENT_YEAR_FILTER = 2;
-    static final int ALL_BRIN_FILTER = 3;
     private DirectoryFixture fixture = new DirectoryFixture("target/pyp");
 
     private MailFixture mailFixture = new MailFixture(89);

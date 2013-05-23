@@ -33,7 +33,7 @@ public class CsvServiceTest extends TestCase {
         brin.setCreationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2011-11-28"));
         brin.setStatus(Status.unblocked);
         brin.setDescription("a description très compliquée");
-        brin.setAffectedTeams(Arrays.asList(Team.frm, Team.rdm_codaf));
+        brin.setAffectedTeams(Arrays.asList(Team.focs, Team.wam));
         brin.setunblockingType(UnblockingType.medium);
         brin.setUnBlockingDate(new SimpleDateFormat("yyyy-MM-dd").parse("2011-11-30"));
         brin.setUnBlockingDescription("toto\ntata a la ligne");
@@ -50,7 +50,7 @@ public class CsvServiceTest extends TestCase {
               "title;creationDate;status;description;affectedTeams;unblockingType;unblockingDate;unblockingDescription;rootCause",
               split[0]);
         Assert.assertEquals(
-              "a title;2011-11-28;unblocked;\"a description très compliquée\";[frm, rdm_codaf];medium;2011-11-30;\"toto\ntata a la ligne\";\"root cause \ndu problème\"",
+              "a title;2011-11-28;unblocked;\"a description très compliquée\";[focs, wam];medium;2011-11-30;\"toto\ntata a la ligne\";\"root cause \ndu problème\"",
               split[1]);
         Assert.assertEquals(
               "empty;" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ";current;\"\";;;;\"\";\"\"",
