@@ -32,6 +32,14 @@ public class XmlCodecTest {
         titre2.setAffectedTeams(affectedTeams);
         brins.add(titre2);
 
+        Brin brinTrois = new Brin("titre3");
+        brinTrois.setUuid("brin3");
+        brinTrois.setCreationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2011-06-01"));
+        brinTrois.setDescription("description3");
+        brinTrois.setUnBlockingDate(new SimpleDateFormat("yyyy-MM-dd").parse("2011-12-15"));
+        brinTrois.setEradicationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2011-05-23"));
+        brins.add(brinTrois);
+
         String actual = xmlCodec.toXml(brins);
 
         XmlUtil.assertEquivalent("<brinList xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n"
@@ -40,21 +48,31 @@ public class XmlCodecTest {
                                  + "    <brin>\n"
                                  + "      <uuid>MonUUID</uuid>\n"
                                  + "      <title>titre1</title>\n"
-                                 + "      <description>description1</description>\n"
                                  + "      <creationDate>2011-06-01 00:00:00.0 CEST</creationDate>\n"
-                                 + "      <affectedTeams/>\n"
                                  + "      <status>current</status>\n"
+                                 + "      <description>description1</description>\n"
+                                 + "      <affectedTeams/>\n"
                                  + "    </brin>\n"
                                  + "    <brin>\n"
                                  + "      <title>titre2</title>\n"
-                                 + "      <description>description2</description>\n"
                                  + "      <creationDate>2011-06-01 00:00:00.0 CEST</creationDate>\n"
+                                 + "      <status>current</status>\n"
+                                 + "      <description>description2</description>\n"
                                  + "      <affectedTeams>\n"
                                  + "           <team>gacpa</team>\n"
                                  + "           <team>wam</team>\n"
                                  + "      </affectedTeams>\n"
-                                 + "      <status>current</status>\n"
                                  + "    </brin>"
+                                 + "    <brin>\n"
+                                 + "      <uuid>brin3</uuid>\n"
+                                 + "      <title>titre3</title>\n"
+                                 + "      <creationDate>2011-06-01 00:00:00.0 CEST</creationDate>\n"
+                                 + "      <status>current</status>\n"
+                                 + "      <description>description3</description>\n"
+                                 + "      <affectedTeams/>\n"
+                                 + "      <unblockingDate>2011-12-15 00:00:00.0 CET</unblockingDate>"
+                                 + "      <eradicationDate>2011-05-23 00:00:00.0 CEST</eradicationDate>"
+                                 + "    </brin>\n"
                                  + "  </repository>\n"
                                  + "</brinList>", actual);
     }
@@ -68,24 +86,25 @@ public class XmlCodecTest {
                           + "    <brin>\n"
                           + "      <uuid>uniqueUuid</uuid>\n"
                           + "      <title>titre1</title>\n"
-                          + "      <description>description1</description>\n"
                           + "      <creationDate>2011-06-01 00:00:00.0 CEST</creationDate>\n"
-                          + "      <unblockingDate>2011-06-01 00:00:00.0 CEST</unblockingDate>\n"
-                          + "      <unblockingType>medium</unblockingType>\n"
-                          + "      <unblockingDescription>Bon ben c'est bon</unblockingDescription>\n"
-                          + "      <affectedTeams/>\n"
                           + "      <status>current</status>\n"
+                          + "      <description>description1</description>\n"
+                          + "      <affectedTeams/>\n"
+                          + "      <unblockingType>medium</unblockingType>\n"
+                          + "      <unblockingDate>2011-06-01 00:00:00.0 CEST</unblockingDate>\n"
+                          + "      <unblockingDescription>Bon ben c'est bon</unblockingDescription>\n"
                           + "    </brin>\n"
                           + "    <brin>\n"
                           + "      <title>titre2</title>\n"
-                          + "      <description>description2</description>\n"
                           + "      <creationDate>2011-06-01 00:00:00.0 CEST</creationDate>\n"
+                          + "      <status>current</status>\n"
+                          + "      <description>description2</description>\n"
                           + "      <affectedTeams>\n"
                           + "      <team>wam</team>\n"
                           + "      <team>transverse</team>\n"
                           + "      </affectedTeams>\n"
                           + "      <rootCause>Pas d'électricité</rootCause>\n"
-                          + "      <status>current</status>\n"
+                          + "      <eradicationDate>2012-06-23 00:00:00.0 CEST</eradicationDate>"
                           + "    </brin>"
                           + "  </repository>\n"
                           + "</brinList>";

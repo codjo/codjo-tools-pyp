@@ -6,7 +6,7 @@ import junit.framework.AssertionFailedError;
 import org.apache.wicket.util.tester.FormTester;
 import org.apache.wicket.util.tester.WicketTester;
 /**
- * //TODO replace with the brand new fixture in Magic
+ * //TODO[codjo-test] replace with the brand new fixture in Magic
  */
 public class WicketFixture {
     private WicketTester wicketTester;

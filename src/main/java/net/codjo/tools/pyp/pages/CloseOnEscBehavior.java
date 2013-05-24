@@ -6,7 +6,7 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 
 /**
- * TODO copied from Magic
+ * TODO[codjo-web] copied from Magic
  */
 public class CloseOnEscBehavior extends AbstractDefaultAjaxBehavior {
     private String elementToObserve;

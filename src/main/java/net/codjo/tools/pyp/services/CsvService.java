@@ -54,6 +54,8 @@ public class CsvService {
               .append(SEPARATOR)
               .append(TEXT_SEPARATOR).append(formatEmpty(brin.getRootCause())).append(TEXT_SEPARATOR)
               .append(SEPARATOR)
+              .append(formatEmptyDate(brin.getEradicationDate()))
+              .append(SEPARATOR)
               .append("\n");
     }
 

@@ -8,7 +8,7 @@
             <status>toEradicate</status>
             <description/>
             <affectedTeams>
-                <string>RDM/CODAF</string>
+                <string>WAM</string>
             </affectedTeams>
         </brin>
         <brin>
@@ -18,7 +18,7 @@
             <status>current</status>
             <description/>
             <affectedTeams>
-                <string>RDM/CODAF</string>
+                <string>WAM</string>
             </affectedTeams>
         </brin>
         <brin>
@@ -28,7 +28,7 @@
             <status>eradicated</status>
             <description/>
             <affectedTeams>
-                <string>RDM/CODAF</string>
+                <string>WAM</string>
             </affectedTeams>
         </brin>
         <brin>
@@ -38,7 +38,7 @@
             <status>unblocked</status>
             <description/>
             <affectedTeams>
-                <string>RDM/CODAF</string>
+                <string>WAM</string>
             </affectedTeams>
         </brin>
         <brin>
@@ -58,7 +58,18 @@
                 Après vérification la webcam était bien branchée sur le nouveau poste , par contre le problème doit se régler après un arrêt relance de la session window et là ce n?est pas le cas car ce matin elle a rebloqué ROSES après avoir fait un arrêt relance sur son poste.
             </description>
             <affectedTeams>
-                <string>RDM/CODAF</string>
+                <string>WAM</string>
+            </affectedTeams>
+        </brin>
+        <brin>
+            <uuid>uuidSix</uuid>
+            <title>EXemple de brin avec une date d'eradication</title>
+            <creationDate>2011-06-07 00:00:00.0 CEST</creationDate>
+            <eradicationDate>2011-06-25 00:00:00.0 CEST</eradicationDate>
+            <status>eradicated</status>
+            <description/>
+            <affectedTeams>
+                <string>WAM</string>
             </affectedTeams>
         </brin>
     </repository>

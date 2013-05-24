@@ -63,7 +63,7 @@ public class HomePageTest extends WicketFixture {
         addNewBrin("thisIsA new Brin", 2, "2001-01-12");
 
         getWicketTester().assertRenderedPage(HomePage.class);
-        getWicketTester().assertLabel("leftPanel:summaryPanel:infoList:3:nbBrin", "1");
+        assertLabelInLeftPanelAtRow(3,"toEradicate", "1");
         getWicketTester().assertContains("thisIsA new Brin");
         getWicketTester().assertContains("toEradicate");
 

@@ -4,38 +4,21 @@ import org.joda.time.DateTime;
 /**
  *
  */
-public class AllBrinFilter implements BrinFilter {
-    private String brinId;
-    private String displayLabel;
-    private DateTime from;
-
+public class AllBrinFilter extends AbstractBrinFilter {
 
     public AllBrinFilter(String brinId, String displayLabel, DateTime from) {
-        this.brinId = brinId;
-        this.displayLabel = displayLabel;
-        this.from = from;
+        super(brinId, displayLabel, from);
     }
 
 
-    public String getDisplayLabel() {
-        if (displayLabel == null) {
-            return brinId;
-        }
-        return displayLabel;
-    }
-
-
-    public String getBrinId() {
-        return brinId;
-    }
-
-
+    @Override
     public boolean doFilter(Brin brin) {
         return true;
     }
 
 
-    public DateTime getFrom() {
-        return from;
+    @Override
+    public DateTime getFirstAcceptableDate() {
+        return null;
     }
 }

@@ -50,6 +50,7 @@ public class BrinForm extends Form<Brin> {
         add(createDataField(brin, "unblockingDate"));
         add(new TextArea("unblockingDescription"));
 
+        add(createDataField(brin, "eradicationDate"));
         add(new TextArea("rootCause"));
 
         final RadioGroup<UnblockingType> group = new RadioGroup<UnblockingType>("unblockingType");

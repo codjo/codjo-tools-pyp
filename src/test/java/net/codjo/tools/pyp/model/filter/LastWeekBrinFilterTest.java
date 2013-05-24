@@ -1,83 +1,26 @@
 package net.codjo.tools.pyp.model.filter;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.Status;
 import org.joda.time.DateTime;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
+
+import static net.codjo.test.common.matcher.JUnitMatchers.*;
 /**
  *
  */
 public class LastWeekBrinFilterTest {
-    private LastWeekBrinFilter filter;
-    private Brin brinUn;
-    DateTime today;
-
-
-    @Before
-    public void setup() throws Exception {
-        today = new DateTime();
-        filter = new LastWeekBrinFilter("mybrin", "toto");
-        brinUn = new Brin("brinUn");
-        brinUn.setStatus(Status.unblocked);
-    }
-
-
     @Test
-    public void test_filterOnCreationDate() throws Exception {
-        Assert.assertTrue(filter.doFilter(brinUn));
+    public void test_getFirstAcceptableDate() throws Exception {
+        DateTime today = new DateTime();
 
-        brinUn.setCreationDate(today.minusDays(10).toDate());
-        Assert.assertFalse(filter.doFilter(brinUn));
+        DateTime firstAcceptableDate = new LastWeekBrinFilter("mybrin", "toto", today).getFirstAcceptableDate();
 
-        brinUn.setCreationDate(today.plusDays(2).toDate());
-        Assert.assertTrue(filter.doFilter(brinUn));
+        assertThat(today.isAfter(firstAcceptableDate), is(true));
+        assertThat(today.minusDays(10).isBefore(firstAcceptableDate), is(true));
+        assertThat(today.plusDays(2).isAfter(firstAcceptableDate), is(true));
+        assertThat(today.minusDays(32).isBefore(firstAcceptableDate), is(true));
 
         DateTime weekLimitDate = today.minusDays(7).withMillisOfDay(0);
-        brinUn.setCreationDate(weekLimitDate.toDate());
-        Assert.assertTrue(filter.doFilter(brinUn));
-
-        brinUn.setCreationDate(weekLimitDate.minus(1).toDate());
-        Assert.assertFalse(filter.doFilter(brinUn));
-
-        brinUn.setCreationDate(today.minusDays(8).toDate());
-        Assert.assertFalse(filter.doFilter(brinUn));
-    }
-
-
-    @Test
-    public void test_filterOnUnblockingDate() throws Exception {
-        brinUn.setCreationDate(today.minusDays(10).toDate());
-        Assert.assertFalse(filter.doFilter(brinUn));
-
-        brinUn.setUnBlockingDate(today.plusDays(2).toDate());
-        Assert.assertTrue(filter.doFilter(brinUn));
-
-        DateTime weekLimitDate = today.minusDays(7).withMillisOfDay(0);
-        brinUn.setUnBlockingDate(weekLimitDate.toDate());
-        Assert.assertTrue(filter.doFilter(brinUn));
-
-        brinUn.setUnBlockingDate(weekLimitDate.minus(1).toDate());
-        Assert.assertFalse(filter.doFilter(brinUn));
-
-        brinUn.setUnBlockingDate(today.minusDays(8).toDate());
-        Assert.assertFalse(filter.doFilter(brinUn));
-    }
-
-
-    @Test
-    public void test_filterCurrentStatusAlwaysFilteredOthersNo() throws Exception {
-        Assert.assertTrue(filter.doFilter(brinUn));
-        brinUn.setCreationDate(today.minusDays(10).toDate());
-        Assert.assertFalse(filter.doFilter(brinUn));
-
-        brinUn.setStatus(Status.toEradicate);
-        Assert.assertFalse(filter.doFilter(brinUn));
-
-        brinUn.setStatus(Status.eradicated);
-        Assert.assertFalse(filter.doFilter(brinUn));
-
-        brinUn.setStatus(Status.current);
-        Assert.assertTrue(filter.doFilter(brinUn));
+        assertThat(weekLimitDate.isAfter(firstAcceptableDate), is(true));
+        assertThat(weekLimitDate.minus(1).isEqual(firstAcceptableDate), is(true));
+        assertThat(weekLimitDate.minus(2).isBefore(firstAcceptableDate), is(true));
     }
 }

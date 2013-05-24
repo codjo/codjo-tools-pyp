@@ -26,6 +26,7 @@ exemple de declaration dans le fichier xml
             <xs:element name="title" type="xs:string"/>
             <xs:element name="creationDate" type="xs:date"/>
             <xs:element name="unblockingDate" type="xs:date"/>
+            <xs:element name="eradicationDate" type="xs:date"/>
             <xs:element name="status" type="xs:string"/>
             <xs:element name="description" type="xs:string"/>
             <xs:element name="affectedTeams" type="xs:string"/>

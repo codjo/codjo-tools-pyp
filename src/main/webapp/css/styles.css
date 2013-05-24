@@ -502,6 +502,12 @@ div.explorerTree div.wicket-tree-table-body {
     width: 480px;
 }
 
+.rootCauseLabel{
+    margin-left: 29px;
+    margin-top: 5px;
+    padding-top: 5px;
+}
+
 .affectedTeams {
     float: right;
 }

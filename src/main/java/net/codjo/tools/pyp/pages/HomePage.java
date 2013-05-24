@@ -102,7 +102,6 @@ public class HomePage extends RootPage {
     }
 
 
-    //TODO copier coller from Magic
     private ModalWindow createWikiExportWindow() {
         final ModalWindow wikiExportWindow = new ModalWindow("wikiExportPanel");
 

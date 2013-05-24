@@ -5,6 +5,7 @@ import net.codjo.tools.pyp.services.BrinService;
 import org.apache.wicket.PageParameters;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
+import org.apache.wicket.protocol.http.WebApplication;
 public class BrinEditPage extends RootPage {
     static final String BRIN_ID_KEY = "id";
 
@@ -30,8 +31,10 @@ public class BrinEditPage extends RootPage {
 
     @Override
     protected void initRightPanel(String id) {
+        String contextPath = WebApplication.get().getServletContext().getContextPath();
         CallBack<AjaxRequestTarget> buttonCallBack = new AbstractCallBack<AjaxRequestTarget>("Back to the List",
-                                                                                             "images/backToList.png") {
+                                                                                             contextPath
+                                                                                             + "/images/backToList.png") {
             public void onClickCallBack(AjaxRequestTarget brin) {
                 setResponsePage(HomePage.class);
             }

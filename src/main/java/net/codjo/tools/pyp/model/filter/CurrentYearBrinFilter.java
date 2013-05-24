@@ -1,13 +1,7 @@
 package net.codjo.tools.pyp.model.filter;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.Status;
 import org.joda.time.DateTime;
 
-public class CurrentYearBrinFilter extends AllBrinFilter {
-
-    public CurrentYearBrinFilter(String brinId, String displayLabel) {
-        this(brinId, displayLabel, new DateTime());
-    }
+public class CurrentYearBrinFilter  extends AbstractBrinFilter  {
 
 
     public CurrentYearBrinFilter(String brinId, String displayLabel, DateTime from) {
@@ -15,22 +9,7 @@ public class CurrentYearBrinFilter extends AllBrinFilter {
     }
 
 
-    @Override
-    public boolean doFilter(Brin brin) {
-        if (Status.current.equals(brin.getStatus())) {
-            return true;
-        }
-        DateTime creationDateTime = new DateTime(brin.getCreationDate());
-        DateTime firstDayOfMonth = getFrom().withDayOfYear(1).withMillisOfDay(0).minus(1);
-
-        DateTime unBlockingDate;
-        if (brin.getUnBlockingDate() == null) {
-            unBlockingDate = null;
-        }
-        else {
-            unBlockingDate = new DateTime(brin.getUnBlockingDate());
-        }
-        return creationDateTime.isAfter(firstDayOfMonth)
-               || (unBlockingDate != null && unBlockingDate.isAfter(firstDayOfMonth));
+    public DateTime getFirstAcceptableDate() {
+        return getFrom().withDayOfYear(1).withMillisOfDay(0).minus(1);
     }
 }

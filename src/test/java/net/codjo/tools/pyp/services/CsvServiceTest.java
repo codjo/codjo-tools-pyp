@@ -38,6 +38,7 @@ public class CsvServiceTest extends TestCase {
         brin.setUnBlockingDate(new SimpleDateFormat("yyyy-MM-dd").parse("2011-11-30"));
         brin.setUnBlockingDescription("toto\ntata a la ligne");
         brin.setRootCause("root cause \ndu problème");
+        brin.setEradicationDate(new SimpleDateFormat("yyyy-MM-dd").parse("2011-11-31"));
         brinList.add(brin);
 
         Brin emptyBrin = new Brin("empty");
@@ -50,10 +51,10 @@ public class CsvServiceTest extends TestCase {
               "title;creationDate;status;description;affectedTeams;unblockingType;unblockingDate;unblockingDescription;rootCause",
               split[0]);
         Assert.assertEquals(
-              "a title;2011-11-28;unblocked;\"a description très compliquée\";[focs, wam];medium;2011-11-30;\"toto\ntata a la ligne\";\"root cause \ndu problème\"",
+              "a title;2011-11-28;unblocked;\"a description très compliquée\";[focs, wam];medium;2011-11-30;\"toto\ntata a la ligne\";\"root cause \ndu problème\";2011-12-01",
               split[1]);
         Assert.assertEquals(
-              "empty;" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ";current;\"\";;;;\"\";\"\"",
+              "empty;" + new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ";current;\"\";;;;\"\";\"\";",
               split[2]);
     }
 }
