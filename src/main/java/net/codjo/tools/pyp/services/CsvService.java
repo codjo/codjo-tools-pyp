@@ -1,15 +1,15 @@
 package net.codjo.tools.pyp.services;
-import net.codjo.tools.pyp.model.Brin;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import net.codjo.tools.pyp.model.Brin;
 /**
  *
  */
 public class CsvService {
     private static final String SEPARATOR = ";";
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final String TEXT_SEPARATOR = "\"";
+    static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
 
     private CsvService() {
@@ -53,6 +53,8 @@ public class CsvService {
               .append(TEXT_SEPARATOR).append(formatEmpty(brin.getUnBlockingDescription())).append(TEXT_SEPARATOR)
               .append(SEPARATOR)
               .append(TEXT_SEPARATOR).append(formatEmpty(brin.getRootCause())).append(TEXT_SEPARATOR)
+              .append(SEPARATOR)
+              .append(formatEmptyDate(brin.getEradicationDate()))
               .append(SEPARATOR)
               .append("\n");
     }

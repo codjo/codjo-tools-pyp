@@ -1,33 +1,24 @@
 package net.codjo.tools.pyp.model.filter;
 import net.codjo.tools.pyp.model.Brin;
+import org.joda.time.DateTime;
 /**
  *
  */
-public class AllBrinFilter implements BrinFilter {
-    private String brinId;
-    private String displayLabel;
+public class AllBrinFilter extends AbstractBrinFilter {
 
-
-    public AllBrinFilter(String brinId, String displayLabel) {
-        this.brinId = brinId;
-        this.displayLabel = displayLabel;
+    public AllBrinFilter(String brinId, String displayLabel, DateTime from) {
+        super(brinId, displayLabel, from);
     }
 
 
-    public String getDisplayLabel() {
-        if (displayLabel == null) {
-            return brinId;
-        }
-        return displayLabel;
-    }
-
-
-    public String getBrinId() {
-        return brinId;
-    }
-
-
+    @Override
     public boolean doFilter(Brin brin) {
         return true;
+    }
+
+
+    @Override
+    public DateTime getFirstAcceptableDate() {
+        return null;
     }
 }

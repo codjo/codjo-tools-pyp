@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="iso-8859-1" standalone="yes"?>
-      <!--
-      exemple de declaration dans le fichier xml
-            <brinList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                  xsi:noNamespaceSchemaLocation="file:///C:/dev/user/pypRepository.xsd">
-      -->
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--
+exemple de declaration dans le fichier xml
+      <brinList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="file:///C:/dev/user/pypRepository.xsd">
+-->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified">
 
     <xs:element name="brinList">
@@ -26,6 +26,7 @@
             <xs:element name="title" type="xs:string"/>
             <xs:element name="creationDate" type="xs:date"/>
             <xs:element name="unblockingDate" type="xs:date"/>
+            <xs:element name="eradicationDate" type="xs:date"/>
             <xs:element name="status" type="xs:string"/>
             <xs:element name="description" type="xs:string"/>
             <xs:element name="affectedTeams" type="xs:string"/>

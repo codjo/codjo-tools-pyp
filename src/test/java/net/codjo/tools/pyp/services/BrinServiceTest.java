@@ -1,9 +1,11 @@
 package net.codjo.tools.pyp.services;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.Status;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.Status;
+import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -121,14 +123,22 @@ public class BrinServiceTest {
         service = new BrinService(configPath);
 
         List<Brin> brins = service.loadConfig();
-        assertThat(5, is(brins.size()));
+        assertThat(6, is(brins.size()));
 
         assertThat("uuidCinq", is(brins.get(0).getUuid()));
         assertThat(true, is(brins.get(0).getDescription().contains("\n")));
         assertThat("uuidDeux", is(brins.get(1).getUuid()));
         assertThat("uuidUn", is(brins.get(2).getUuid()));
         assertThat("uuidQuatre", is(brins.get(3).getUuid()));
+        assertThat(brins.get(3).getCreationDate(), is(buildDate(2011, 06, 07)));
         assertThat("uuidtrois", is(brins.get(4).getUuid()));
+        assertThat("uuidSix", is(brins.get(5).getUuid()));
+        assertThat(brins.get(5).getEradicationDate(), is(buildDate(2011, 6, 25)));
+    }
+
+
+    private Date buildDate(final int year, final int monthOfYear, final int dayOfMonth) {
+        return new DateTime(year, monthOfYear, dayOfMonth, 0, 0, 0, 0).toDate();
     }
 
 

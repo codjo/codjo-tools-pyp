@@ -30,7 +30,7 @@ public class BrinEditPageTest extends WicketFixture {
 
     @Test
     public void test_accessByLinkByPageParameters() throws Exception {
-                String fileContent = "<brinList>\n"
+        String fileContent = "<brinList>\n"
                              + "  <repository>\n"
                              + "    <brin>\n"
                              + "      <uuid>1</uuid>\n"

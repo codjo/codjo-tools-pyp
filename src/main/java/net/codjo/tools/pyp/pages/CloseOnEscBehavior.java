@@ -6,7 +6,7 @@ import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
 import org.apache.wicket.markup.html.IHeaderResponse;
 
 /**
- * TODO copied from Magic
+ * TODO[codjo-web] copied from Magic
  */
 public class CloseOnEscBehavior extends AbstractDefaultAjaxBehavior {
     private String elementToObserve;
@@ -38,11 +38,11 @@ public class CloseOnEscBehavior extends AbstractDefaultAjaxBehavior {
     @Override
     public void renderHead(IHeaderResponse response) {
         String javascript =
-                "$(" + elementToObserve + ").observe('" + eventName + "', function(e){\n"
-                        + "  if (e.keyCode == Event.KEY_ESC){"
-                        + getCallbackScript()
-                        + "}"
-                        + "});";
+              "$(" + elementToObserve + ").observe('" + eventName + "', function(e){\n"
+              + "  if (e.keyCode == Event.KEY_ESC){"
+              + getCallbackScript()
+              + "}"
+              + "});";
         response.renderOnDomReadyJavascript(javascript);
         super.renderHead(response);
     }

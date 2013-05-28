@@ -1,7 +1,7 @@
 package net.codjo.tools.pyp.xml;
-import net.codjo.tools.pyp.model.Brin;
 import java.util.Collections;
 import java.util.List;
+import net.codjo.tools.pyp.model.Brin;
 /**
  *
  */

@@ -1,7 +1,4 @@
 package net.codjo.tools.pyp.services;
-import net.codjo.confluence.ConfluenceException;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.Status;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Properties;
@@ -11,6 +8,9 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import net.codjo.confluence.ConfluenceException;
+import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.Status;
 import org.apache.log4j.Logger;
 /**
  * TODO pas mal de copier coller from codjo-plugin

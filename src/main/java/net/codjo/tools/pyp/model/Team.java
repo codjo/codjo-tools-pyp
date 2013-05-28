@@ -3,8 +3,8 @@ package net.codjo.tools.pyp.model;
  *
  */
 public enum Team {
-    rdm_codaf("RDM/CODAF"),
-    frm("FRM"),
+    wam("WAM"),
+    focs("FOCS"),
     gacpa("GACPA"),
     transverse("TRANSVERSE");
 

@@ -17,7 +17,7 @@ public class Brin implements Serializable {
     private Date unblockingDate;
     private String unblockingDescription;
     private String rootCause;
-
+    private Date eradicationDate;
 
     public Brin() {
         this("");
@@ -127,5 +127,15 @@ public class Brin implements Serializable {
 
     public void setUuid(String uuid) {
         this.uuid = uuid;
+    }
+
+
+    public Date getEradicationDate() {
+        return eradicationDate;
+    }
+
+
+    public void setEradicationDate(Date eradicationDate) {
+        this.eradicationDate = eradicationDate;
     }
 }

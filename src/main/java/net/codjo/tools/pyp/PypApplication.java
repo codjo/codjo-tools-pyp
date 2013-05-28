@@ -1,4 +1,6 @@
 package net.codjo.tools.pyp;
+import java.io.File;
+import java.nio.charset.Charset;
 import net.codjo.tools.pyp.pages.BrinEditPage;
 import net.codjo.tools.pyp.pages.HomePage;
 import net.codjo.tools.pyp.services.BrinService;
@@ -8,24 +10,33 @@ import org.apache.wicket.Page;
 import org.apache.wicket.Request;
 import org.apache.wicket.Response;
 import org.apache.wicket.Session;
+import org.apache.wicket.markup.html.WebResource;
 import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.util.resource.FileResourceStream;
+import org.apache.wicket.util.resource.IResourceStream;
 /**
  *
  */
 public class PypApplication extends WebApplication {
+    protected static final String XML_REPOSITORY_PATH = "/brinList";
     private PropertyLoader loader;
     private final BrinService brinService;
 
 
-    @Override
-    public Session newSession(Request request, Response response) {
-        return super.newSession(request, response);
+    public PypApplication() {
+        this("/pyp.properties");
     }
 
 
     public PypApplication(String propertyFilePath) {
         loader = new PropertyLoader(propertyFilePath);
         brinService = new BrinService(loader.getRepositoryFilePath());
+    }
+
+
+    @Override
+    public Session newSession(Request request, Response response) {
+        return new PypSession(request);
     }
 
 
@@ -42,11 +53,6 @@ public class PypApplication extends WebApplication {
     }
 
 
-    public PypApplication() {
-        this("/pyp.properties");
-    }
-
-
     @Override
     public Class<? extends Page> getHomePage() {
         return HomePage.class;
@@ -58,6 +64,22 @@ public class PypApplication extends WebApplication {
         super.init();
         mountBookmarkablePage("/edit.html", BrinEditPage.class);
         mountBookmarkablePage("/home.html", HomePage.class);
+        mountXmlRepositoryResource();
+    }
+
+
+    private void mountXmlRepositoryResource() {
+        final File file = new File(loader.getRepositoryFilePath());
+        final String resourceId = "xmlRepository";
+        getSharedResources().add(resourceId, new WebResource() {
+            @Override
+            public IResourceStream getResourceStream() {
+                final FileResourceStream fileResourceStream = new FileResourceStream(file);
+                fileResourceStream.setCharset(Charset.forName("UTF-8"));
+                return fileResourceStream;
+            }
+        });
+        mountSharedResource(XML_REPOSITORY_PATH, Application.class.getName() + "/" + resourceId);
     }
 
 

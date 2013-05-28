@@ -7,7 +7,6 @@ import java.util.List;
 import net.codjo.tools.pyp.ExternalImage;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.filter.BrinFilter;
-import net.codjo.tools.pyp.model.filter.BrinFilterEnum;
 import net.codjo.tools.pyp.services.BrinService;
 import net.codjo.tools.pyp.services.CsvService;
 import org.apache.wicket.PageParameters;
@@ -31,19 +30,7 @@ public class HomePage extends RootPage {
     private final DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
 
-    public HomePage(final PageParameters pageParameters) {
-        if (pageParameters.containsKey("brinFilter")) {
-            brinFilter = BrinFilterEnum.get(pageParameters.getString("brinFilter"));
-        }
-        else {
-            brinFilter = BrinFilterForm.DEFAULT_BRIN_FILTER;
-        }
-        buildPage();
-    }
-
-
-    public HomePage(BrinFilter brinFilter) {
-        super(brinFilter);
+    public HomePage() {
         buildPage();
     }
 
@@ -81,7 +68,7 @@ public class HomePage extends RootPage {
 
         CallBack<AjaxRequestTarget> exportCsvCallBack
               = new AbstractCallBack<AjaxRequestTarget>("Export all BRINs (csv)", "images/export.png") {
-            public void onClickCallBack(AjaxRequestTarget brin) {
+            public void onClickCallBack(AjaxRequestTarget ajaxRequestTarget) {
                 //TODO On pourrait creer un DownloadLink pour encapsuler ce comportement
                 StringBuilder content = CsvService.export(BrinService.getBrinService(HomePage.this).getBrins(
                       getBrinFilter()));
@@ -95,7 +82,7 @@ public class HomePage extends RootPage {
         CallBack<AjaxRequestTarget> exportWikiCallBack =
               new AbstractCallBack<AjaxRequestTarget>("Export wiki", "images/wiki-icon.gif") {
                   public void onClickCallBack(AjaxRequestTarget target) {
-                      wikiExportPanel.fillContent(BrinService.getBrinService(HomePage.this).getBrins(brinFilter));
+                      wikiExportPanel.fillContent(BrinService.getBrinService(HomePage.this).getBrins(getBrinFilter()));
                       wikiExportWindow.show(target);
                   }
               };
@@ -106,16 +93,15 @@ public class HomePage extends RootPage {
 
     @Override
     protected void initLeftPanel(String id) {
-        CallBack brinFilterCallBack = new AbstractCallBack<BrinFilter>("brinFilterCallBack", null) {
+        CallBack<BrinFilter> brinFilterCallBack = new AbstractCallBack<BrinFilter>("brinFilterCallBack", null) {
             public void onClickCallBack(BrinFilter brinFilter) {
                 setBrinFilter(brinFilter);
             }
         };
-        add(new LeftPanel(id, brinFilter, brinFilterCallBack));
+        add(new LeftPanel(id, getBrinFilter(), brinFilterCallBack));
     }
 
 
-    //TODO copier coller from Magic
     private ModalWindow createWikiExportWindow() {
         final ModalWindow wikiExportWindow = new ModalWindow("wikiExportPanel");
 
@@ -130,7 +116,11 @@ public class HomePage extends RootPage {
 
 
     private void responseWithEdit(Brin brin) {
-        setResponsePage(new BrinEditPage(brin, brinFilter));
+        PageParameters params = new PageParameters();
+        if (brin != null) {
+            params.add(BrinEditPage.BRIN_ID_KEY, brin.getUuid());
+        }
+        setResponsePage(BrinEditPage.class, params);
     }
 
 
@@ -139,16 +129,6 @@ public class HomePage extends RootPage {
             return "";
         }
         return format.format(dateToFormat);
-    }
-
-
-    public BrinFilter getBrinFilter() {
-        return brinFilter;
-    }
-
-
-    public void setBrinFilter(BrinFilter brinFilter) {
-        this.brinFilter = brinFilter;
     }
 
 
