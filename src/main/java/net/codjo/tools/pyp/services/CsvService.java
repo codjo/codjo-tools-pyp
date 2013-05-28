@@ -8,8 +8,8 @@ import net.codjo.tools.pyp.model.Brin;
  */
 public class CsvService {
     private static final String SEPARATOR = ";";
-    public static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
     private static final String TEXT_SEPARATOR = "\"";
+    static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd/MM/yyyy");
 
 
     private CsvService() {

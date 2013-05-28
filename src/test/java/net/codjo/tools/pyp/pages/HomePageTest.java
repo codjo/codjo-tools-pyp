@@ -20,7 +20,7 @@ import static net.codjo.test.common.matcher.JUnitMatchers.*;
  *
  */
 public class HomePageTest extends WicketFixture {
-    static final int LAST_WEEK_FILTER = 0;
+    private static final int LAST_WEEK_FILTER = 0;
     private static final int CURRENT_MONTH_FILTER = 1;
     private static final int CURRENT_YEAR_FILTER = 2;
     private DirectoryFixture fixture = new DirectoryFixture("target/pyp");
@@ -29,7 +29,7 @@ public class HomePageTest extends WicketFixture {
     private CompositeFixture compositeFixture = new CompositeFixture(fixture, mailFixture);
 
     private final static String DATETIME_FORMAT = "yyyy-MM-dd hh:mm:ss.S z";
-    static final String DATE_FORMAT = "yyyy-MM-dd";
+    private static final String DATE_FORMAT = "yyyy-MM-dd";
 
 
     @Before

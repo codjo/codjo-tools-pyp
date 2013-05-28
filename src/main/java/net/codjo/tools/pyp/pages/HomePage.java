@@ -68,7 +68,7 @@ public class HomePage extends RootPage {
 
         CallBack<AjaxRequestTarget> exportCsvCallBack
               = new AbstractCallBack<AjaxRequestTarget>("Export all BRINs (csv)", "images/export.png") {
-            public void onClickCallBack(AjaxRequestTarget brin) {
+            public void onClickCallBack(AjaxRequestTarget ajaxRequestTarget) {
                 //TODO On pourrait creer un DownloadLink pour encapsuler ce comportement
                 StringBuilder content = CsvService.export(BrinService.getBrinService(HomePage.this).getBrins(
                       getBrinFilter()));

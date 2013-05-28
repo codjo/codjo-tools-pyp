@@ -3,6 +3,7 @@ import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
+import com.thoughtworks.xstream.converters.basic.DateConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.io.xml.DomDriver;
@@ -27,6 +28,8 @@ public class XmlCodec {
         xStream.alias("team", Team.class);
         xStream.setMode(XStream.NO_REFERENCES);
         xStream.registerConverter(new BinListConverter("/pyp/pypRepository.xsd"));
+        String[] formats= new String[]{"yyyy-MM-dd HH:mm:ss.S z"};
+        xStream.registerConverter(new DateConverter("dd/MM/yyyy", formats));
     }
 
 

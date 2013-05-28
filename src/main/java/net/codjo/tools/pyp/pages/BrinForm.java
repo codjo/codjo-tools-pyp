@@ -133,8 +133,7 @@ public class BrinForm extends Form<Brin> {
 
 
     private DateTextField createDataField(Brin theBrin, String dateFieldName) {
-        return new DateTextField(dateFieldName,
-                                 new PropertyModel<Date>(theBrin, dateFieldName), "yyyy-MM-dd");
+        return new DateTextField(dateFieldName, new PropertyModel<Date>(theBrin, dateFieldName), "yyyy-MM-dd");
     }
 
 
