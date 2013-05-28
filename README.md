@@ -1,3 +1,5 @@
+Building
+--------
 For building Pyp, you need to declare the following properties in your settings.xml.
 
 for example :
@@ -29,18 +31,18 @@ for example :
         </profile>
 ```
 
-Deployment :
+Deploying
+---------
 * mvn --batch-mode codjo:switch-to-parent-release
 * mvn release:prepare
 * mvn release:perform -DconnectionUrl=scm:git:file:///C:/dev/projects/codjo/tools/codjo-tools-pyp/.git -Darguments="-Dremote=codjo -Dprocess=integration -Dserver=integration" -Dprocess=integration -Dserver=integration
 * mvn --batch-mode codjo:switch-to-parent-snapshot
-
-* git checkout master
-* git merge integration
-* git gc
-* push.cmd
-* git push --tag
-
+* Publish on github:
+     * git checkout master
+     * git merge integration
+     * git gc
+     * push.cmd (or git push origin for external contributors)
+     * git push --tag
 
 TODO :
 * Edit page correction : move save button to the upper right
