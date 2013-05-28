@@ -45,6 +45,8 @@ Deploying
      * git push --tag
 
 TODO :
+* bug with special characters like [ in title wich should be escaped
+* Add a copy button in wiki export page
 * Edit page correction : move save button to the upper right
 * add a statistic panel (nb brin/years) + filters ?
 * when unblocking radio button is clcked, status passes to unblocked
