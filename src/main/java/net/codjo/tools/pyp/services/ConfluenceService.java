@@ -11,6 +11,7 @@ import net.codjo.confluence.Page;
  */
 public class ConfluenceService {
 
+    private static final int CONFLUENCE_TIMEOUT = 10000;
     private String confluenceSpaceKey;
     private String confluencePage;
 
@@ -26,6 +27,7 @@ public class ConfluenceService {
                                                      String confluencePassword) throws ConfluenceException {
         ConfluenceServer server = new ConfluenceServer(
               new ConfluenceSession(confluenceUrl, confluenceUser, confluencePassword));
+        server.setTimeout(CONFLUENCE_TIMEOUT);
         server.login();
         try {
             Page page = server.getPage(confluenceSpaceKey, confluencePage);
