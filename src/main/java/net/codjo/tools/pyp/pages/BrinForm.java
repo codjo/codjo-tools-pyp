@@ -106,29 +106,28 @@ public class BrinForm extends Form<Brin> {
 
     @Override
     public void onSubmit() {
-        if (brin.getUuid() == null) {
-            BrinService.getBrinService(this).addBrin(brin);
-            sendMail(brin);
-        }
-        else {
-            BrinService.getBrinService(this).updateBrin(brin);
-
-            if (!initialStatus.equals(brin.getStatus())) {
+        try {
+            if (brin.getUuid() == null) {
+                BrinService.getBrinService(this).addBrin(brin);
                 sendMail(brin);
             }
-        }
+            else {
+                BrinService.getBrinService(this).updateBrin(brin);
 
-        setResponsePage(HomePage.class);
+                if (!initialStatus.equals(brin.getStatus())) {
+                    sendMail(brin);
+                }
+            }
+            setResponsePage(HomePage.class);
+        }
+        catch (Exception e) {
+            error("Error while trying to send announcement to the recipients: " + e.getLocalizedMessage());
+        }
     }
 
 
-    private void sendMail(Brin theBrin) {
-        try {
-            mailService.sendMail(theBrin);
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void sendMail(Brin theBrin) throws Exception {
+        mailService.sendMail(theBrin);
     }
 
 

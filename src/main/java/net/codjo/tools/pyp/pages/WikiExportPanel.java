@@ -25,14 +25,15 @@ public class WikiExportPanel extends Panel {
     }
 
 
-    private void addWikiContentForStatus(StringBuilder builder,
-                                         Map<Status, List<Brin>> resultMap,
-                                         Status status) {
+    void addWikiContentForStatus(StringBuilder builder, Map<Status, List<Brin>> resultMap, Status status) {
         List<Brin> brinListForStatus = resultMap.get(status);
-        if (brinListForStatus.size() != 0) {
+        if (!brinListForStatus.isEmpty()) {
             builder.append("* ").append(status.getStatus().toLowerCase()).append("\n");
             for (Brin brin : brinListForStatus) {
-                builder.append("** [").append(brin.getTitle()).append(" | ")
+                String title = brin.getTitle();
+                title = title.replaceAll("[\\[]", "\\\\[");
+                title = title.replaceAll("[\\]]", "\\\\]");
+                builder.append("** [").append(title).append(" | ")
                       .append(getApplicationUrl()).append("?id=")
                       .append(brin.getUuid()).append("]").append("\n");
             }

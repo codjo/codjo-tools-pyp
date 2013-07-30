@@ -8,7 +8,6 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import net.codjo.confluence.ConfluenceException;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.Status;
 import org.apache.log4j.Logger;
@@ -35,15 +34,10 @@ public class MailService implements Serializable {
 
         ConfluenceService confluenceService = new ConfluenceService(properties.getConfluenceSpaceKey(),
                                                                     properties.getConfluencePage());
-        Set<String> to = null;
-        try {
-            to = confluenceService.extractUserListFromConfluence(properties.getConfluenceUrl(),
-                                                                 properties.getConfluenceUser(),
-                                                                 properties.getConfluencePassword());
-        }
-        catch (ConfluenceException e) {
-            e.printStackTrace();
-        }
+
+        Set<String> to = confluenceService.extractUserListFromConfluence(properties.getConfluenceUrl(),
+                                                                         properties.getConfluenceUser(),
+                                                                         properties.getConfluencePassword());
 
         String subject = "[BRIN][" + brin.getStatus().getStatus() + "] - " + brin.getTitle();
         String mailBody = createMailBody(brin);

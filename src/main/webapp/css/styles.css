@@ -582,7 +582,6 @@ div.explorerTree div.wicket-tree-table-body {
     padding-bottom: 10px;
     font-size: 13px;
     min-height: 25px;
-    visibility: hidden;
 }
 
 .feedbackPanelERROR span {
