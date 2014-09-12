@@ -1,0 +1,14 @@
+<contactList xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="/pyp/pypRepository.xsd">
+    <contacts>
+        <contact>
+            <mail>contact1@gmail.com</mail>
+        </contact>
+        <badTag>
+            <nothingToDoHere>contact2@yahoo.com</nothingToDoHere>
+        </badTag>
+        <contact>
+            <mail>contact3@yahoo.com</mail>
+        </contact>
+    </contacts>
+</contactList>

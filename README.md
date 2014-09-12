@@ -59,6 +59,7 @@ TODO :
 * Manage properly the absence of a confluence server (add alerts on gui or any sendMail simulation)
 
 DONE :
+* remove confluence dependency and replace it by a config file that contains a list of contacts (PypContacts.xml in the same directory than PypRepository.xml)
 * Manage PypRepository.xsd
 * simple export for confluence, with Name/Url for quick insert in "reunion plateforme" minutes
 * close WikiExport window with ESC button
