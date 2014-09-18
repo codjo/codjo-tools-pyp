@@ -41,16 +41,6 @@
             <artifactId>slf4j-log4j12</artifactId>
         </dependency>
         <dependency>
-            <groupId>net.codjo.confluence</groupId>
-            <artifactId>codjo-confluence</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>net.codjo.agent</groupId>
-                    <artifactId>codjo-agent</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>mail</artifactId>
         </dependency>
@@ -78,9 +68,6 @@
     <properties>
         <smtpMockServer>localhost</smtpMockServer>
         <smtpMockPort>89</smtpMockPort>
-
-        <confluenceTestPage>SendAnnouncementForBrin</confluenceTestPage>
-        <confluenceManualTestPage>SendAnnouncementForBrinManualTest</confluenceManualTestPage>
         <repositoryTestFilePath>target/pyp/pypRepository.xml</repositoryTestFilePath>
     </properties>
 
@@ -118,14 +105,6 @@
                 <smtpServer>${smtpMockServer}</smtpServer>
                 <smtpPort>${smtpMockPort}</smtpPort>
                 <mailDomain>${mailDomainPrd}</mailDomain>
-
-                <confluenceUrl>${confluenceTestUrl}</confluenceUrl>
-                <confluenceUser>${confluenceTestUser}</confluenceUser>
-                <confluencePassword>${confluenceTestPassword}</confluencePassword>
-                <confluenceSpaceKey>${confluenceTestSpaceKey}</confluenceSpaceKey>
-                <confluencePage>${confluenceManualTestPage}</confluencePage>
-
-                <confluenceUnitPage>${confluenceTestPage}</confluenceUnitPage>
                 <repositoryFilePath>${repositoryTestFilePath}</repositoryFilePath>
                 <deploymentServerUrl>http://localhost:8080/manager/</deploymentServerUrl>
             </properties>
@@ -144,14 +123,6 @@
                 <smtpServer>${smtpPrdServer}</smtpServer>
                 <smtpPort>${smtpPrdPort}</smtpPort>
                 <mailDomain>${mailDomainPrd}</mailDomain>
-
-                <confluenceUrl>${confluencePrdUrl}</confluenceUrl>
-                <confluenceUser>${confluencePrdUser}</confluenceUser>
-                <confluencePassword>${confluencePrdPassword}</confluencePassword>
-                <confluenceSpaceKey>${confluencePrdSpaceKey}</confluenceSpaceKey>
-                <confluencePage>${confluencePrdPage}</confluencePage>
-
-                <confluenceUnitPage>${confluenceTestPage}</confluenceUnitPage>
                 <repositoryFilePath>Z:\\equipes\\equipe-transverse\\pyp\\repository\\pypRepository.xml</repositoryFilePath>
                 <deploymentServerUrl>http://wp-sic:8080/manager/</deploymentServerUrl>
             </properties>

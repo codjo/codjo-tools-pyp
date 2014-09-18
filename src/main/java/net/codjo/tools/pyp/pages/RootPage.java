@@ -10,7 +10,7 @@ import org.apache.wicket.markup.html.panel.EmptyPanel;
  *
  */
 public abstract class RootPage extends WebPage {
-    private static final String DOCUMENTATION_URL = "http://wp-confluence/confluence/display/framework/agf-pyp";
+    private static final String DOCUMENTATION_URL = "http://wp-sic:8080/documentation/framework/agf-pyp.html";
 
 
     protected RootPage() {
