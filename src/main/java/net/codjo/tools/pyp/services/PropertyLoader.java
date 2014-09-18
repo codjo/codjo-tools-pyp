@@ -7,12 +7,6 @@ import java.util.Properties;
  *
  */
 public class PropertyLoader implements Serializable {
-
-    private String confluenceSpaceKey;
-    private String confluencePage;
-    private String confluenceUrl;
-    private String confluenceUser;
-    private String confluencePassword;
     private String smtpServer;
     private String smtpPort;
     private String mailDomain;
@@ -30,12 +24,6 @@ public class PropertyLoader implements Serializable {
             e.printStackTrace();
         }
         if (props != null) {
-            confluenceSpaceKey = props.getProperty("confluenceSpaceKey");
-            confluencePage = props.getProperty("confluencePage");
-            confluencePage = props.getProperty("confluencePage");
-            confluenceUrl = props.getProperty("confluenceUrl");
-            confluenceUser = props.getProperty("confluenceUser");
-            confluencePassword = props.getProperty("confluencePassword");
             smtpServer = props.getProperty("smtpServer");
             smtpPort = props.getProperty("smtpPort");
             mailDomain = props.getProperty("mailDomain");
@@ -56,31 +44,6 @@ public class PropertyLoader implements Serializable {
             stream.close();
         }
         return properties;
-    }
-
-
-    public String getConfluenceSpaceKey() {
-        return confluenceSpaceKey;
-    }
-
-
-    public String getConfluencePage() {
-        return confluencePage;
-    }
-
-
-    public String getConfluenceUrl() {
-        return confluenceUrl;
-    }
-
-
-    public String getConfluenceUser() {
-        return confluenceUser;
-    }
-
-
-    public String getConfluencePassword() {
-        return confluencePassword;
     }
 
 

@@ -1,16 +1,20 @@
 package net.codjo.tools.pyp.services;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Properties;
-import java.util.Set;
+
+import net.codjo.tools.pyp.model.Brin;
+import net.codjo.tools.pyp.model.Status;
+import org.apache.log4j.Logger;
+
 import javax.mail.Message.RecipientType;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import net.codjo.tools.pyp.model.Brin;
-import net.codjo.tools.pyp.model.Status;
-import org.apache.log4j.Logger;
+import java.io.File;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Properties;
+import java.util.Set;
+
 /**
  * TODO pas mal de copier coller from codjo-plugin
  */
@@ -20,27 +24,21 @@ public class MailService implements Serializable {
     private static final Logger LOG = Logger.getLogger(MailService.class);
     public static final String CR = "<br>";
     private PropertyLoader properties;
-    private String pypUrl;
+    private ContactService contactService;
 
 
-    public MailService(String contextUrl) {
-        properties = new PropertyLoader("/pyp.properties");
-        pypUrl = contextUrl;
+    public MailService() {
+        this.properties = new PropertyLoader("/pyp.properties");
+        this.contactService =  new ContactService(new File(properties.getRepositoryFilePath()).getParent());
     }
 
 
-    public void sendMail(Brin brin) throws Exception {
+    public void sendMail(Brin brin, String pypUrl) throws Exception {
         String from = System.getProperty("user.name");
-
-        ConfluenceService confluenceService = new ConfluenceService(properties.getConfluenceSpaceKey(),
-                                                                    properties.getConfluencePage());
-
-        Set<String> to = confluenceService.extractUserListFromConfluence(properties.getConfluenceUrl(),
-                                                                         properties.getConfluenceUser(),
-                                                                         properties.getConfluencePassword());
+        Set<String> to = contactService.extractMailList();
 
         String subject = "[BRIN][" + brin.getStatus().getStatus() + "] - " + brin.getTitle();
-        String mailBody = createMailBody(brin);
+        String mailBody = createMailBody(brin,pypUrl);
 
         LOG.info("----------------------------------------------------------------------");
         LOG.info("");
@@ -48,17 +46,17 @@ public class MailService implements Serializable {
         LOG.info("   To      : " + to);
         LOG.info("   Subject : " + subject);
         LOG.info("   Body    : \n"
-                 + mailBody);
+                + mailBody);
 
         sendMail(from, to, subject, mailBody);
     }
 
 
-    private String createMailBody(Brin brin) {
+    private String createMailBody(Brin brin,String pypUrl) {
         StringBuilder builder = new StringBuilder();
         builder.append("Bonjour,<br>" + "<br>")
-              .append(getPhraseIntroduction(brin))
-              .append(getParagraph("Description:", brin.getDescription()));
+                .append(getPhraseIntroduction(brin))
+                .append(getParagraph("Description:", brin.getDescription()));
 
         if (Status.unblocked.equals(brin.getStatus())) {
             builder.append(getParagraph("Unblocking:", brin.getUnBlockingDescription()));
@@ -66,7 +64,7 @@ public class MailService implements Serializable {
         if (Status.eradicated.equals(brin.getStatus())) {
             builder.append(getParagraph("Root cause :", brin.getRootCause()));
         }
-        addBrinUrl(brin, builder);
+        addBrinUrl(brin, builder,pypUrl);
         builder.append("<br>Cordialement.");
         return builder.toString().replaceAll("\n", "<br>");
     }
@@ -75,28 +73,25 @@ public class MailService implements Serializable {
     private String getPhraseIntroduction(Brin brin) {
         if (Status.current.equals(brin.getStatus())) {
             return "Le BRIN suivant a été créé.<br><br>";
-        }
-        else if (Status.unblocked.equals(brin.getStatus())) {
+        } else if (Status.unblocked.equals(brin.getStatus())) {
             return "Le BRIN suivant a été débloqué.<br><br>";
-        }
-        else if (Status.toEradicate.equals(brin.getStatus())) {
+        } else if (Status.toEradicate.equals(brin.getStatus())) {
             return "Le BRIN suivant doit être éradiqué.<br><br>";
-        }
-        else if (Status.eradicated.equals(brin.getStatus())) {
+        } else if (Status.eradicated.equals(brin.getStatus())) {
             return "Le BRIN suivant a été éradiqué.<br><br>";
         }
         return "";
     }
 
 
-    private void addBrinUrl(Brin brin, StringBuilder builder) {
+    private void addBrinUrl(Brin brin, StringBuilder builder,String pypUrl) {
         if (pypUrl != null) {
             builder.append("<br>")
-                  .append("Pour plus de détails, merci de consulter le BRIN dans l'application <a href=\"")
-                  .append(pypUrl).append("edit.html/id/").append(brin.getUuid())
-                  .append("\">")
-                  .append("PostYourProblem")
-                  .append("</a>.<br>");
+                    .append("Pour plus de détails, merci de consulter le BRIN dans l'application <a href=\"")
+                    .append(pypUrl).append("edit.html/id/").append(brin.getUuid())
+                    .append("\">")
+                    .append("PostYourProblem")
+                    .append("</a>.<br>");
         }
     }
 
@@ -122,8 +117,7 @@ public class MailService implements Serializable {
         msg.setFrom(new InternetAddress(from + properties.getMailDomain()));
 
         for (String aToSet : toSet) {
-            String to = aToSet + properties.getMailDomain();
-            msg.addRecipients(RecipientType.TO, InternetAddress.parse(to, false));
+            msg.addRecipients(RecipientType.TO, InternetAddress.parse(aToSet, false));
         }
 
         msg.setSubject(subject);

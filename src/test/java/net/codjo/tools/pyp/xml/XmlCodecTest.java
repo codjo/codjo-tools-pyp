@@ -1,14 +1,16 @@
 package net.codjo.tools.pyp.xml;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import net.codjo.test.common.XmlUtil;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.Team;
 import org.joda.time.DateTime;
 import org.junit.Test;
 
-import static net.codjo.test.common.matcher.JUnitMatchers.*;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import static net.codjo.test.common.matcher.JUnitMatchers.assertThat;
+import static net.codjo.test.common.matcher.JUnitMatchers.is;
 /**
  *
  */

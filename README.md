@@ -15,18 +15,6 @@ for example :
                 <smtpPrdServer>mySmtp</smtpPrdServer>
                 <smtpPrdPort>25</smtpPrdPort>
                 <mailDomainPrd>@gmail.com</mailDomainPrd>
-
-                <confluencePrdUrl>http://wp-confluence/confluence</confluencePrdUrl>
-                <confluencePrdUser>mandela</confluencePrdUser>
-                <confluencePrdPassword>XXX_12355</confluencePrdPassword>
-                <confluencePrdSpaceKey>swdev</confluencePrdSpaceKey>
-                <confluencePrdPage>Destinataire equipe java</confluencePrdPage>
-				
-				<confluenceTestUrl>http://wd-confluence/confluence</confluenceTestUrl>
-				<confluenceTestUser>mandela_dev</confluenceTestUser>
-				<confluenceTestPassword>XXXX_4567</confluenceTestPassword>
-				<confluenceTestSpaceKey>sandbox</confluenceTestSpaceKey>
-
             </properties>
         </profile>
 ```
@@ -56,9 +44,9 @@ TODO :
 * show detail in a popup to avoid double click
 * Move tomcat-maven-plugin to super-pom
 * Manage automatic backup of repository ?
-* Manage properly the absence of a confluence server (add alerts on gui or any sendMail simulation)
 
 DONE :
+* remove confluence dependency and replace it by a config file that contains a list of contacts (PypContacts.xml in the same directory than PypRepository.xml)
 * Manage PypRepository.xsd
 * simple export for confluence, with Name/Url for quick insert in "reunion plateforme" minutes
 * close WikiExport window with ESC button
