@@ -1,11 +1,12 @@
 package net.codjo.tools.pyp.pages;
-import java.io.File;
+
 import junit.framework.Assert;
 import net.codjo.test.common.fixture.CompositeFixture;
 import net.codjo.test.common.fixture.DirectoryFixture;
 import net.codjo.test.common.fixture.MailFixture;
 import net.codjo.test.common.matcher.JUnitMatchers;
 import net.codjo.tools.pyp.WicketFixture;
+import net.codjo.tools.pyp.services.ContactServiceTest;
 import net.codjo.util.file.FileUtil;
 import org.apache.wicket.Session;
 import org.apache.wicket.extensions.ajax.markup.html.modal.ModalWindow;
@@ -15,7 +16,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static net.codjo.test.common.matcher.JUnitMatchers.*;
+import java.io.File;
+
+import static net.codjo.test.common.matcher.JUnitMatchers.assertThat;
+
 /**
  *
  */
@@ -47,6 +51,7 @@ public class HomePageTest extends WicketFixture {
     @Test
     public void test_homePage() throws Exception {
         doInit("/pyp.properties");
+        ContactServiceTest.initContactsFile(new File(fixture.getCanonicalFile(), "PypContacts.xml"));
         getWicketTester().startPage(HomePage.class);
         getWicketTester().assertContains("Title");
         getWicketTester().assertContains("Creation");
@@ -63,7 +68,7 @@ public class HomePageTest extends WicketFixture {
         addNewBrin("thisIsA new Brin", 2, "2001-01-12");
 
         getWicketTester().assertRenderedPage(HomePage.class);
-        assertLabelInLeftPanelAtRow(3,"toEradicate", "1");
+        assertLabelInLeftPanelAtRow(3, "toEradicate", "1");
         getWicketTester().assertContains("thisIsA new Brin");
         getWicketTester().assertContains("toEradicate");
 
@@ -89,56 +94,56 @@ public class HomePageTest extends WicketFixture {
         String aYearAgo = dateTime.minusYears(1).toString(DATETIME_FORMAT);
 
         String fileContent = "<brinList>\n"
-                             + "  <repository>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>1</uuid>\n"
-                             + "      <title>Brin de plus d'un mois</title>\n"
-                             + "      <creationDate>" + aYearAgo + "</creationDate>\n"
-                             + "      <status>unblocked</status>\n"
-                             + "      <description>sdq</description>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>2</uuid>\n"
-                             + "      <title>Brin d'il y a deux jours</title>\n"
-                             + "      <creationDate>" + twoDaysAgo + "</creationDate>\n"
-                             + "      <status>current</status>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>3</uuid>\n"
-                             + "      <title>Deboque ya moins d une semaine</title>\n"
-                             + "      <creationDate>" + aYearAgo + "</creationDate>\n"
-                             + "      <unblockingDate>" + today + "</unblockingDate>\n"
-                             + "      <status>unblocked</status>\n"
-                             + "      <description>sdq</description>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>4</uuid>\n"
-                             + "      <title>A eradiquer ya plus de 3 mois (90jours)</title>\n"
-                             + "      <creationDate>" + aYearAgo + "</creationDate>\n"
-                             + "      <unblockingDate>" + aYearAgo + "</unblockingDate>\n"
-                             + "      <status>toEradicate</status>\n"
-                             + "      <description>sdq</description>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>5</uuid>\n"
-                             + "      <title>Eradique ya plus d'un an (370 jours)</title>\n"
-                             + "      <creationDate>" + aYearAgo + "</creationDate>\n"
-                             + "      <unblockingDate>" + aYearAgo + "</unblockingDate>\n"
-                             + "      <status>eradicated</status>\n"
-                             + "      <description>sdq</description>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "  </repository>\n"
-                             + "</brinList>";
+                + "  <repository>\n"
+                + "    <brin>\n"
+                + "      <uuid>1</uuid>\n"
+                + "      <title>Brin de plus d'un mois</title>\n"
+                + "      <creationDate>" + aYearAgo + "</creationDate>\n"
+                + "      <status>unblocked</status>\n"
+                + "      <description>sdq</description>\n"
+                + "      <affectedTeams/>\n"
+                + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                + "    </brin>\n"
+                + "    <brin>\n"
+                + "      <uuid>2</uuid>\n"
+                + "      <title>Brin d'il y a deux jours</title>\n"
+                + "      <creationDate>" + twoDaysAgo + "</creationDate>\n"
+                + "      <status>current</status>\n"
+                + "      <affectedTeams/>\n"
+                + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
+                + "    </brin>\n"
+                + "    <brin>\n"
+                + "      <uuid>3</uuid>\n"
+                + "      <title>Deboque ya moins d une semaine</title>\n"
+                + "      <creationDate>" + aYearAgo + "</creationDate>\n"
+                + "      <unblockingDate>" + today + "</unblockingDate>\n"
+                + "      <status>unblocked</status>\n"
+                + "      <description>sdq</description>\n"
+                + "      <affectedTeams/>\n"
+                + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                + "    </brin>\n"
+                + "    <brin>\n"
+                + "      <uuid>4</uuid>\n"
+                + "      <title>A eradiquer ya plus de 3 mois (90jours)</title>\n"
+                + "      <creationDate>" + aYearAgo + "</creationDate>\n"
+                + "      <unblockingDate>" + aYearAgo + "</unblockingDate>\n"
+                + "      <status>toEradicate</status>\n"
+                + "      <description>sdq</description>\n"
+                + "      <affectedTeams/>\n"
+                + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                + "    </brin>\n"
+                + "    <brin>\n"
+                + "      <uuid>5</uuid>\n"
+                + "      <title>Eradique ya plus d'un an (370 jours)</title>\n"
+                + "      <creationDate>" + aYearAgo + "</creationDate>\n"
+                + "      <unblockingDate>" + aYearAgo + "</unblockingDate>\n"
+                + "      <status>eradicated</status>\n"
+                + "      <description>sdq</description>\n"
+                + "      <affectedTeams/>\n"
+                + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                + "    </brin>\n"
+                + "  </repository>\n"
+                + "</brinList>";
 
         FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRepository.xml"), fileContent);
 
@@ -146,7 +151,7 @@ public class HomePageTest extends WicketFixture {
 
         getWicketTester().startPage(HomePage.class);
         assertThat(getWicketTester().getComponentFromLastRenderedPage("leftPanel:filterForm:brinFilters")
-                         .getDefaultModelObject(), JUnitMatchers.<Object>notNullValue());
+                .getDefaultModelObject(), JUnitMatchers.<Object>notNullValue());
 
         int row = 1;
         assertLabelAtRow(row++, "Brin d&#039;il y a deux jours");
@@ -188,28 +193,29 @@ public class HomePageTest extends WicketFixture {
         String aMonthAgo = dateTime.minusMonths(1).toString(DATETIME_FORMAT);
 
         String fileContent = "<brinList>\n"
-                             + "  <repository>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>1</uuid>\n"
-                             + "      <title>Brin de plus d'un mois</title>\n"
-                             + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
-                             + "      <status>unblocked</status>\n"
-                             + "      <description>sdq</description>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>2</uuid>\n"
-                             + "      <title>Brin d'il y a deux jours</title>\n"
-                             + "      <creationDate>" + twoDaysAgo + "</creationDate>\n"
-                             + "      <status>current</status>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "  </repository>\n"
-                             + "</brinList>";
+                + "  <repository>\n"
+                + "    <brin>\n"
+                + "      <uuid>1</uuid>\n"
+                + "      <title>Brin de plus d'un mois</title>\n"
+                + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
+                + "      <status>unblocked</status>\n"
+                + "      <description>sdq</description>\n"
+                + "      <affectedTeams/>\n"
+                + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                + "    </brin>\n"
+                + "    <brin>\n"
+                + "      <uuid>2</uuid>\n"
+                + "      <title>Brin d'il y a deux jours</title>\n"
+                + "      <creationDate>" + twoDaysAgo + "</creationDate>\n"
+                + "      <status>current</status>\n"
+                + "      <affectedTeams/>\n"
+                + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
+                + "    </brin>\n"
+                + "  </repository>\n"
+                + "</brinList>";
 
         FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRepository.xml"), fileContent);
+        ContactServiceTest.initContactsFile(new File(fixture.getCanonicalFile(), "PypContacts.xml"));
 
         doInit("/pyp.properties");
 
@@ -246,35 +252,35 @@ public class HomePageTest extends WicketFixture {
         String aMonthAgo = dateTime.minusMonths(1).toString(DATETIME_FORMAT);
 
         String fileContent = "<brinList>\n"
-                             + "  <repository>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>1</uuid>\n"
-                             + "      <title>Brin de plus d'un mois</title>\n"
-                             + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
-                             + "      <status>unblocked</status>\n"
-                             + "      <description>sdq</description>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>3</uuid>\n"
-                             + "      <title>Autre Brin de plus d'un mois</title>\n"
-                             + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
-                             + "      <status>unblocked</status>\n"
-                             + "      <description>sdq</description>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>2</uuid>\n"
-                             + "      <title>Brin d'il y a deux jours</title>\n"
-                             + "      <creationDate>" + twoDaysAgo + "</creationDate>\n"
-                             + "      <status>current</status>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "  </repository>\n"
-                             + "</brinList>";
+                + "  <repository>\n"
+                + "    <brin>\n"
+                + "      <uuid>1</uuid>\n"
+                + "      <title>Brin de plus d'un mois</title>\n"
+                + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
+                + "      <status>unblocked</status>\n"
+                + "      <description>sdq</description>\n"
+                + "      <affectedTeams/>\n"
+                + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                + "    </brin>\n"
+                + "    <brin>\n"
+                + "      <uuid>3</uuid>\n"
+                + "      <title>Autre Brin de plus d'un mois</title>\n"
+                + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
+                + "      <status>unblocked</status>\n"
+                + "      <description>sdq</description>\n"
+                + "      <affectedTeams/>\n"
+                + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                + "    </brin>\n"
+                + "    <brin>\n"
+                + "      <uuid>2</uuid>\n"
+                + "      <title>Brin d'il y a deux jours</title>\n"
+                + "      <creationDate>" + twoDaysAgo + "</creationDate>\n"
+                + "      <status>current</status>\n"
+                + "      <affectedTeams/>\n"
+                + "      <unblockingDescription>sqdqd</unblockingDescription>\n"
+                + "    </brin>\n"
+                + "  </repository>\n"
+                + "</brinList>";
 
         FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRepository.xml"), fileContent);
 
@@ -289,15 +295,15 @@ public class HomePageTest extends WicketFixture {
 
         getWicketTester().clickLink("rightPanel:myContainer:menuList:2:imageLink", true);
 
-        ModalWindow modalWindow = (ModalWindow)getWicketTester().getComponentFromLastRenderedPage("wikiExportPanel");
+        ModalWindow modalWindow = (ModalWindow) getWicketTester().getComponentFromLastRenderedPage("wikiExportPanel");
         Assert.assertTrue(modalWindow.isShown());
 
         String expectedWikiContent = ""
-                                     + "* current\n"
-                                     + "** [Brin d'il y a deux jours | http://localhost/edit.html?id=2]\n"
-                                     + "* unblocked\n"
-                                     + "** [Brin de plus d'un mois | http://localhost/edit.html?id=1]\n"
-                                     + "** [Autre Brin de plus d'un mois | http://localhost/edit.html?id=3]\n";
+                + "* current\n"
+                + "** [Brin d'il y a deux jours | http://localhost/edit.html?id=2]\n"
+                + "* unblocked\n"
+                + "** [Brin de plus d'un mois | http://localhost/edit.html?id=1]\n"
+                + "** [Autre Brin de plus d'un mois | http://localhost/edit.html?id=3]\n";
         getWicketTester().assertModelValue("wikiExportPanel:content:wikiContent", expectedWikiContent);
     }
 
@@ -308,20 +314,21 @@ public class HomePageTest extends WicketFixture {
         String aMonthAgo = dateTime.minusMonths(1).toString(DATETIME_FORMAT);
 
         String fileContent = "<brinList>\n"
-                             + "  <repository>\n"
-                             + "    <brin>\n"
-                             + "      <uuid>1</uuid>\n"
-                             + "      <title>Brin de plus d'un mois</title>\n"
-                             + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
-                             + "      <status>unblocked</status>\n"
-                             + "      <description>sdq</description>\n"
-                             + "      <affectedTeams/>\n"
-                             + "      <unblockingDescription>qsd</unblockingDescription>\n"
-                             + "    </brin>\n"
-                             + "  </repository>\n"
-                             + "</brinList>";
+                + "  <repository>\n"
+                + "    <brin>\n"
+                + "      <uuid>1</uuid>\n"
+                + "      <title>Brin de plus d'un mois</title>\n"
+                + "      <creationDate>" + aMonthAgo + "</creationDate>\n"
+                + "      <status>unblocked</status>\n"
+                + "      <description>sdq</description>\n"
+                + "      <affectedTeams/>\n"
+                + "      <unblockingDescription>qsd</unblockingDescription>\n"
+                + "    </brin>\n"
+                + "  </repository>\n"
+                + "</brinList>";
 
         FileUtil.saveContent(new File(fixture.getCanonicalFile(), "pypRepository.xml"), fileContent);
+        ContactServiceTest.initContactsFile(new File(fixture.getCanonicalFile(), "PypContacts.xml"));
 
         doInit("/pyp.properties");
 
@@ -329,15 +336,15 @@ public class HomePageTest extends WicketFixture {
 
         updateBrin("new title", 2);
         mailFixture.getReceivedMessage(0).assertThat()
-              .from(System.getProperty("user.name") + "@allianz.fr")
-              .to("USER1@allianz.fr", "USER2@allianz.fr")
-              .subject("[BRIN][TO_ERADICATE] - new title")
-              .bodyContains("Bonjour,<br><br>Le BRIN suivant doit être éradiqué.<br>")
-              .bodyContains("<br><b>Description:</b><br><br><br><br>")
-              .bodyContains("Pour plus de détails, ")
-              .bodyContains("merci de consulter le BRIN dans l'application ")
-              .bodyContains("<a href=\"http://localhost//edit.html/id/1\">PostYourProblem</a>")
-              .bodyContains("Cordialement.")
+                .from(System.getProperty("user.name") + "@allianz.fr")
+                .to(new String[]{"contact1@gmail.com", "contact2@yahoo.com", "contact3@yahoo.com"})
+                .subject("[BRIN][TO_ERADICATE] - new title")
+                .bodyContains("Bonjour,<br><br>Le BRIN suivant doit être éradiqué.<br>")
+                .bodyContains("<br><b>Description:</b><br><br><br><br>")
+                .bodyContains("Pour plus de détails, ")
+                .bodyContains("merci de consulter le BRIN dans l'application ")
+                .bodyContains("<a href=\"http://localhost//edit.html/id/1\">PostYourProblem</a>")
+                .bodyContains("Cordialement.")
         ;
         mailFixture.assertReceivedMessagesCount(1);
     }
@@ -345,14 +352,14 @@ public class HomePageTest extends WicketFixture {
 
     private void assertLabelAtRow(int row, String expectedLabel) {
         getWicketTester().assertLabel("brinListContainer:brinList:" + row + ":title",
-                                      expectedLabel);
+                expectedLabel);
     }
 
 
     private void assertLabelInLeftPanelAtRow(int row, String expectedLabelText, String expectedBrinNumber) {
         getWicketTester().assertLabel("leftPanel:summaryPanel:infoList:" + row + ":statusLabel", expectedLabelText);
         getWicketTester().assertLabel("leftPanel:summaryPanel:infoList:" + row + ":nbBrin",
-                                      expectedBrinNumber);
+                expectedBrinNumber);
     }
 
 

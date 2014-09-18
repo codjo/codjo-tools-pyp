@@ -1,37 +1,32 @@
 package net.codjo.tools.pyp.pages;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+
+import net.codjo.tools.pyp.PypApplication;
 import net.codjo.tools.pyp.model.Brin;
 import net.codjo.tools.pyp.model.Status;
 import net.codjo.tools.pyp.model.Team;
 import net.codjo.tools.pyp.model.UnblockingType;
 import net.codjo.tools.pyp.services.BrinService;
 import net.codjo.tools.pyp.services.MailService;
+import org.apache.wicket.RequestCycle;
 import org.apache.wicket.extensions.markup.html.form.DateTextField;
-import org.apache.wicket.markup.html.form.Check;
-import org.apache.wicket.markup.html.form.CheckGroup;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.markup.html.form.SimpleFormComponentLabel;
-import org.apache.wicket.markup.html.form.SubmitLink;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.PropertyModel;
-import org.apache.wicket.protocol.http.WebRequest;
+import org.apache.wicket.protocol.http.WebRequestCycle;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+
 /**
  *
  */
 public class BrinForm extends Form<Brin> {
     private Brin brin;
-    private MailService mailService;
     private Status initialStatus;
 
 
@@ -39,8 +34,6 @@ public class BrinForm extends Form<Brin> {
         super(formId, new CompoundPropertyModel<Brin>(brin));
         this.brin = brin;
         initialStatus = brin.getStatus();
-        mailService = new MailService(getContextUrl(((WebRequest)getRequest()).getHttpServletRequest()).toString());
-
         add(new TextField("title").setRequired(true));
         add(createDataField(brin, "creationDate").setRequired(true));
 
@@ -57,7 +50,7 @@ public class BrinForm extends Form<Brin> {
         add(group);
 
         ListView<UnblockingType> radioList = new ListView<UnblockingType>("radios",
-                                                                          Arrays.asList(UnblockingType.values())) {
+                Arrays.asList(UnblockingType.values())) {
 
             @Override
             protected void populateItem(ListItem<UnblockingType> item) {
@@ -70,7 +63,7 @@ public class BrinForm extends Form<Brin> {
         group.add(radioList);
 
         final DropDownChoice<Status> dropDownChoice = new DropDownChoice<Status>("status",
-                                                                                 Arrays.asList(Status.values()));
+                Arrays.asList(Status.values()));
         add(dropDownChoice);
 
         //Teams
@@ -110,8 +103,7 @@ public class BrinForm extends Form<Brin> {
             if (brin.getUuid() == null) {
                 BrinService.getBrinService(this).addBrin(brin);
                 sendMail(brin);
-            }
-            else {
+            } else {
                 BrinService.getBrinService(this).updateBrin(brin);
 
                 if (!initialStatus.equals(brin.getStatus())) {
@@ -119,15 +111,17 @@ public class BrinForm extends Form<Brin> {
                 }
             }
             setResponsePage(HomePage.class);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             error("Error while trying to send announcement to the recipients: " + e.getLocalizedMessage());
         }
     }
 
 
     private void sendMail(Brin theBrin) throws Exception {
-        mailService.sendMail(theBrin);
+        PypApplication application = (PypApplication) getApplication();
+        MailService mailService = application.getMailService();
+        String pypUrl = getContextUrl(((WebRequestCycle) RequestCycle.get()).getWebRequest().getHttpServletRequest()).toString();
+        mailService.sendMail(theBrin,pypUrl);
     }
 
 
